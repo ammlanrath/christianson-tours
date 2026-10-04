@@ -171,20 +171,23 @@
 
 <!-- Load Central Data & Render Script -->
 <script src="data.js"></script>
+<script src="api.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', async () => {
     const grid = document.getElementById('tours-grid');
     const filterDuration = document.getElementById('filter-duration');
     const filterCategory = document.getElementById('filter-category');
     const filterPrice = document.getElementById('filter-price');
     const resetBtn = document.getElementById('reset-filters');
 
+    const tours = await window.CHRISTIANSON_API.getTours();
+
     function renderTours() {
       const durationVal = filterDuration.value;
       const categoryVal = filterCategory.value;
       const priceVal = filterPrice.value;
 
-      const filtered = CHRISTIANSON_DATA.tours.filter(tour => {
+      const filtered = tours.filter(tour => {
         if (durationVal !== 'all' && tour.durationType !== durationVal) return false;
         if (categoryVal !== 'all' && tour.category !== categoryVal) return false;
         if (priceVal !== 'all' && tour.startingPrice > parseInt(priceVal)) return false;

@@ -315,9 +315,10 @@
 
 <!-- SCRIPTS -->
 <script src="data.js"></script>
+<script src="api.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const tour = CHRISTIANSON_DATA.tours.find(t => t.id === 'grand-canyon-west');
+  document.addEventListener('DOMContentLoaded', async () => {
+    const tour = await window.CHRISTIANSON_API.getTourById('grand-canyon-west');
 
     // 1. Render Interactive Itinerary
     const itNav = document.getElementById('itinerary-nav');

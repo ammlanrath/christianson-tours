@@ -341,6 +341,7 @@
 </footer>
 
 <script src="data.js"></script>
+<script src="api.js"></script>
 <script>
   let state = {
     tourId: 'grand-canyon-west',
@@ -488,24 +489,43 @@
     }
   }
 
-  function confirmBooking() {
+  async function confirmBooking() {
     const tour = window.CHRISTIANSON_DATA.tours.find(t => t.id === state.tourId);
     const pkg = tour.packages.find(p => p.id === state.packageId) || tour.packages[0];
     const hotel = window.CHRISTIANSON_DATA.hotels.find(h => h.id === state.hotelId) || window.CHRISTIANSON_DATA.hotels[0];
+    
     const guestName = document.getElementById('guest-name').value || 'Krystal Thomas';
+    const guestEmail = document.getElementById('guest-email').value || 'krystal@example.com';
+    const date = document.getElementById('book-date').value;
 
-    const refNum = 'CT-' + Math.floor(10000 + Math.random() * 90000);
+    const payload = {
+      tourId: state.tourId,
+      packageId: state.packageId,
+      date: date,
+      adults: state.adults,
+      kids: state.kids,
+      hotelId: state.hotelId,
+      guestName,
+      guestEmail,
+      addons: state.selectedAddons
+    };
 
-    document.getElementById('booking-flow').classList.add('hidden');
-    document.getElementById('confirmation-screen').classList.remove('hidden');
+    try {
+      const res = await window.CHRISTIANSON_API.createBooking(payload);
 
-    document.getElementById('conf-ref').textContent = refNum;
-    document.getElementById('conf-guest').textContent = guestName;
-    document.getElementById('conf-tour').textContent = `${tour.name} — ${pkg.name}`;
-    document.getElementById('conf-pickup').textContent = `${hotel.name} (${hotel.pickupTime})`;
-    document.getElementById('conf-price').textContent = document.getElementById('sum-total-price').textContent;
+      document.getElementById('booking-flow').classList.add('hidden');
+      document.getElementById('confirmation-screen').classList.remove('hidden');
 
-    window.scrollTo({ top: 100, behavior: 'smooth' });
+      document.getElementById('conf-ref').textContent = res.bookingReference || ('CT-' + Math.floor(10000 + Math.random() * 90000));
+      document.getElementById('conf-guest').textContent = res.guestName || guestName;
+      document.getElementById('conf-tour').textContent = `${tour.name} — ${pkg.name}`;
+      document.getElementById('conf-pickup').textContent = `${res.hotelName || hotel.name} (${res.pickupTime || hotel.pickupTime})`;
+      document.getElementById('conf-price').textContent = `$${res.totalPrice}`;
+
+      window.scrollTo({ top: 100, behavior: 'smooth' });
+    } catch (err) {
+      alert("Booking Error: " + err.message);
+    }
   }
 
   document.addEventListener('DOMContentLoaded', () => {

@@ -171,10 +171,12 @@
 </footer>
 
 <script src="data.js"></script>
+<script src="api.js"></script>
 <script>
   let activeCat = 'ALL';
   const categories = ['ALL', 'PICKUP', 'CANCELLATION', 'FOOD', 'TOURS', 'WHAT TO BRING', 'ACCESSIBILITY', 'CHILDREN'];
   let openIndex = 0;
+  let faqsList = [];
 
   function renderCategories() {
     const container = document.getElementById('faq-categories');
@@ -205,7 +207,7 @@
     const query = document.getElementById('faq-search').value.toLowerCase();
     const list = document.getElementById('faq-accordion-list');
 
-    let filtered = window.CHRISTIANSON_DATA.faqs.filter(item => {
+    let filtered = faqsList.filter(item => {
       const matchCat = activeCat === 'ALL' || item.category === activeCat;
       const matchQuery = !query || item.question.toLowerCase().includes(query) || item.answer.toLowerCase().includes(query);
       return matchCat && matchQuery;
@@ -235,8 +237,9 @@
     `).join('');
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('faq-search').addEventListener('input', renderFAQs);
+    faqsList = await window.CHRISTIANSON_API.getFaqs();
     renderCategories();
     renderFAQs();
   });

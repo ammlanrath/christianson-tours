@@ -190,9 +190,11 @@
 </footer>
 
 <script src="data.js"></script>
+<script src="api.js"></script>
 <script>
   let activeTag = 'ALL';
   const tags = ['ALL', 'GUIDES', 'DRIVERS', 'FAMILIES', 'GRAND CANYON', 'HOOVER DAM', 'SAFETY'];
+  let reviewsList = [];
 
   function renderTags() {
     const container = document.getElementById('filter-tag-container');
@@ -217,9 +219,9 @@
     const query = document.getElementById('review-search').value.toLowerCase();
     const grid = document.getElementById('reviews-grid');
     
-    let filtered = window.CHRISTIANSON_DATA.reviews.filter(r => {
+    let filtered = reviewsList.filter(r => {
       const matchTag = activeTag === 'ALL' || r.tags.includes(activeTag);
-      const matchQuery = !query || r.comment.toLowerCase().includes(query) || r.author.toLowerCase().includes(query) || r.tour.toLowerCase().includes(query);
+      const matchQuery = !query || r.comment.toLowerCase().includes(query) || r.author.toLowerCase().includes(query) || (r.tour && r.tour.toLowerCase().includes(query));
       return matchTag && matchQuery;
     });
 
@@ -256,8 +258,9 @@
     `).join('');
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('review-search').addEventListener('input', renderReviews);
+    reviewsList = await window.CHRISTIANSON_API.getReviews();
     renderTags();
     renderReviews();
   });

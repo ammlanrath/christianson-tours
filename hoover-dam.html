@@ -274,9 +274,10 @@
 
 <!-- Shared Data & Page Controller Script -->
 <script src="data.js"></script>
+<script src="api.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const tour = window.CHRISTIANSON_DATA.tours.find(t => t.id === 'hoover-dam');
+  document.addEventListener('DOMContentLoaded', async () => {
+    const tour = await window.CHRISTIANSON_API.getTourById('hoover-dam');
     if (!tour) return;
 
     // 1. Render Interactive Itinerary
