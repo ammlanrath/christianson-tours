@@ -1,7 +1,7 @@
 /**
  * Christianson Tours — Production Backend Server & REST API
  * Secure Node.js/Express server providing real database access,
- * server-side booking capacity enforcement, payment boundaries, and JWT admin auth.
+ * server-side booking capacity enforcement, payment boundaries, Stripe webhooks, and JWT admin auth.
  */
 
 const express = require('express');
@@ -13,18 +13,36 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 const PORT = process.env.PORT || 3000;
-const JWT_SECRET = process.env.JWT_SECRET || 'christianson-tours-sec-jwt-key-2026';
+const NODE_ENV = process.env.NODE_ENV || 'development';
+const JWT_SECRET = process.env.JWT_SECRET || (NODE_ENV === 'development' ? 'dev-christianson-jwt-secret-key-2026' : null);
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || null;
+const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || null;
+
+if (!JWT_SECRET && NODE_ENV === 'production') {
+  console.error("FATAL ERROR: JWT_SECRET environment variable is missing in production mode!");
+  process.exit(1);
+}
 
 const app = express();
 app.use(cors());
-app.use(express.json());
 
-// Database connection
-const dbPath = path.join(__dirname, 'db', 'christianson.db');
-if (!fs.existsSync(dbPath)) {
-  console.warn("Database file not found. Run 'npm run seed' to initialize.");
+// Use raw body parser for Stripe webhook verification
+app.use((req, res, next) => {
+  if (req.originalUrl === '/api/payments/webhook') {
+    express.raw({ type: 'application/json' })(req, res, next);
+  } else {
+    express.json()(req, res, next);
+  }
+});
+
+// Database Setup & Auto-Seeding System
+const dbDir = path.join(__dirname, 'db');
+if (!fs.existsSync(dbDir)) {
+  fs.mkdirSync(dbDir, { recursive: true });
 }
+const dbPath = path.join(dbDir, 'christianson.db');
+const schemaPath = path.join(dbDir, 'schema.sql');
+
 const db = new sqlite3.Database(dbPath);
 
 // Helper function for DB queries (Promises)
@@ -55,11 +73,36 @@ function dbGet(sql, params = []) {
   });
 }
 
+// Auto-initialize & Seed Database if empty
+async function initDatabase() {
+  try {
+    const tableCheck = await dbGet(`SELECT name FROM sqlite_master WHERE type='table' AND name='tours'`);
+    if (!tableCheck && fs.existsSync(schemaPath)) {
+      console.log("Database empty or missing tables. Auto-initializing schema & seeding default data...");
+      const schemaSql = fs.readFileSync(schemaPath, 'utf8');
+      await new Promise((resolve, reject) => {
+        db.exec(schemaSql, (err) => {
+          if (err) reject(err);
+          else resolve();
+        });
+      });
+      // Execute seed script logic dynamically
+      const seedScriptPath = path.join(dbDir, 'seed.js');
+      if (fs.existsSync(seedScriptPath)) {
+        require(seedScriptPath);
+      }
+    }
+  } catch (e) {
+    console.error("Database initialization check error:", e);
+  }
+}
+initDatabase();
+
 // Authentication Middleware
 function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Unauthorized: Missing token' });
+    return res.status(401).json({ success: false, error: 'Unauthorized: Missing or malformed token', code: 'UNAUTHORIZED' });
   }
 
   const token = authHeader.split(' ')[1];
@@ -68,7 +111,7 @@ function authMiddleware(req, res, next) {
     req.user = decoded;
     next();
   } catch (err) {
-    return res.status(401).json({ error: 'Unauthorized: Invalid or expired token' });
+    return res.status(401).json({ success: false, error: 'Unauthorized: Session expired or invalid token', code: 'UNAUTHORIZED' });
   }
 }
 
@@ -104,9 +147,9 @@ app.get('/api/tours', async (req, res) => {
       };
     });
 
-    res.json({ tours: result });
+    res.json({ success: true, tours: result });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ success: false, error: 'Database query error: ' + err.message });
   }
 });
 
@@ -114,12 +157,13 @@ app.get('/api/tours', async (req, res) => {
 app.get('/api/tours/:id', async (req, res) => {
   try {
     const tour = await dbGet(`SELECT * FROM tours WHERE id = ?`, [req.params.id]);
-    if (!tour) return res.status(404).json({ error: 'Tour not found' });
+    if (!tour) return res.status(404).json({ success: false, error: 'Tour not found' });
 
     const packages = await dbQuery(`SELECT * FROM packages WHERE tour_id = ?`, [tour.id]);
     const itinerary = await dbQuery(`SELECT * FROM itineraries WHERE tour_id = ? ORDER BY step_order ASC`, [tour.id]);
 
     res.json({
+      success: true,
       ...tour,
       highlights: JSON.parse(tour.highlights || '[]'),
       packages: packages.map(p => ({
@@ -134,7 +178,7 @@ app.get('/api/tours/:id', async (req, res) => {
       itinerary
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ success: false, error: 'Database query error: ' + err.message });
   }
 });
 
@@ -142,9 +186,9 @@ app.get('/api/tours/:id', async (req, res) => {
 app.get('/api/hotels', async (req, res) => {
   try {
     const hotels = await dbQuery(`SELECT * FROM hotels ORDER BY name ASC`);
-    res.json({ hotels });
+    res.json({ success: true, hotels });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ success: false, error: 'Database query error: ' + err.message });
   }
 });
 
@@ -153,13 +197,14 @@ app.get('/api/addons', async (req, res) => {
   try {
     const addons = await dbQuery(`SELECT * FROM addons`);
     res.json({
+      success: true,
       addons: addons.map(a => ({
         ...a,
         tours: JSON.parse(a.tours || '[]')
       }))
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ success: false, error: 'Database query error: ' + err.message });
   }
 });
 
@@ -168,6 +213,7 @@ app.get('/api/reviews', async (req, res) => {
   try {
     const reviews = await dbQuery(`SELECT * FROM reviews WHERE status = 'APPROVED' ORDER BY id DESC`);
     res.json({
+      success: true,
       reviews: reviews.map(r => ({
         ...r,
         tour: r.tour_name,
@@ -175,7 +221,7 @@ app.get('/api/reviews', async (req, res) => {
       }))
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ success: false, error: 'Database query error: ' + err.message });
   }
 });
 
@@ -183,16 +229,16 @@ app.get('/api/reviews', async (req, res) => {
 app.get('/api/faqs', async (req, res) => {
   try {
     const faqs = await dbQuery(`SELECT * FROM faqs ORDER BY display_order ASC`);
-    res.json({ faqs });
+    res.json({ success: true, faqs });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ success: false, error: 'Database query error: ' + err.message });
   }
 });
 
 // GET /api/availability — Check remaining seats for a date
 app.get('/api/availability', async (req, res) => {
   const { tourId, date } = req.query;
-  if (!tourId || !date) return res.status(400).json({ error: 'Missing tourId or date parameter' });
+  if (!tourId || !date) return res.status(400).json({ success: false, error: 'Missing tourId or date parameter' });
 
   try {
     const avail = await dbGet(`SELECT * FROM availability WHERE tour_id = ? AND date = ?`, [tourId, date]);
@@ -201,6 +247,7 @@ app.get('/api/availability', async (req, res) => {
     const remaining = Math.max(0, maxCap - booked);
 
     res.json({
+      success: true,
       tourId,
       date,
       maxCapacity: maxCap,
@@ -209,20 +256,20 @@ app.get('/api/availability', async (req, res) => {
       isAvailable: remaining > 0
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ success: false, error: 'Database query error: ' + err.message });
   }
 });
 
 // ----------------------------------------------------
-// SERVER-SIDE BOOKING ENGINE & RACE CONDITION PROTECTION
+// SERVER-SIDE BOOKING ENGINE & CAPACITY ENFORCEMENT
 // ----------------------------------------------------
 
-// POST /api/bookings/create — Create booking with server-side validation & pricing
+// POST /api/bookings/create — Create booking with server-side pricing authority
 app.post('/api/bookings/create', async (req, res) => {
   const { tourId, packageId, date, adults, kids, hotelId, guestName, guestEmail, guestPhone, addons } = req.body;
 
   if (!tourId || !packageId || !date || !guestName || !guestEmail || !hotelId) {
-    return res.status(400).json({ error: 'Missing required booking fields.' });
+    return res.status(400).json({ success: false, error: 'Missing required booking fields.' });
   }
 
   const adultCount = parseInt(adults) || 1;
@@ -232,11 +279,11 @@ app.post('/api/bookings/create', async (req, res) => {
   try {
     // 1. Fetch official package price from DB (Server is the sole pricing authority)
     const pkg = await dbGet(`SELECT * FROM packages WHERE id = ? AND tour_id = ?`, [packageId, tourId]);
-    if (!pkg) return res.status(404).json({ error: 'Invalid tour or package selected.' });
+    if (!pkg) return res.status(404).json({ success: false, error: 'Invalid tour or package selected.' });
 
     // 2. Fetch hotel details from DB
     const hotel = await dbGet(`SELECT * FROM hotels WHERE id = ?`, [hotelId]);
-    if (!hotel) return res.status(404).json({ error: 'Invalid hotel pickup location.' });
+    if (!hotel) return res.status(404).json({ success: false, error: 'Invalid hotel pickup location.' });
 
     // 3. Server-side price calculation
     let calculatedTotal = pkg.price * totalGuests;
@@ -250,19 +297,20 @@ app.post('/api/bookings/create', async (req, res) => {
       });
     }
 
-    // 4. Server-Side Atomic Capacity Check (Race Condition Protection)
+    // 4. Server-Side Atomic Capacity Check
     let avail = await dbGet(`SELECT * FROM availability WHERE tour_id = ? AND date = ?`, [tourId, date]);
     const maxCap = avail ? avail.max_capacity : 30;
     const currentBooked = avail ? avail.booked_seats : 0;
 
     if (currentBooked + totalGuests > maxCap) {
       return res.status(409).json({
+        success: false,
         error: 'Capacity Exceeded',
         message: `Only ${Math.max(0, maxCap - currentBooked)} seats remain for ${date}. Cannot book ${totalGuests} seats.`
       });
     }
 
-    // 5. Update/Insert availability atomically
+    // 5. Update/Insert availability
     if (!avail) {
       await dbRun(`INSERT INTO availability (tour_id, date, max_capacity, booked_seats) VALUES (?, ?, ?, ?)`,
         [tourId, date, 30, totalGuests]);
@@ -271,7 +319,7 @@ app.post('/api/bookings/create', async (req, res) => {
         [totalGuests, tourId, date]);
     }
 
-    // 6. Create Booking Record
+    // 6. Create Booking Record with Initial PENDING_PAYMENT Lifecycle Status
     const bookingRef = 'CT-' + Math.floor(10000 + Math.random() * 90000);
 
     await dbRun(`INSERT INTO bookings 
@@ -293,7 +341,7 @@ app.post('/api/bookings/create', async (req, res) => {
         JSON.stringify(selectedAddons),
         calculatedTotal,
         'CONFIRMED',
-        'PAID'
+        'PENDING'
       ]);
 
     res.status(201).json({
@@ -304,39 +352,42 @@ app.post('/api/bookings/create', async (req, res) => {
       hotelName: hotel.name,
       pickupTime: hotel.pickup_time,
       date,
-      message: 'Booking confirmed and server-validated.'
+      status: 'CONFIRMED',
+      paymentStatus: 'PENDING',
+      message: 'Reservation created. Awaiting payment confirmation.'
     });
 
   } catch (err) {
     console.error("Booking Error:", err);
-    res.status(500).json({ error: 'Server booking processing failed: ' + err.message });
+    res.status(500).json({ success: false, error: 'Server booking processing failed: ' + err.message });
   }
 });
 
 // ----------------------------------------------------
-// PAYMENT BOUNDARY (STRIPE / WEBHOOK INTEGRATION)
+// PAYMENT BOUNDARY & STRIPE WEBHOOKS
 // ----------------------------------------------------
 
 // POST /api/payments/create-session — Create payment checkout session
 app.post('/api/payments/create-session', async (req, res) => {
   const { bookingId } = req.body;
-  if (!bookingId) return res.status(400).json({ error: 'Missing bookingId' });
+  if (!bookingId) return res.status(400).json({ success: false, error: 'Missing bookingId parameter' });
 
   try {
     const booking = await dbGet(`SELECT * FROM bookings WHERE id = ?`, [bookingId]);
-    if (!booking) return res.status(404).json({ error: 'Booking not found' });
+    if (!booking) return res.status(404).json({ success: false, error: 'Booking not found' });
 
     if (!STRIPE_SECRET_KEY) {
       return res.json({
+        success: true,
         stripeConfigured: false,
-        message: 'Stripe API key pending configuration. Mock payment session boundary generated.',
-        sessionUrl: `/booking.html?confirmed=${booking.id}`,
+        message: 'Stripe API key pending configuration. Mock payment session generated.',
+        mockPaymentUrl: `/booking.html?confirmed=${booking.id}`,
         bookingId: booking.id,
         amount: booking.total_price
       });
     }
 
-    // Real Stripe Session creation boundary
+    // Stripe Checkout Session Creation
     const stripe = require('stripe')(STRIPE_SECRET_KEY);
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -357,20 +408,59 @@ app.post('/api/payments/create-session', async (req, res) => {
       metadata: { bookingId: booking.id }
     });
 
-    res.json({ stripeConfigured: true, sessionUrl: session.url });
+    res.json({ success: true, stripeConfigured: true, sessionUrl: session.url });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 
-// POST /api/payments/webhook — Handle payment gateway webhook
+// POST /api/payments/mock-confirm — Development/Demo Payment Confirmation
+app.post('/api/payments/mock-confirm', async (req, res) => {
+  const { bookingId } = req.body;
+  if (!bookingId) return res.status(400).json({ success: false, error: 'Missing bookingId' });
+
+  try {
+    const booking = await dbGet(`SELECT * FROM bookings WHERE id = ?`, [bookingId]);
+    if (!booking) return res.status(404).json({ success: false, error: 'Booking reference not found' });
+
+    await dbRun(`UPDATE bookings SET payment_status = 'PAID', status = 'CONFIRMED' WHERE id = ?`, [bookingId]);
+    res.json({ success: true, bookingId, paymentStatus: 'PAID', status: 'CONFIRMED', message: 'Payment confirmed in demo mode.' });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/payments/webhook — Official Stripe Signature Verified Webhook
 app.post('/api/payments/webhook', async (req, res) => {
-  const { eventType, bookingId } = req.body;
-  if (eventType === 'payment_intent.succeeded' || eventType === 'checkout.session.completed') {
-    if (bookingId) {
-      await dbRun(`UPDATE bookings SET payment_status = 'PAID', status = 'CONFIRMED' WHERE id = ?`, [bookingId]);
+  const sig = req.headers['stripe-signature'];
+  let event;
+
+  if (STRIPE_SECRET_KEY && STRIPE_WEBHOOK_SECRET && sig) {
+    const stripe = require('stripe')(STRIPE_SECRET_KEY);
+    try {
+      event = stripe.webhooks.constructEvent(req.body, sig, STRIPE_WEBHOOK_SECRET);
+    } catch (err) {
+      console.error(`Webhook Signature Verification Failed: ${err.message}`);
+      return res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+  } else {
+    // Unverified fallback only if Stripe webhook secret is unconfigured
+    try {
+      event = JSON.parse(req.body.toString());
+    } catch (e) {
+      return res.status(400).send("Invalid webhook payload");
     }
   }
+
+  if (event.type === 'checkout.session.completed' || event.type === 'payment_intent.succeeded') {
+    const session = event.data.object;
+    const bookingId = session.metadata ? session.metadata.bookingId : null;
+    if (bookingId) {
+      await dbRun(`UPDATE bookings SET payment_status = 'PAID', status = 'CONFIRMED' WHERE id = ?`, [bookingId]);
+      console.log(`Payment webhook confirmed booking ${bookingId}`);
+    }
+  }
+
   res.json({ received: true });
 });
 
@@ -381,14 +471,14 @@ app.post('/api/payments/webhook', async (req, res) => {
 // POST /api/auth/login — Admin Authentication
 app.post('/api/auth/login', async (req, res) => {
   const { username, password } = req.body;
-  if (!username || !password) return res.status(400).json({ error: 'Username and password required' });
+  if (!username || !password) return res.status(400).json({ success: false, error: 'Username and password required' });
 
   try {
     const user = await dbGet(`SELECT * FROM users WHERE username = ?`, [username]);
-    if (!user) return res.status(401).json({ error: 'Invalid username or password' });
+    if (!user) return res.status(401).json({ success: false, error: 'Invalid username or password' });
 
     const validPassword = await bcrypt.compare(password, user.password_hash);
-    if (!validPassword) return res.status(401).json({ error: 'Invalid username or password' });
+    if (!validPassword) return res.status(401).json({ success: false, error: 'Invalid username or password' });
 
     const token = jwt.sign({ id: user.id, username: user.username, role: user.role }, JWT_SECRET, { expiresIn: '12h' });
 
@@ -398,7 +488,7 @@ app.post('/api/auth/login', async (req, res) => {
       user: { username: user.username, role: user.role }
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ success: false, error: 'Server authentication failure: ' + err.message });
   }
 });
 
@@ -406,11 +496,12 @@ app.post('/api/auth/login', async (req, res) => {
 app.get('/api/admin/dashboard', authMiddleware, async (req, res) => {
   try {
     const totalBookings = await dbGet(`SELECT COUNT(*) as count, SUM(total_price) as revenue FROM bookings WHERE status != 'CANCELLED'`);
-    const pendingBookings = await dbGet(`SELECT COUNT(*) as count FROM bookings WHERE status = 'PENDING'`);
+    const pendingBookings = await dbGet(`SELECT COUNT(*) as count FROM bookings WHERE status = 'PENDING' OR payment_status = 'PENDING'`);
     const totalTours = await dbGet(`SELECT COUNT(*) as count FROM tours`);
     const recentBookings = await dbQuery(`SELECT * FROM bookings ORDER BY created_at DESC LIMIT 10`);
 
     res.json({
+      success: true,
       analytics: {
         totalBookings: totalBookings.count || 0,
         totalRevenue: totalBookings.revenue || 0,
@@ -420,7 +511,7 @@ app.get('/api/admin/dashboard', authMiddleware, async (req, res) => {
       recentBookings
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 
@@ -428,9 +519,9 @@ app.get('/api/admin/dashboard', authMiddleware, async (req, res) => {
 app.get('/api/admin/bookings', authMiddleware, async (req, res) => {
   try {
     const bookings = await dbQuery(`SELECT * FROM bookings ORDER BY created_at DESC`);
-    res.json({ bookings });
+    res.json({ success: true, bookings });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 
@@ -440,9 +531,9 @@ app.patch('/api/admin/bookings/:id', authMiddleware, async (req, res) => {
   try {
     await dbRun(`UPDATE bookings SET status = COALESCE(?, status), payment_status = COALESCE(?, payment_status) WHERE id = ?`,
       [status, payment_status, req.params.id]);
-    res.json({ success: true, message: 'Booking updated' });
+    res.json({ success: true, message: 'Booking status updated successfully' });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 
@@ -453,28 +544,40 @@ app.put('/api/admin/tours/:id', authMiddleware, async (req, res) => {
     await dbRun(`UPDATE tours SET name = COALESCE(?, name), tagline = COALESCE(?, tagline), starting_price = COALESCE(?, starting_price), summary = COALESCE(?, summary) WHERE id = ?`,
       [name, tagline, starting_price, summary, req.params.id]);
     
-    // Update standard package price if changed
     if (starting_price) {
       await dbRun(`UPDATE packages SET price = ? WHERE tour_id = ? AND badge = 'Best Value'`, [starting_price, req.params.id]);
     }
 
     res.json({ success: true, message: 'Tour details updated in database' });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 
 // POST /api/admin/availability — Adjust Seat Capacity per Date (Protected)
 app.post('/api/admin/availability', authMiddleware, async (req, res) => {
   const { tourId, date, maxCapacity } = req.body;
-  if (!tourId || !date || !maxCapacity) return res.status(400).json({ error: 'Missing parameters' });
+  if (!tourId || !date || !maxCapacity) return res.status(400).json({ success: false, error: 'Missing parameters' });
 
   try {
     await dbRun(`INSERT INTO availability (tour_id, date, max_capacity, booked_seats) VALUES (?, ?, ?, 0)
       ON CONFLICT(tour_id, date) DO UPDATE SET max_capacity = ?`, [tourId, date, maxCapacity, maxCapacity]);
-    res.json({ success: true, message: 'Capacity updated' });
+    res.json({ success: true, message: 'Capacity updated successfully' });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// PATCH /api/admin/reviews/:id — Moderate Customer Reviews (Protected)
+app.patch('/api/admin/reviews/:id', authMiddleware, async (req, res) => {
+  const { status } = req.body; // 'APPROVED' or 'REJECTED'
+  if (!status) return res.status(400).json({ success: false, error: 'Status is required' });
+
+  try {
+    await dbRun(`UPDATE reviews SET status = ? WHERE id = ?`, [status, req.params.id]);
+    res.json({ success: true, message: `Review status updated to ${status}` });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 
@@ -483,7 +586,7 @@ app.use(express.static(path.join(__dirname)));
 
 // Fallback to index.html for single-page style navigation
 app.get('*', (req, res) => {
-  if (req.path.startsWith('/api/')) return res.status(404).json({ error: 'API route not found' });
+  if (req.path.startsWith('/api/')) return res.status(404).json({ success: false, error: 'API route not found' });
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 

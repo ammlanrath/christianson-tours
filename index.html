@@ -384,9 +384,9 @@
   <!-- END: WhyChristiansonTours -->
 
 <!-- BEGIN: TheJourneyFlow -->
-<section class="relative z-10 glass-section-dark py-24 border-t border-white/10" id="journey">
+<section class="relative z-10 glass-section-dark py-24 border-t border-white/10 overflow-hidden" id="journey">
 <div class="max-w-[1720px] mx-auto px-6 lg:px-10">
-<div class="text-center max-w-2xl mx-auto mb-20">
+<div class="text-center max-w-2xl mx-auto mb-16">
 <div class="inline-flex items-center space-x-2 text-brand-terracotta text-xs font-bold uppercase tracking-widest2 mb-3">
 <span class="w-4 h-[2px] bg-brand-terracotta"></span>
 <span>02 / Seamless Itinerary</span>
@@ -395,38 +395,76 @@
 <h2 class="text-3xl md:text-5xl font-cinzel font-bold text-white">The Southwestern Journey</h2>
 <p class="text-brand-sand/80 text-sm mt-3">From morning departure to your Las Vegas hotel drop-off, every mile is curated.</p>
 </div>
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
-<div class="glass-panel p-5 rounded-xl border-l-4 border-l-brand-terracotta">
-<span class="text-xs font-mono text-brand-terracotta font-bold">01 · 6:30 AM</span>
-<h4 class="text-base font-syne font-bold text-white mt-1">Hotel Pickup</h4>
-<p class="text-xs text-brand-sand/70 mt-2">Designated VIP tour lobby pickup at all Las Vegas Strip &amp; Downtown resorts.</p>
+
+<!-- Continuous Seamless Marquee Track -->
+<div class="marquee-container">
+  <div class="marquee-track space-x-6 py-2">
+    <!-- Set 1 -->
+    <div class="w-72 glass-panel p-5 rounded-2xl border-l-4 border-l-brand-terracotta flex-shrink-0">
+      <span class="text-xs font-mono text-brand-terracotta font-bold">01 · 6:30 AM</span>
+      <h4 class="text-base font-syne font-bold text-white mt-1">Hotel Pickup</h4>
+      <p class="text-xs text-brand-sand/70 mt-2">VIP tour lobby pickup at all Las Vegas Strip &amp; Downtown resorts.</p>
+    </div>
+    <div class="w-72 glass-panel p-5 rounded-2xl border-l-4 border-l-white/30 flex-shrink-0">
+      <span class="text-xs font-mono text-brand-sand font-bold">02 · 7:15 AM</span>
+      <h4 class="text-base font-syne font-bold text-white mt-1">Desert Highway</h4>
+      <p class="text-xs text-brand-sand/70 mt-2">Scenic cruise through Eldorado Valley and ancient Joshua Tree forests.</p>
+    </div>
+    <div class="w-72 glass-panel p-5 rounded-2xl border-l-4 border-l-brand-turquoise flex-shrink-0">
+      <span class="text-xs font-mono text-brand-turquoise font-bold">03 · 8:15 AM</span>
+      <h4 class="text-base font-syne font-bold text-white mt-1">Hoover Dam</h4>
+      <p class="text-xs text-brand-sand/70 mt-2">Walk the 900-foot-high memorial bypass bridge with photo vistas.</p>
+    </div>
+    <div class="w-72 glass-panel p-5 rounded-2xl border-l-4 border-l-brand-terracotta flex-shrink-0">
+      <span class="text-xs font-mono text-brand-terracotta font-bold">04 · 10:45 AM</span>
+      <h4 class="text-base font-syne font-bold text-white mt-1">West Rim Arrival</h4>
+      <p class="text-xs text-brand-sand/70 mt-2">Enter Hualapai lands with direct access to Eagle Point &amp; Skywalk.</p>
+    </div>
+    <div class="w-72 glass-panel p-5 rounded-2xl border-l-4 border-l-brand-ochre flex-shrink-0">
+      <span class="text-xs font-mono text-brand-ochre font-bold">05 · 1:00 PM</span>
+      <h4 class="text-base font-syne font-bold text-white mt-1">Guano Point</h4>
+      <p class="text-xs text-brand-sand/70 mt-2">Catered canyon-side dining with dramatic 360-degree gorge outlooks.</p>
+    </div>
+    <div class="w-72 glass-panel p-5 rounded-2xl border-l-4 border-l-emerald-400 flex-shrink-0">
+      <span class="text-xs font-mono text-emerald-400 font-bold">06 · 5:30 PM</span>
+      <h4 class="text-base font-syne font-bold text-white mt-1">Vegas Return</h4>
+      <p class="text-xs text-brand-sand/70 mt-2">Comfortable return to your hotel entrance in time for evening shows.</p>
+    </div>
+
+    <!-- Duplicate Set for Seamless Infinite Loop -->
+    <div class="w-72 glass-panel p-5 rounded-2xl border-l-4 border-l-brand-terracotta flex-shrink-0">
+      <span class="text-xs font-mono text-brand-terracotta font-bold">01 · 6:30 AM</span>
+      <h4 class="text-base font-syne font-bold text-white mt-1">Hotel Pickup</h4>
+      <p class="text-xs text-brand-sand/70 mt-2">VIP tour lobby pickup at all Las Vegas Strip &amp; Downtown resorts.</p>
+    </div>
+    <div class="w-72 glass-panel p-5 rounded-2xl border-l-4 border-l-white/30 flex-shrink-0">
+      <span class="text-xs font-mono text-brand-sand font-bold">02 · 7:15 AM</span>
+      <h4 class="text-base font-syne font-bold text-white mt-1">Desert Highway</h4>
+      <p class="text-xs text-brand-sand/70 mt-2">Scenic cruise through Eldorado Valley and ancient Joshua Tree forests.</p>
+    </div>
+    <div class="w-72 glass-panel p-5 rounded-2xl border-l-4 border-l-brand-turquoise flex-shrink-0">
+      <span class="text-xs font-mono text-brand-turquoise font-bold">03 · 8:15 AM</span>
+      <h4 class="text-base font-syne font-bold text-white mt-1">Hoover Dam</h4>
+      <p class="text-xs text-brand-sand/70 mt-2">Walk the 900-foot-high memorial bypass bridge with photo vistas.</p>
+    </div>
+    <div class="w-72 glass-panel p-5 rounded-2xl border-l-4 border-l-brand-terracotta flex-shrink-0">
+      <span class="text-xs font-mono text-brand-terracotta font-bold">04 · 10:45 AM</span>
+      <h4 class="text-base font-syne font-bold text-white mt-1">West Rim Arrival</h4>
+      <p class="text-xs text-brand-sand/70 mt-2">Enter Hualapai lands with direct access to Eagle Point &amp; Skywalk.</p>
+    </div>
+    <div class="w-72 glass-panel p-5 rounded-2xl border-l-4 border-l-brand-ochre flex-shrink-0">
+      <span class="text-xs font-mono text-brand-ochre font-bold">05 · 1:00 PM</span>
+      <h4 class="text-base font-syne font-bold text-white mt-1">Guano Point</h4>
+      <p class="text-xs text-brand-sand/70 mt-2">Catered canyon-side dining with dramatic 360-degree gorge outlooks.</p>
+    </div>
+    <div class="w-72 glass-panel p-5 rounded-2xl border-l-4 border-l-emerald-400 flex-shrink-0">
+      <span class="text-xs font-mono text-emerald-400 font-bold">06 · 5:30 PM</span>
+      <h4 class="text-base font-syne font-bold text-white mt-1">Vegas Return</h4>
+      <p class="text-xs text-brand-sand/70 mt-2">Comfortable return to your hotel entrance in time for evening shows.</p>
+    </div>
+  </div>
 </div>
-<div class="glass-panel p-5 rounded-xl border-l-4 border-l-white/30">
-<span class="text-xs font-mono text-brand-sand font-bold">02 · 7:15 AM</span>
-<h4 class="text-base font-syne font-bold text-white mt-1">Desert Highway</h4>
-<p class="text-xs text-brand-sand/70 mt-2">Scenic cruise through Eldorado Valley and ancient 900-year-old Joshua Tree forests.</p>
-</div>
-<div class="glass-panel p-5 rounded-xl border-l-4 border-l-brand-turquoise">
-<span class="text-xs font-mono text-brand-turquoise font-bold">03 · 8:15 AM</span>
-<h4 class="text-base font-syne font-bold text-white mt-1">Hoover Dam</h4>
-<p class="text-xs text-brand-sand/70 mt-2">Walk the 900-foot-high memorial bypass bridge with photo vistas of Lake Mead.</p>
-</div>
-<div class="glass-panel p-5 rounded-xl border-l-4 border-l-brand-terracotta">
-<span class="text-xs font-mono text-brand-terracotta font-bold">04 · 10:45 AM</span>
-<h4 class="text-base font-syne font-bold text-white mt-1">West Rim Arrival</h4>
-<p class="text-xs text-brand-sand/70 mt-2">Enter Hualapai lands with direct access to Eagle Point &amp; world-famous Skywalk.</p>
-</div>
-<div class="glass-panel p-5 rounded-xl border-l-4 border-l-brand-ochre">
-<span class="text-xs font-mono text-brand-ochre font-bold">05 · 1:00 PM</span>
-<h4 class="text-base font-syne font-bold text-white mt-1">Guano Point</h4>
-<p class="text-xs text-brand-sand/70 mt-2">Catered canyon-side dining with dramatic 360-degree panoramic canyon gorge outlooks.</p>
-</div>
-<div class="glass-panel p-5 rounded-xl border-l-4 border-l-emerald-400">
-<span class="text-xs font-mono text-emerald-400 font-bold">06 · 5:30 PM</span>
-<h4 class="text-base font-syne font-bold text-white mt-1">Vegas Return</h4>
-<p class="text-xs text-brand-sand/70 mt-2">Comfortable return to your hotel entrance in plenty of time for dinner and evening shows.</p>
-</div>
-</div>
+
 </div>
 </section>
 <!-- END: TheJourneyFlow -->
