@@ -97,11 +97,11 @@
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     }
     .glass-panel-elevated {
-      background: rgba(20, 26, 34, 0.78);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(224, 109, 68, 0.35);
-      box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
+      background: rgba(12, 16, 22, 0.90);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 20px 50px 0 rgba(0, 0, 0, 0.7);
     }
 
     /* Content Section Overlay - Light Translucent Backdrop so WEBP Animation is Clearly Visible */
@@ -216,36 +216,40 @@
 </div>
 
 <!-- SCENE 3: STAGGERED DIAGONAL (NORTH-WEST) TRIP CARDS SEQUENCE -->
-<div class="relative w-full max-w-2xl mx-auto h-[440px] flex items-center justify-center my-auto z-30 pointer-events-none" id="hero-cards-container">
+<div class="absolute inset-0 flex items-center justify-center pt-20 pb-12 px-4 z-30 pointer-events-none" id="hero-cards-container">
 
 <!-- CARD 1: Las Vegas Departure (Stage 1) -->
-<div id="card-1" class="absolute inset-0 flex items-center justify-center transition-all duration-300 opacity-0">
-<div class="w-full glass-panel-elevated rounded-3xl p-8 sm:p-10 border border-brand-ochre/50 shadow-2xl">
-<div class="flex items-center justify-between mb-3">
-<span class="text-xs font-mono uppercase tracking-widest text-brand-ochre font-bold">Stage 01 / 03</span>
-<span class="px-3 py-1 rounded-full bg-brand-ochre/20 border border-brand-ochre/40 text-[10px] font-mono text-brand-ochre font-bold uppercase">Strip Hotel Pickup</span>
+<div id="card-1" class="absolute inset-0 flex items-center justify-center p-4 transition-all duration-300 opacity-0">
+<div class="w-full max-w-xl glass-panel-elevated rounded-3xl overflow-hidden border border-brand-ochre/50 shadow-2xl">
+<div class="relative h-44 sm:h-52 w-full overflow-hidden">
+<img alt="Las Vegas Pickup" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1581351123004-757df051db8e?auto=format&fit=crop&w=800&q=80"/>
+<div class="absolute inset-0 bg-gradient-to-t from-brand-charcoal via-transparent to-black/30"></div>
+<span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-brand-ochre text-xs font-bold uppercase tracking-wider text-brand-charcoal shadow-md">Stage 01 / 03 · Pickup</span>
+<span class="absolute top-4 right-4 px-3 py-1 rounded-lg bg-black/70 backdrop-blur text-xs font-mono font-bold text-emerald-400">Included</span>
 </div>
-<h3 class="text-2xl sm:text-4xl font-cinzel font-bold text-white mb-4">Las Vegas Departure</h3>
-<p class="text-sm sm:text-base text-brand-sand/90 mb-6 leading-relaxed">Begin your southwestern excursion directly from the Las Vegas Strip. We provide VIP hotel lobby pickup at all major resort properties in comfortable, executive vehicles.</p>
-<div class="pt-6 border-t border-white/10 flex items-center justify-between">
-<span class="text-xs uppercase font-mono tracking-widest text-brand-sand/70">Complimentary Pickup Included</span>
-<a href="#booking-cta" class="px-6 py-2.5 rounded-full bg-brand-ochre text-brand-charcoal text-xs font-bold uppercase tracking-wider hover:bg-amber-400 transition-all">Book Excursion</a>
+<div class="p-6 sm:p-7">
+<h3 class="text-xl sm:text-3xl font-cinzel font-bold text-white mb-2">Las Vegas Departure</h3>
+<p class="text-xs sm:text-sm text-brand-sand/90 mb-5 leading-relaxed">Begin your southwestern excursion directly from the Las Vegas Strip. Complimentary VIP hotel lobby pickup at all major resort properties in executive vehicles.</p>
+<div class="flex items-center space-x-3">
+<a class="flex-1 py-3 rounded-xl bg-brand-ochre hover:bg-amber-400 text-center text-xs font-bold text-brand-charcoal uppercase tracking-wider transition-all shadow-md" href="#booking-cta">Book Excursion</a>
+<a class="flex-1 py-3 rounded-xl border border-white/20 hover:border-white text-center text-xs font-semibold text-white uppercase tracking-wider transition-all" href="tel:+17024569200">Call Concierge</a>
+</div>
 </div>
 </div>
 </div>
 
 <!-- CARD 2: Hoover Dam Highlights (Stage 2) -->
-<div id="card-2" class="absolute inset-0 flex items-center justify-center transition-all duration-300 opacity-0">
-<div class="w-full glass-panel-elevated rounded-3xl overflow-hidden border border-brand-turquoise/50 shadow-2xl">
-<div class="relative h-48 sm:h-56 w-full overflow-hidden">
+<div id="card-2" class="absolute inset-0 flex items-center justify-center p-4 transition-all duration-300 opacity-0">
+<div class="w-full max-w-xl glass-panel-elevated rounded-3xl overflow-hidden border border-brand-turquoise/50 shadow-2xl">
+<div class="relative h-44 sm:h-52 w-full overflow-hidden">
 <img alt="Hoover Dam Tour" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1VJcOp5we5Ddu4quv_s8ZI7Dr5C3Zj7Q8T9mbQtttXHTVC_GRBxmLstPcOHeEHC9Vz8kgE7GwUaVZkg98i8BQw0_cpDS7Zg5GQ34UZ_TRHimb7hgApY0Idz-9lSFECN55hZ6VwFVFOqPwQ9igX1ZP-ITbSg44yHWLGogyArm2F4PDfbCJovKx21lTHZKd-01zFsdjZlROLfXQ6ORSekrEUh6Eiraq5uZujX7MgbId916f44ia1qRIOfxj6x"/>
 <div class="absolute inset-0 bg-gradient-to-t from-brand-charcoal via-transparent to-black/30"></div>
 <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-brand-turquoise text-xs font-bold uppercase tracking-wider text-brand-charcoal shadow-md">Stage 02 / 03 · Half Day</span>
 <span class="absolute top-4 right-4 px-3 py-1 rounded-lg bg-black/70 backdrop-blur text-xs font-mono font-bold text-brand-ochre">From $50</span>
 </div>
-<div class="p-6 sm:p-8">
+<div class="p-6 sm:p-7">
 <h3 class="text-xl sm:text-3xl font-cinzel font-bold text-white mb-2">Hoover Dam Highlights</h3>
-<p class="text-xs sm:text-sm text-brand-sand/90 mb-6">Walk the Mike O'Callaghan-Pat Tillman Memorial Bypass Bridge, enjoy 900-ft views into Black Canyon, Lake Mead vistas, and historic Boulder City.</p>
+<p class="text-xs sm:text-sm text-brand-sand/90 mb-5 leading-relaxed">Walk the Mike O'Callaghan-Pat Tillman Memorial Bypass Bridge, enjoy 900-ft views into Black Canyon, Lake Mead vistas, and historic Boulder City.</p>
 <div class="flex items-center space-x-3">
 <a class="flex-1 py-3 rounded-xl bg-brand-turquoise hover:bg-cyan-400 text-center text-xs font-bold text-brand-charcoal uppercase tracking-wider transition-all shadow-md" href="#tour-hoover-details">View Details</a>
 <a class="flex-1 py-3 rounded-xl border border-white/20 hover:border-white text-center text-xs font-semibold text-white uppercase tracking-wider transition-all" href="tel:+17024569200">Call to Book</a>
@@ -255,17 +259,17 @@
 </div>
 
 <!-- CARD 3: Grand Canyon West Rim (Stage 3) -->
-<div id="card-3" class="absolute inset-0 flex items-center justify-center transition-all duration-300 opacity-0">
-<div class="w-full glass-panel-elevated rounded-3xl overflow-hidden border border-brand-terracotta/50 shadow-2xl">
-<div class="relative h-48 sm:h-56 w-full overflow-hidden">
+<div id="card-3" class="absolute inset-0 flex items-center justify-center p-4 transition-all duration-300 opacity-0">
+<div class="w-full max-w-xl glass-panel-elevated rounded-3xl overflow-hidden border border-brand-terracotta/50 shadow-2xl">
+<div class="relative h-44 sm:h-52 w-full overflow-hidden">
 <img alt="Grand Canyon West Rim" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1XotMXw9VUOOt1Qv48v9Nh0DxlwCXKGYPqSOs5VJlxng3o1G_REP6WAV9D94zOfQfssmgN0H0LVO2Xzvb1j8nPqTAq5Rq2K2iIrsqhv9DNVHyWFSX7CylTIn52sQoXgAw7UvBZDP9ETlB-USJnoYpaq9qS5Huz9zFCiYSlE11DZ_J19qL5082yqzckhf1h32gciopr40W4KFOhHh9H1C-hCAf3v036zOLvXqqlW9W73CbpYlDa-knOO3fbS"/>
 <div class="absolute inset-0 bg-gradient-to-t from-brand-charcoal via-transparent to-black/30"></div>
 <span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-brand-terracotta text-xs font-bold uppercase tracking-wider text-white shadow-md">Stage 03 / 03 · Full Day</span>
 <span class="absolute top-4 right-4 px-3 py-1 rounded-lg bg-black/70 backdrop-blur text-xs font-mono font-bold text-brand-ochre">From $97</span>
 </div>
-<div class="p-6 sm:p-8">
+<div class="p-6 sm:p-7">
 <h3 class="text-xl sm:text-3xl font-cinzel font-bold text-white mb-2">Grand Canyon West Rim</h3>
-<p class="text-xs sm:text-sm text-brand-sand/90 mb-6">4 full hours at the rim! Eagle Point, Guano Point 360° overlook, Skywalk access, Hualapai Nation, and deli picnic lunch included.</p>
+<p class="text-xs sm:text-sm text-brand-sand/90 mb-5 leading-relaxed">4 full hours at the rim! Eagle Point, Guano Point 360° overlook, Skywalk access, Hualapai Nation, and deli picnic lunch included.</p>
 <div class="flex items-center space-x-3">
 <a class="flex-1 py-3 rounded-xl bg-brand-terracotta hover:bg-brand-terracottaDark text-center text-xs font-bold text-white uppercase tracking-wider transition-all shadow-md" href="#tour-canyon-details">View Details</a>
 <a class="flex-1 py-3 rounded-xl border border-white/20 hover:border-white text-center text-xs font-semibold text-white uppercase tracking-wider transition-all" href="tel:+17024569200">Call to Book</a>
@@ -836,39 +840,51 @@ document.addEventListener('DOMContentLoaded', () => {
         const card = document.getElementById(cardId);
         if (!card) return;
 
-        if (progress < startP || progress > endP + 0.08) {
+        if (progress < startP || progress > endP) {
             card.style.opacity = '0';
             card.style.pointerEvents = 'none';
             card.style.visibility = 'hidden';
+            card.style.transform = 'translate3d(0, 150px, 0)';
             return;
         }
 
         card.style.visibility = 'visible';
-        const duration = endP - startP;
-        const midP = startP + duration * 0.65; // Center active focus phase
+        const totalDuration = endP - startP;
+        
+        // 3 Distinct Phases:
+        // 1. Enter (25% of range): Slides in diagonally from bottom-right (+130px, +150px) to center (0,0)
+        // 2. Middle Resting Plateau (50% of range): STAYS DEAD CENTER AT (0,0) while user scrolls!
+        // 3. Exit Northwest (25% of range): Slides UP & Northwest (-130px, -150px) and fades out
+        
+        const enterEnd = startP + totalDuration * 0.25;
+        const exitStart = startP + totalDuration * 0.75;
 
         let opacity = 0;
         let translateX = 0;
         let translateY = 0;
 
-        if (progress < midP) {
-            // Entering phase: Coming diagonally from South-East (+X, +Y) moving North-West towards center (0, 0)
-            let enterFraction = (progress - startP) / (midP - startP);
-            enterFraction = Math.max(0, Math.min(1, enterFraction));
-            opacity = enterFraction;
-            translateX = (1 - enterFraction) * 140; // 140px right
-            translateY = (1 - enterFraction) * 180; // 180px down
+        if (progress < enterEnd) {
+            let fraction = (progress - startP) / (enterEnd - startP);
+            fraction = Math.max(0, Math.min(1, fraction));
+            opacity = fraction;
+            translateX = (1 - fraction) * 130;
+            translateY = (1 - fraction) * 150;
+        } else if (progress <= exitStart) {
+            // REST IN DEAD CENTER OF SCREEN
+            opacity = 1;
+            translateX = 0;
+            translateY = 0;
         } else {
-            // Exiting phase: Moving further North-West (-X, -Y) and fading out
-            let exitFraction = (progress - midP) / (endP + 0.08 - midP);
-            exitFraction = Math.max(0, Math.min(1, exitFraction));
-            opacity = 1 - exitFraction;
-            translateX = -exitFraction * 140; // -140px left
-            translateY = -exitFraction * 180; // -180px up
+            // EXIT NORTHWEST (Going up and left!)
+            let fraction = (progress - exitStart) / (endP - exitStart);
+            fraction = Math.max(0, Math.min(1, fraction));
+            opacity = 1 - fraction;
+            translateX = -fraction * 130;
+            translateY = -fraction * 150;
         }
 
         card.style.opacity = opacity.toString();
-        card.style.pointerEvents = opacity > 0.2 ? 'auto' : 'none';
+        card.style.pointerEvents = opacity > 0.5 ? 'auto' : 'none';
         card.style.transform = `translate3d(${translateX}px, ${translateY}px, 0)`;
     }
 
