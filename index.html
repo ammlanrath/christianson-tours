@@ -43,11 +43,16 @@
   </script>
 <!-- Custom CSS: Base & Translucent Glass Aesthetics -->
 <style data-purpose="base-styling">
-    html, body {
+    html {
       background-color: #0a0e12;
       color: #e8ded4;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      overflow-x: hidden;
+    }
+    body {
+      background-color: #0a0e12;
+      color: #e8ded4;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: clip;
     }
     
     /* Fixed Fullscreen HD Canvas Background - Always 100% Crisp & High Quality */
@@ -160,7 +165,7 @@
 
 <!-- BEGIN: HeroScrollExperience -->
 <section class="relative z-10 w-full h-[450vh]" id="hero-scroll-section">
-<div class="sticky top-0 w-full h-screen overflow-hidden flex flex-col justify-between pt-24 pb-8 px-6 lg:px-12">
+<div id="hero-sticky-stage" class="sticky top-0 w-full h-screen overflow-hidden flex flex-col justify-between pt-24 pb-8 px-6 lg:px-12 z-20">
 
 <!-- SCENE 1: Fullscreen Opening Title (Centered over the WEBP animation background) -->
 <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-6 z-10 transition-all duration-500 pointer-events-auto" id="hero-center-title">
