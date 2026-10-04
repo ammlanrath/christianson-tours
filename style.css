@@ -2,18 +2,17 @@ body, html {
     margin: 0;
     padding: 0;
     width: 100%;
-    background-color: #000; /* Dark background to make the images pop */
-    overflow-x: hidden; /* Prevent horizontal scrolling */
+    background-color: #0a0e12;
 }
 
-#scroll-container {
-    height: 600vh; /* Make this larger to slow down the scroll speed. 600vh means 6 times the viewport height */
+body {
+    overflow-x: clip;
 }
 
 #animation-canvas {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100vw;
     height: 100vh;
 }
