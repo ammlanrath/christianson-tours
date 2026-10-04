@@ -41,7 +41,7 @@
       }
     }
   </script>
-<!-- Custom CSS: Layout & Aesthetics -->
+<!-- Custom CSS: Base & Aesthetics -->
 <style data-purpose="base-styling">
     body {
       background-color: #0a0e12;
@@ -50,7 +50,19 @@
       overflow-x: hidden;
     }
     
-    /* Smooth custom scrollbars */
+    /* Fixed Fullscreen Canvas Background */
+    #animation-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: 0;
+      pointer-events: none;
+    }
+    
+    /* Custom Scrollbars */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
@@ -65,41 +77,45 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #e06d44;
     }
-
-    .hide-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .hide-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
   </style>
-<style data-purpose="luxury-glassmorphism">
+
+<style data-purpose="glassmorphism">
     .glass-panel {
-      background: rgba(20, 25, 30, 0.72);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(20, 25, 30, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
     .glass-panel-elevated {
       background: rgba(24, 30, 38, 0.88);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(224, 109, 68, 0.22);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(224, 109, 68, 0.3);
     }
-    .glow-terracotta {
-      box-shadow: 0 0 32px rgba(224, 109, 68, 0.25);
+    .glass-section {
+      background: rgba(10, 14, 18, 0.82);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .glass-section-dark {
+      background: rgba(20, 25, 30, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
     }
   </style>
 </head>
 <body class="selection:bg-brand-terracotta selection:text-white antialiased">
+
+<!-- FULLSCREEN FIXED SCROLL ANIMATION CANVAS -->
+<canvas id="animation-canvas"></canvas>
+
 <!-- BEGIN: MainHeader -->
 <header class="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-white/10 transition-all duration-300">
 <div class="max-w-[1720px] mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
-<!-- Brand Logo Container -->
+<!-- Brand Logo -->
 <a class="flex items-center space-x-3 group" href="#" title="Christianson Tours Home">
-<div class="h-11 flex items-center bg-white/95 rounded-lg px-2.5 py-1 shadow-md transition-transform duration-300 group-hover:scale-105">
-<img alt="Christianson Tours Las Vegas" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XuN-JAcSsHH2elPZb7_iotvLWa0IHiDj7CVMBs9DY-Z7PjCZCpZGmVhCHKVMuYgKPDrnp6nO88Qp8k4mat9ekiG-r9pLHCly4AiFlvXso42dmtRkVQ-a6V18-kRXsD1BrzCG1Tbt2JO1eJegxQg3TyM9-F__G2mhtRty79YmA6WPSJ2JNnx5ZanWIA8tNoCoyuUBFJ7ogjlivzrvNo5z9dXvSkfdjsxJC1Uw6Qg4Bm-diyAkGQqdZpc9Ne"/>
+<div class="h-11 flex items-center bg-white/95 rounded-lg px-3 py-1 shadow-md transition-transform duration-300 group-hover:scale-105">
+<span class="text-brand-charcoal font-cinzel font-bold text-lg tracking-tight">CHRISTIANSON TOURS</span>
 </div>
 </a>
 <!-- Primary Navigation Links -->
@@ -112,7 +128,7 @@
 <a class="hover:text-brand-terracotta transition-colors duration-200" href="#plan-trip">Plan Trip</a>
 <a class="hover:text-brand-terracotta transition-colors duration-200" href="#faq">FAQ</a>
 </nav>
-<!-- Concierge & Direct Booking Action -->
+<!-- Direct Action -->
 <div class="flex items-center space-x-5">
 <a class="hidden xl:flex flex-col text-right group" href="tel:+17024569200">
 <span class="text-[10px] uppercase font-bold tracking-widest text-brand-muted">Vegas Concierge</span>
@@ -128,174 +144,130 @@
 </div>
 </header>
 <!-- END: MainHeader -->
-<!-- BEGIN: HeroSplitExperience -->
-<section class="hero-scroll-section relative w-full h-[400vh] bg-brand-charcoal" id="hero-scroll-section">
-<div class="hero-sticky sticky top-0 w-full h-screen min-h-[760px] overflow-hidden relative">
-<!-- LEFT SIDE: Interactive Visual Layer with WEBP Scroll Canvas -->
-<div id="hero-visual-layer" class="absolute top-20 lg:bottom-0 left-0 w-full lg:w-1/2 h-[45%] lg:h-auto z-0 overflow-hidden border-b lg:border-b-0 lg:border-r border-white/10 bg-brand-charcoal">
-<!-- Scroll Animation Canvas Container -->
-<div id="hero-visual-container" class="w-full h-full absolute inset-0 bg-black">
-<canvas id="animation-canvas" class="w-full h-full object-cover absolute inset-0"></canvas>
-<div id="visual-progress-bar" class="absolute bottom-0 left-0 h-1 bg-brand-terracotta w-0 transition-all duration-75 z-20"></div>
-</div>
-<!-- Tactical Overlay Elements -->
-<div class="absolute inset-0 pointer-events-none p-4 lg:p-10 flex flex-col justify-between z-10">
-<!-- Top Status Bar -->
-<div class="flex items-center justify-between z-10">
-<div class="flex items-center space-x-2.5 px-3 py-1.5 rounded bg-black/60 backdrop-blur-md border border-white/10">
+
+<!-- BEGIN: HeroScrollExperience -->
+<section class="relative z-10 w-full h-[400vh]" id="hero-scroll-section">
+<div class="sticky top-0 w-full h-screen overflow-hidden flex flex-col justify-between pt-24 pb-8 px-6 lg:px-12">
+
+<!-- SCENE 1: Fullscreen Opening Title (Centered over the crisp WEBP animation background) -->
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center px-6 z-20 transition-all duration-500 pointer-events-auto" id="hero-center-title">
+<div class="inline-flex items-center space-x-2 text-brand-terracotta text-xs sm:text-sm font-bold uppercase tracking-widest2 mb-4 px-5 py-2 rounded-full bg-black/60 backdrop-blur-md border border-white/15 shadow-2xl">
 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-<span class="text-[11px] font-mono tracking-widest text-emerald-300 uppercase">Live Journey Tracker</span>
+<span>★ 4.9 Rated · 1,990+ Google Reviews</span>
 </div>
-<div class="text-right font-mono text-[10px] text-brand-muted/80 tracking-widest hidden sm:block">
-<p>ROUTE: LV-93 / CANYON CORRIDOR</p>
+<h1 class="text-4xl sm:text-6xl lg:text-8xl font-cinzel font-extrabold text-white tracking-tight leading-none max-w-6xl mb-6 drop-shadow-2xl">
+        Christianson Tours
+      </h1>
+<p class="text-brand-sand text-base sm:text-xl lg:text-2xl font-sans max-w-3xl mb-10 leading-relaxed drop-shadow-md">
+        Grand Canyon West Rim &amp; Hoover Dam Day Excursions from Las Vegas
+      </p>
+<div class="flex flex-wrap items-center justify-center gap-4">
+<a class="px-8 py-4 rounded-full bg-brand-terracotta hover:bg-brand-terracottaDark text-white text-xs sm:text-sm font-bold uppercase tracking-widest transition-all shadow-xl shadow-brand-terracotta/30 hover:scale-105" href="#booking-cta">
+          Explore Tours &amp; Book
+        </a>
+<a class="px-8 py-4 rounded-full glass-panel hover:bg-white/10 text-white text-xs sm:text-sm font-bold uppercase tracking-widest transition-all hover:scale-105" href="tel:+17024569200">
+          📞 (702) 456-9200
+        </a>
+</div>
+<!-- Scroll Prompt -->
+<div class="mt-16 flex flex-col items-center opacity-80 animate-bounce">
+<span class="text-xs font-mono uppercase tracking-widest text-brand-sand mb-2">Scroll Down to Explore</span>
+<svg class="w-5 h-5 text-brand-terracotta" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 14l-7 7m0 0l-7-7m7 7V3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 </div>
-<!-- Waypoint Sequence Marker -->
-<div class="z-10 w-full max-w-md bg-black/55 backdrop-blur-md p-4 rounded-xl border border-white/10 shadow-2xl">
-<div class="flex items-center justify-between text-[11px] font-mono tracking-widest text-brand-muted uppercase mb-3">
-<span>Expedition Waypoints</span>
+
+<!-- SCENE 2: Waypoint Navigation Bar (Fades in on scroll) -->
+<div class="w-full max-w-4xl mx-auto z-10 transition-opacity duration-300 opacity-0" id="hero-waypoint-bar">
+<div class="bg-black/60 backdrop-blur-md p-4 rounded-2xl border border-white/15 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="flex items-center space-x-2 text-[11px] font-mono tracking-widest text-brand-muted uppercase">
+<span>Expedition Waypoints:</span>
 <span class="text-brand-ochre font-semibold" id="active-waypoint-indicator">01 / 03 - Las Vegas</span>
 </div>
-<!-- Waypoint Timeline Indicator -->
-<div class="flex items-center space-x-2">
-<div class="flex-1 flex items-center space-x-1.5 cursor-pointer pointer-events-auto" onclick="window.scrollToDestination(0)">
-<span class="w-2.5 h-2.5 rounded-full bg-brand-ochre ring-4 ring-brand-ochre/30 transition-all" id="pin-vegas"></span>
-<span class="text-xs font-semibold text-white transition-colors" id="text-vegas">Las Vegas</span>
+<div class="flex items-center space-x-4">
+<div class="flex items-center space-x-2 cursor-pointer" onclick="window.scrollToDestination(0)">
+<span class="w-3 h-3 rounded-full bg-brand-ochre ring-4 ring-brand-ochre/30 transition-all" id="pin-vegas"></span>
+<span class="text-xs font-semibold text-white" id="text-vegas">Las Vegas</span>
 </div>
-<div class="w-5 h-[1px] bg-white/20"></div>
-<div class="flex-1 flex items-center space-x-1.5 cursor-pointer pointer-events-auto" onclick="window.scrollToDestination(1)">
-<span class="w-2.5 h-2.5 rounded-full bg-white/20 transition-all" id="pin-hoover"></span>
-<span class="text-xs text-brand-muted transition-colors" id="text-hoover">Hoover Dam</span>
+<div class="w-6 h-[1px] bg-white/20"></div>
+<div class="flex items-center space-x-2 cursor-pointer" onclick="window.scrollToDestination(1)">
+<span class="w-3 h-3 rounded-full bg-white/20 transition-all" id="pin-hoover"></span>
+<span class="text-xs text-brand-muted" id="text-hoover">Hoover Dam</span>
 </div>
-<div class="w-5 h-[1px] bg-white/20"></div>
-<div class="flex-1 flex items-center space-x-1.5 cursor-pointer pointer-events-auto" onclick="window.scrollToDestination(2)">
-<span class="w-2.5 h-2.5 rounded-full bg-white/20 transition-all" id="pin-canyon"></span>
-<span class="text-xs text-brand-muted transition-colors" id="text-canyon">Grand Canyon</span>
-</div>
+<div class="w-6 h-[1px] bg-white/20"></div>
+<div class="flex items-center space-x-2 cursor-pointer" onclick="window.scrollToDestination(2)">
+<span class="w-3 h-3 rounded-full bg-white/20 transition-all" id="pin-canyon"></span>
+<span class="text-xs text-brand-muted" id="text-canyon">Grand Canyon</span>
 </div>
 </div>
 </div>
 </div>
-<!-- RIGHT SIDE: Horizontal Tour Journey Cards & Details -->
-<div id="hero-content-layer" class="absolute top-[calc(5rem+45%)] lg:top-20 bottom-0 right-0 w-full lg:w-1/2 z-10 flex flex-col justify-between overflow-hidden bg-brand-charcoal lg:border-l border-white/10 py-6 lg:py-12">
-<!-- Hero Header Text -->
-<div class="z-10 px-6 lg:px-12 mb-2 lg:mb-6 flex-shrink-0">
-<div class="flex items-center space-x-2 text-brand-terracotta text-xs font-bold uppercase tracking-widest2 mb-2">
-<span class="w-6 h-[2px] bg-brand-terracotta"></span>
-<span>Official Las Vegas Day Tours</span>
-</div>
-<h1 class="text-2xl sm:text-3xl lg:text-5xl font-cinzel font-bold text-white tracking-tight leading-tight">
-          Iconic Natural Wonders. <br class="hidden sm:inline"/>
-<span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-sand via-brand-terracotta to-brand-ochre">Zero Hassle.</span>
-</h1>
-<p class="text-brand-muted text-sm max-w-xl mt-2 hidden sm:block">
-          Complimentary Strip hotel pickups, comfortable executive vehicles, and informative storytellers navigating the American Southwest.
-        </p>
-</div>
-<!-- Tour Cards Interactive Slider Track -->
-<div class="relative flex-1 w-full overflow-hidden flex items-center" id="hero-tour-panel">
-<div class="flex w-[300%] h-full items-center will-change-transform" id="hero-card-track">
+
+<!-- SCENE 3: Horizontal Tour Cards Track (Slides smoothly across screen) -->
+<div class="relative w-full overflow-hidden my-auto opacity-0 transition-opacity duration-500 z-10" id="hero-cards-container">
+<div class="flex w-[300%] items-center will-change-transform" id="hero-card-track">
 <!-- CARD 1: Las Vegas Departure -->
-<div class="w-1/3 px-6 lg:px-12 flex items-center justify-start h-full sm:h-auto">
-<div class="w-full max-w-[420px] glass-panel rounded-2xl p-6 sm:p-8 border border-white/10 shadow-xl transition-all duration-300 hover:border-brand-ochre/50" id="tour-card-vegas">
-<h3 class="text-xl sm:text-2xl font-cinzel font-bold text-white mb-2 sm:mb-4">Las Vegas Departure</h3>
-<p class="text-xs sm:text-sm text-brand-sand/75 mb-4 sm:mb-6 leading-relaxed">Begin your journey from the neon heart of the desert. We provide coordinated pickup from major Strip resorts, ensuring a seamless start to your day of exploration.</p>
-<div class="pt-4 sm:pt-6 border-t border-white/10 flex items-center justify-between">
-<span class="text-[10px] sm:text-xs uppercase font-mono tracking-widest text-brand-muted">Your journey begins</span>
-<span class="w-8 h-1 rounded-full bg-brand-ochre"></span>
+<div class="w-1/3 px-6 lg:px-16 flex items-center justify-center">
+<div class="w-full max-w-xl glass-panel-elevated rounded-3xl p-8 sm:p-10 border border-brand-ochre/40 shadow-2xl">
+<span class="text-xs font-mono uppercase tracking-widest text-brand-ochre font-bold block mb-2">Stage 01</span>
+<h3 class="text-2xl sm:text-4xl font-cinzel font-bold text-white mb-4">Las Vegas Departure</h3>
+<p class="text-sm sm:text-base text-brand-sand/80 mb-6 leading-relaxed">Begin your journey directly from the Las Vegas Strip. We provide VIP hotel lobby pickup at major resort properties in modern, comfortable executive vehicles.</p>
+<div class="pt-6 border-t border-white/10 flex items-center justify-between">
+<span class="text-xs uppercase font-mono tracking-widest text-brand-muted">Complimentary Pickup Included</span>
+<span class="w-10 h-1 rounded-full bg-brand-ochre"></span>
 </div>
 </div>
 </div>
-<!-- CARD 2: Hoover Dam Highlights Tour -->
-<div class="w-1/3 px-6 lg:px-12 flex items-center justify-start h-full sm:h-auto">
-<div class="w-full max-w-[420px] glass-panel rounded-2xl overflow-hidden border border-white/15 shadow-2xl transition-all duration-300 hover:border-brand-turquoise" id="tour-card-hoover">
-<div class="relative h-32 sm:h-48 w-full overflow-hidden">
-<img alt="Hoover Dam Highlights Tour from Las Vegas" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida/AEtjO1VJcOp5we5Ddu4quv_s8ZI7Dr5C3Zj7Q8T9mbQtttXHTVC_GRBxmLstPcOHeEHC9Vz8kgE7GwUaVZkg98i8BQw0_cpDS7Zg5GQ34UZ_TRHimb7hgApY0Idz-9lSFECN55hZ6VwFVFOqPwQ9igX1ZP-ITbSg44yHWLGogyArm2F4PDfbCJovKx21lTHZKd-01zFsdjZlROLfXQ6ORSekrEUh6Eiraq5uZujX7MgbId916f44ia1qRIOfxj6x"/>
-<div class="absolute inset-0 bg-gradient-to-t from-brand-surface via-transparent to-black/30"></div>
-<span class="absolute top-3 left-3 px-2 sm:px-3 py-1 rounded-full bg-brand-turquoise text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-brand-charcoal shadow-md">
-              Engineering in the desert
-            </span>
-<span class="absolute top-3 right-3 px-2 py-1 rounded bg-black/60 backdrop-blur text-[10px] sm:text-xs font-mono font-bold text-brand-ochre">
-              ★ 4.9
-            </span>
+<!-- CARD 2: Hoover Dam Highlights -->
+<div class="w-1/3 px-6 lg:px-16 flex items-center justify-center">
+<div class="w-full max-w-xl glass-panel-elevated rounded-3xl overflow-hidden border border-brand-turquoise/40 shadow-2xl">
+<div class="relative h-48 sm:h-56 w-full overflow-hidden">
+<img alt="Hoover Dam Tour" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1VJcOp5we5Ddu4quv_s8ZI7Dr5C3Zj7Q8T9mbQtttXHTVC_GRBxmLstPcOHeEHC9Vz8kgE7GwUaVZkg98i8BQw0_cpDS7Zg5GQ34UZ_TRHimb7hgApY0Idz-9lSFECN55hZ6VwFVFOqPwQ9igX1ZP-ITbSg44yHWLGogyArm2F4PDfbCJovKx21lTHZKd-01zFsdjZlROLfXQ6ORSekrEUh6Eiraq5uZujX7MgbId916f44ia1qRIOfxj6x"/>
+<div class="absolute inset-0 bg-gradient-to-t from-brand-charcoal via-transparent to-black/30"></div>
+<span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-brand-turquoise text-xs font-bold uppercase tracking-wider text-brand-charcoal">Half Day · 4.5 Hours</span>
+<span class="absolute top-4 right-4 px-3 py-1 rounded-lg bg-black/60 backdrop-blur text-xs font-mono font-bold text-brand-ochre">From $50</span>
 </div>
-<div class="p-4 sm:p-6">
-<div class="flex items-baseline justify-between mb-1 sm:mb-2">
-<span class="text-[10px] sm:text-xs uppercase font-mono tracking-widest text-brand-muted">Half-Day Tour</span>
-<div class="text-right">
-<span class="text-lg sm:text-xl font-bold font-syne text-white">From $50</span>
-</div>
-</div>
-<h3 class="text-base sm:text-xl font-cinzel font-bold text-white mb-1 sm:mb-2 leading-snug">
-              Hoover Dam Highlights
-            </h3>
-<p class="text-[11px] sm:text-xs text-brand-sand/75 line-clamp-2 mb-3 sm:mb-4">
-              Mike O'Callaghan-Pat Tillman Bypass Bridge observation walk, Lake Mead panorama, Arizona lookout.
-            </p>
-<div class="flex items-center space-x-2 sm:space-x-3 pt-2 sm:pt-3 border-t border-white/10">
-<a class="flex-1 py-2 px-3 sm:px-4 rounded-xl border border-white/20 hover:border-white text-center text-[10px] sm:text-xs font-semibold text-white uppercase tracking-wider transition-all" href="#tour-hoover-details">
-                View Tour
-              </a>
-<a class="flex-1 py-2 px-3 sm:px-4 rounded-xl bg-brand-turquoise hover:bg-cyan-400 text-center text-[10px] sm:text-xs font-bold text-brand-charcoal uppercase tracking-wider transition-all shadow-md" href="tel:+17024569200">
-                Call to Book
-              </a>
+<div class="p-6 sm:p-8">
+<h3 class="text-xl sm:text-3xl font-cinzel font-bold text-white mb-2">Hoover Dam Highlights</h3>
+<p class="text-xs sm:text-sm text-brand-sand/80 mb-6">Mike O'Callaghan-Pat Tillman Bypass Bridge walkway, Lake Mead vistas, and historic Boulder City.</p>
+<div class="flex items-center space-x-3">
+<a class="flex-1 py-3 rounded-xl bg-brand-turquoise hover:bg-cyan-400 text-center text-xs font-bold text-brand-charcoal uppercase tracking-wider transition-all" href="#tour-hoover-details">View Details</a>
+<a class="flex-1 py-3 rounded-xl border border-white/20 hover:border-white text-center text-xs font-semibold text-white uppercase tracking-wider transition-all" href="tel:+17024569200">Call to Book</a>
 </div>
 </div>
 </div>
 </div>
 <!-- CARD 3: Grand Canyon West Rim -->
-<div class="w-1/3 px-6 lg:px-12 flex items-center justify-start h-full sm:h-auto">
-<div class="w-full max-w-[420px] glass-panel-elevated rounded-2xl overflow-hidden border border-brand-terracotta/30 shadow-2xl transition-all duration-300 hover:border-brand-terracotta" id="tour-card-canyon">
-<div class="relative h-32 sm:h-48 w-full overflow-hidden">
-<img alt="Grand Canyon West Rim Day Tour from Las Vegas" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida/AEtjO1XotMXw9VUOOt1Qv48v9Nh0DxlwCXKGYPqSOs5VJlxng3o1G_REP6WAV9D94zOfQfssmgN0H0LVO2Xzvb1j8nPqTAq5Rq2K2iIrsqhv9DNVHyWFSX7CylTIn52sQoXgAw7UvBZDP9ETlB-USJnoYpaq9qS5Huz9zFCiYSlE11DZ_J19qL5082yqzckhf1h32gciopr40W4KFOhHh9H1C-hCAf3v036zOLvXqqlW9W73CbpYlDa-knOO3fbS"/>
-<div class="absolute inset-0 bg-gradient-to-t from-brand-surface via-transparent to-black/30"></div>
-<span class="absolute top-3 left-3 px-2 sm:px-3 py-1 rounded-full bg-brand-terracotta text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-white shadow-md">
-              Experience the canyon
-            </span>
-<span class="absolute top-3 right-3 px-2 py-1 rounded bg-black/60 backdrop-blur text-[10px] sm:text-xs font-mono font-bold text-brand-ochre">
-              ★ 4.9
-            </span>
+<div class="w-1/3 px-6 lg:px-16 flex items-center justify-center">
+<div class="w-full max-w-xl glass-panel-elevated rounded-3xl overflow-hidden border border-brand-terracotta/40 shadow-2xl">
+<div class="relative h-48 sm:h-56 w-full overflow-hidden">
+<img alt="Grand Canyon West Rim" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1XotMXw9VUOOt1Qv48v9Nh0DxlwCXKGYPqSOs5VJlxng3o1G_REP6WAV9D94zOfQfssmgN0H0LVO2Xzvb1j8nPqTAq5Rq2K2iIrsqhv9DNVHyWFSX7CylTIn52sQoXgAw7UvBZDP9ETlB-USJnoYpaq9qS5Huz9zFCiYSlE11DZ_J19qL5082yqzckhf1h32gciopr40W4KFOhHh9H1C-hCAf3v036zOLvXqqlW9W73CbpYlDa-knOO3fbS"/>
+<div class="absolute inset-0 bg-gradient-to-t from-brand-charcoal via-transparent to-black/30"></div>
+<span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-brand-terracotta text-xs font-bold uppercase tracking-wider text-white">Full Day · 10.5 Hours</span>
+<span class="absolute top-4 right-4 px-3 py-1 rounded-lg bg-black/60 backdrop-blur text-xs font-mono font-bold text-brand-ochre">From $97</span>
 </div>
-<div class="p-4 sm:p-6">
-<div class="flex items-baseline justify-between mb-1 sm:mb-2">
-<span class="text-[10px] sm:text-xs uppercase font-mono tracking-widest text-brand-muted">Full-Day Tour</span>
-<div class="text-right">
-<span class="text-lg sm:text-xl font-bold font-syne text-white">From $97</span>
-</div>
-</div>
-<h3 class="text-base sm:text-xl font-cinzel font-bold text-white mb-1 sm:mb-2 leading-snug">
-              Grand Canyon West Rim
-            </h3>
-<p class="text-[11px] sm:text-xs text-brand-sand/75 line-clamp-2 mb-3 sm:mb-4">
-              Eagle Point, Guano Point, Hualapai Indian Nation, and Joshua Tree Forest highway.
-            </p>
-<div class="flex items-center space-x-2 sm:space-x-3 pt-2 sm:pt-3 border-t border-white/10">
-<a class="flex-1 py-2 px-3 sm:px-4 rounded-xl border border-white/20 hover:border-white text-center text-[10px] sm:text-xs font-semibold text-white uppercase tracking-wider transition-all" href="#tour-canyon-details">
-                View Tour
-              </a>
-<a class="flex-1 py-2 px-3 sm:px-4 rounded-xl bg-brand-terracotta hover:bg-brand-terracottaDark text-center text-[10px] sm:text-xs font-bold text-white uppercase tracking-wider transition-all shadow-md" href="tel:+17024569200">
-                Call to Book
-              </a>
+<div class="p-6 sm:p-8">
+<h3 class="text-xl sm:text-3xl font-cinzel font-bold text-white mb-2">Grand Canyon West Rim</h3>
+<p class="text-xs sm:text-sm text-brand-sand/80 mb-6">Eagle Point, Guano Point 360° overlook, Hualapai Nation, and deli picnic lunch included.</p>
+<div class="flex items-center space-x-3">
+<a class="flex-1 py-3 rounded-xl bg-brand-terracotta hover:bg-brand-terracottaDark text-center text-xs font-bold text-white uppercase tracking-wider transition-all" href="#tour-canyon-details">View Details</a>
+<a class="flex-1 py-3 rounded-xl border border-white/20 hover:border-white text-center text-xs font-semibold text-white uppercase tracking-wider transition-all" href="tel:+17024569200">Call to Book</a>
 </div>
 </div>
 </div>
 </div>
 </div>
 </div>
-</div>
-<!-- Scroll Indicator -->
-<div class="hidden lg:flex items-center justify-center pt-2 pb-4 flex-shrink-0">
-<div class="flex flex-col items-center opacity-60 animate-bounce">
-<span class="text-[10px] uppercase font-mono tracking-widest text-brand-muted mb-1">Scroll to Journey</span>
-<svg class="w-4 h-4 text-brand-muted" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 14l-7 7m0 0l-7-7m7 7V3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-</div>
-</div>
+
+<!-- Progress Bar -->
+<div class="w-full h-1 bg-white/10 rounded-full overflow-hidden relative z-10">
+<div class="h-full bg-brand-terracotta w-0 transition-all duration-75" id="hero-progress-bar"></div>
 </div>
 </div>
 </section>
-<!-- END: HeroSplitExperience -->
+<!-- END: HeroScrollExperience -->
+
 <!-- BEGIN: TrustStatsBanner -->
-<section class="border-y border-white/10 bg-brand-surface py-8">
+<section class="relative z-10 glass-section-dark border-y border-white/10 py-10">
 <div class="max-w-[1720px] mx-auto px-6 lg:px-10">
 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
 <div class="border-r border-white/10 last:border-none">
@@ -322,8 +294,9 @@
 </div>
 </section>
 <!-- END: TrustStatsBanner -->
+
 <!-- BEGIN: WhyChristiansonTours -->
-<section class="py-24 max-w-[1720px] mx-auto px-6 lg:px-10" id="why-us">
+<section class="relative z-10 glass-section py-24 max-w-[1720px] mx-auto px-6 lg:px-10" id="why-us">
 <div class="max-w-3xl mb-16">
 <div class="flex items-center space-x-2 text-brand-terracotta text-xs font-bold uppercase tracking-widest2 mb-3">
 <span class="w-6 h-[2px] bg-brand-terracotta"></span>
@@ -336,73 +309,55 @@
         We specialize exclusively in high-touch, intimate southwestern excursions designed to maximize your time viewing landscapes rather than waiting in boarding lines.
       </p>
 </div>
-<!-- 6 Core Trust Cards Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-<!-- Item 1 -->
 <div class="glass-panel p-8 rounded-2xl hover:border-brand-terracotta/50 transition-all duration-300 group">
 <div class="w-12 h-12 rounded-xl bg-brand-terracotta/10 border border-brand-terracotta/30 flex items-center justify-center text-brand-terracotta mb-6 group-hover:scale-110 transition-transform">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 <h3 class="text-xl font-syne font-bold text-white mb-2">Experienced Guides</h3>
-<p class="text-sm text-brand-muted leading-relaxed">
-          Certified southwestern interpretive naturalists with deep storytelling insights into Mohave Desert ecology and Indigenous history.
-        </p>
+<p class="text-sm text-brand-muted leading-relaxed">Certified southwestern interpretive naturalists with deep storytelling insights into Mohave Desert ecology and Indigenous history.</p>
 </div>
-<!-- Item 2 -->
 <div class="glass-panel p-8 rounded-2xl hover:border-brand-terracotta/50 transition-all duration-300 group">
 <div class="w-12 h-12 rounded-xl bg-brand-terracotta/10 border border-brand-terracotta/30 flex items-center justify-center text-brand-terracotta mb-6 group-hover:scale-110 transition-transform">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 <h3 class="text-xl font-syne font-bold text-white mb-2">Professional Drivers</h3>
-<p class="text-sm text-brand-muted leading-relaxed">
-          Friendly, experienced professionals dedicated to smooth highway navigation and ensuring you feel completely safe throughout your trip.
-        </p>
+<p class="text-sm text-brand-muted leading-relaxed">Friendly, experienced professionals dedicated to smooth highway navigation and ensuring you feel completely safe throughout your trip.</p>
 </div>
-<!-- Item 3 -->
 <div class="glass-panel p-8 rounded-2xl hover:border-brand-terracotta/50 transition-all duration-300 group">
 <div class="w-12 h-12 rounded-xl bg-brand-terracotta/10 border border-brand-terracotta/30 flex items-center justify-center text-brand-terracotta mb-6 group-hover:scale-110 transition-transform">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 <h3 class="text-xl font-syne font-bold text-white mb-2">Immaculate Vehicles</h3>
-<p class="text-sm text-brand-muted leading-relaxed">
-          Clean, neat, and well-maintained buses featuring panoramic picture windows and highly effective climate control for maximum comfort.
-        </p>
+<p class="text-sm text-brand-muted leading-relaxed">Clean, neat, and well-maintained buses featuring panoramic picture windows and highly effective climate control for maximum comfort.</p>
 </div>
-<!-- Item 4 -->
 <div class="glass-panel p-8 rounded-2xl hover:border-brand-terracotta/50 transition-all duration-300 group">
 <div class="w-12 h-12 rounded-xl bg-brand-terracotta/10 border border-brand-terracotta/30 flex items-center justify-center text-brand-terracotta mb-6 group-hover:scale-110 transition-transform">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 <h3 class="text-xl font-syne font-bold text-white mb-2">Punctual Strip Pickup</h3>
-<p class="text-sm text-brand-muted leading-relaxed">
-          Precise, punctual coordinated hotel arrival times ensuring your tour starts seamlessly without unnecessary waiting around.
-        </p>
+<p class="text-sm text-brand-muted leading-relaxed">Precise, punctual coordinated hotel arrival times ensuring your tour starts seamlessly without unnecessary waiting around.</p>
 </div>
-<!-- Item 5 -->
 <div class="glass-panel p-8 rounded-2xl hover:border-brand-terracotta/50 transition-all duration-300 group">
 <div class="w-12 h-12 rounded-xl bg-brand-terracotta/10 border border-brand-terracotta/30 flex items-center justify-center text-brand-terracotta mb-6 group-hover:scale-110 transition-transform">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 <h3 class="text-xl font-syne font-bold text-white mb-2">Informative Experience</h3>
-<p class="text-sm text-brand-muted leading-relaxed">
-          No generic canned recordings. Live audio commentary covering geology, engineering feats, movie lore, and desert wildlife habitats.
-        </p>
+<p class="text-sm text-brand-muted leading-relaxed">No generic canned recordings. Live audio commentary covering geology, engineering feats, movie lore, and desert wildlife habitats.</p>
 </div>
-<!-- Item 6 -->
 <div class="glass-panel p-8 rounded-2xl hover:border-brand-terracotta/50 transition-all duration-300 group">
 <div class="w-12 h-12 rounded-xl bg-brand-terracotta/10 border border-brand-terracotta/30 flex items-center justify-center text-brand-terracotta mb-6 group-hover:scale-110 transition-transform">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 <h3 class="text-xl font-syne font-bold text-white mb-2">Comfortable Journey</h3>
-<p class="text-sm text-brand-muted leading-relaxed">
-          Plush high-back recline seating, generous legroom, complimentary bottled water throughout the day, and well-timed scenic rest stops.
-        </p>
+<p class="text-sm text-brand-muted leading-relaxed">Plush high-back recline seating, generous legroom, complimentary bottled water throughout the day, and well-timed scenic rest stops.</p>
 </div>
 </div>
 </section>
 <!-- END: WhyChristiansonTours -->
+
 <!-- BEGIN: TheJourneyFlow -->
-<section class="py-24 bg-brand-surface relative overflow-hidden" id="journey">
+<section class="relative z-10 glass-section-dark py-24 border-t border-white/10" id="journey">
 <div class="max-w-[1720px] mx-auto px-6 lg:px-10">
 <div class="text-center max-w-2xl mx-auto mb-20">
 <div class="inline-flex items-center space-x-2 text-brand-terracotta text-xs font-bold uppercase tracking-widest2 mb-3">
@@ -413,39 +368,32 @@
 <h2 class="text-3xl md:text-5xl font-cinzel font-bold text-white">The Southwestern Journey</h2>
 <p class="text-brand-muted text-sm mt-3">From morning departure to your Las Vegas hotel drop-off, every mile is curated.</p>
 </div>
-<!-- Linear Route Milestone Step Cards -->
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 relative">
-<!-- Step 1 -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
 <div class="glass-panel p-5 rounded-xl border-l-4 border-l-brand-terracotta">
 <span class="text-xs font-mono text-brand-terracotta font-bold">01 · 6:30 AM</span>
 <h4 class="text-base font-syne font-bold text-white mt-1">Hotel Pickup</h4>
 <p class="text-xs text-brand-muted mt-2">Designated VIP tour lobby pickup at all Las Vegas Strip &amp; Downtown resorts.</p>
 </div>
-<!-- Step 2 -->
 <div class="glass-panel p-5 rounded-xl border-l-4 border-l-white/30">
 <span class="text-xs font-mono text-brand-sand font-bold">02 · 7:15 AM</span>
 <h4 class="text-base font-syne font-bold text-white mt-1">Desert Highway</h4>
 <p class="text-xs text-brand-muted mt-2">Scenic cruise through Eldorado Valley and ancient 900-year-old Joshua Tree forests.</p>
 </div>
-<!-- Step 3 -->
 <div class="glass-panel p-5 rounded-xl border-l-4 border-l-brand-turquoise">
 <span class="text-xs font-mono text-brand-turquoise font-bold">03 · 8:15 AM</span>
 <h4 class="text-base font-syne font-bold text-white mt-1">Hoover Dam</h4>
 <p class="text-xs text-brand-muted mt-2">Walk the 900-foot-high memorial bypass bridge with photo vistas of Lake Mead.</p>
 </div>
-<!-- Step 4 -->
 <div class="glass-panel p-5 rounded-xl border-l-4 border-l-brand-terracotta">
 <span class="text-xs font-mono text-brand-terracotta font-bold">04 · 10:45 AM</span>
 <h4 class="text-base font-syne font-bold text-white mt-1">West Rim Arrival</h4>
 <p class="text-xs text-brand-muted mt-2">Enter Hualapai lands with direct access to Eagle Point &amp; world-famous Skywalk.</p>
 </div>
-<!-- Step 5 -->
 <div class="glass-panel p-5 rounded-xl border-l-4 border-l-brand-ochre">
 <span class="text-xs font-mono text-brand-ochre font-bold">05 · 1:00 PM</span>
 <h4 class="text-base font-syne font-bold text-white mt-1">Guano Point</h4>
 <p class="text-xs text-brand-muted mt-2">Catered canyon-side dining with dramatic 360-degree panoramic canyon gorge outlooks.</p>
 </div>
-<!-- Step 6 -->
 <div class="glass-panel p-5 rounded-xl border-l-4 border-l-emerald-400">
 <span class="text-xs font-mono text-emerald-400 font-bold">06 · 5:30 PM</span>
 <h4 class="text-base font-syne font-bold text-white mt-1">Vegas Return</h4>
@@ -455,8 +403,9 @@
 </div>
 </section>
 <!-- END: TheJourneyFlow -->
+
 <!-- BEGIN: TourExplorationPackages -->
-<section class="py-24 max-w-[1720px] mx-auto px-6 lg:px-10" id="tours">
+<section class="relative z-10 glass-section py-24 max-w-[1720px] mx-auto px-6 lg:px-10" id="tours">
 <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
 <div>
 <div class="flex items-center space-x-2 text-brand-terracotta text-xs font-bold uppercase tracking-widest2 mb-3">
@@ -469,16 +418,13 @@
         Transparent flat-rate pricing. Complete with professional driver-guide, Strip hotel transport, entrance fees, and complimentary chilled beverages.
       </p>
 </div>
-<!-- Editorial Side-by-Side Tour Cards -->
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-<!-- Tour 1: Grand Canyon West Rim -->
+<!-- Tour 1 -->
 <article class="glass-panel rounded-3xl overflow-hidden border border-white/10 hover:border-brand-terracotta/60 transition-all duration-300 flex flex-col" id="tour-canyon-details">
 <div class="relative h-72 lg:h-80 w-full overflow-hidden">
 <img alt="Grand Canyon West Rim Tour" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1XotMXw9VUOOt1Qv48v9Nh0DxlwCXKGYPqSOs5VJlxng3o1G_REP6WAV9D94zOfQfssmgN0H0LVO2Xzvb1j8nPqTAq5Rq2K2iIrsqhv9DNVHyWFSX7CylTIn52sQoXgAw7UvBZDP9ETlB-USJnoYpaq9qS5Huz9zFCiYSlE11DZ_J19qL5082yqzckhf1h32gciopr40W4KFOhHh9H1C-hCAf3v036zOLvXqqlW9W73CbpYlDa-knOO3fbS"/>
 <div class="absolute inset-0 bg-gradient-to-t from-brand-charcoal via-transparent to-transparent"></div>
-<div class="absolute top-4 left-4 bg-brand-terracotta px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider text-white shadow-lg">
-            Most Popular Choice
-          </div>
+<div class="absolute top-4 left-4 bg-brand-terracotta px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider text-white shadow-lg">Most Popular Choice</div>
 <div class="absolute bottom-4 left-6 right-6 flex items-end justify-between">
 <div>
 <span class="text-xs font-mono text-brand-ochre tracking-widest uppercase">Full Day · 10.5 Hours</span>
@@ -492,9 +438,7 @@
 </div>
 <div class="p-8 flex-1 flex flex-col justify-between">
 <div>
-<p class="text-brand-sand/80 text-sm leading-relaxed mb-6">
-              Journey from the neon lights of Las Vegas through the Mojave Desert to the sovereign Hualapai Nation at the West Rim of the Grand Canyon. Explore Eagle Point, Guano Point, and marvel at millions of years of exposed geologic history.
-            </p>
+<p class="text-brand-sand/80 text-sm leading-relaxed mb-6">Journey from the neon lights of Las Vegas through the Mojave Desert to the sovereign Hualapai Nation at the West Rim of the Grand Canyon. Explore Eagle Point, Guano Point, and marvel at millions of years of exposed geologic history.</p>
 <h4 class="text-xs font-mono uppercase tracking-widest text-brand-terracotta font-bold mb-3">Included Highlights</h4>
 <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-brand-sand mb-8">
 <li class="flex items-center"><svg class="w-4 h-4 mr-2 text-brand-terracotta" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg> Hotel pickup &amp; drop-off</li>
@@ -504,23 +448,17 @@
 </ul>
 </div>
 <div class="flex items-center space-x-4 pt-6 border-t border-white/10">
-<a class="flex-1 py-3 px-6 rounded-xl bg-brand-terracotta hover:bg-brand-terracottaDark text-white text-xs font-bold uppercase tracking-wider text-center transition-all shadow-lg shadow-brand-terracotta/25" href="#booking-cta">
-              Book Canyon West ($97)
-            </a>
-<a class="py-3 px-5 rounded-xl border border-white/20 hover:border-white text-white text-xs font-semibold text-center transition-all" href="tel:+17024569200">
-              Inquire
-            </a>
+<a class="flex-1 py-3 px-6 rounded-xl bg-brand-terracotta hover:bg-brand-terracottaDark text-white text-xs font-bold uppercase tracking-wider text-center transition-all shadow-lg shadow-brand-terracotta/25" href="#booking-cta">Book Canyon West ($97)</a>
+<a class="py-3 px-5 rounded-xl border border-white/20 hover:border-white text-white text-xs font-semibold text-center transition-all" href="tel:+17024569200">Inquire</a>
 </div>
 </div>
 </article>
-<!-- Tour 2: Hoover Dam Highlights Tour -->
+<!-- Tour 2 -->
 <article class="glass-panel rounded-3xl overflow-hidden border border-white/10 hover:border-brand-turquoise/60 transition-all duration-300 flex flex-col" id="tour-hoover-details">
 <div class="relative h-72 lg:h-80 w-full overflow-hidden">
 <img alt="Hoover Dam Highlights Tour" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1VJcOp5we5Ddu4quv_s8ZI7Dr5C3Zj7Q8T9mbQtttXHTVC_GRBxmLstPcOHeEHC9Vz8kgE7GwUaVZkg98i8BQw0_cpDS7Zg5GQ34UZ_TRHimb7hgApY0Idz-9lSFECN55hZ6VwFVFOqPwQ9igX1ZP-ITbSg44yHWLGogyArm2F4PDfbCJovKx21lTHZKd-01zFsdjZlROLfXQ6ORSekrEUh6Eiraq5uZujX7MgbId916f44ia1qRIOfxj6x"/>
 <div class="absolute inset-0 bg-gradient-to-t from-brand-charcoal via-transparent to-transparent"></div>
-<div class="absolute top-4 left-4 bg-brand-turquoise px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider text-brand-charcoal shadow-lg">
-            Best Morning Tour
-          </div>
+<div class="absolute top-4 left-4 bg-brand-turquoise px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider text-brand-charcoal shadow-lg">Best Morning Tour</div>
 <div class="absolute bottom-4 left-6 right-6 flex items-end justify-between">
 <div>
 <span class="text-xs font-mono text-brand-turquoise tracking-widest uppercase">Half Day · 4.5 Hours</span>
@@ -534,9 +472,7 @@
 </div>
 <div class="p-8 flex-1 flex flex-col justify-between">
 <div>
-<p class="text-brand-sand/80 text-sm leading-relaxed mb-6">
-              Witness the greatest engineering triumph of the 20th century. Stand atop the Mike O'Callaghan-Pat Tillman Memorial Bridge looking 900 feet down into Black Canyon, followed by the Lake Mead vista and historic Boulder City.
-            </p>
+<p class="text-brand-sand/80 text-sm leading-relaxed mb-6">Witness the greatest engineering triumph of the 20th century. Stand atop the Mike O'Callaghan-Pat Tillman Memorial Bridge looking 900 feet down into Black Canyon, followed by the Lake Mead vista and historic Boulder City.</p>
 <h4 class="text-xs font-mono uppercase tracking-widest text-brand-turquoise font-bold mb-3">Included Highlights</h4>
 <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-brand-sand mb-8">
 <li class="flex items-center"><svg class="w-4 h-4 mr-2 text-brand-turquoise" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg> Strip hotel express pickup</li>
@@ -546,20 +482,17 @@
 </ul>
 </div>
 <div class="flex items-center space-x-4 pt-6 border-t border-white/10">
-<a class="flex-1 py-3 px-6 rounded-xl bg-brand-turquoise hover:bg-cyan-400 text-brand-charcoal text-xs font-bold uppercase tracking-wider text-center transition-all shadow-lg shadow-brand-turquoise/25" href="#booking-cta">
-              Book Hoover Dam ($50)
-            </a>
-<a class="py-3 px-5 rounded-xl border border-white/20 hover:border-white text-white text-xs font-semibold text-center transition-all" href="tel:+17024569200">
-              Inquire
-            </a>
+<a class="flex-1 py-3 px-6 rounded-xl bg-brand-turquoise hover:bg-cyan-400 text-brand-charcoal text-xs font-bold uppercase tracking-wider text-center transition-all shadow-lg shadow-brand-turquoise/25" href="#booking-cta">Book Hoover Dam ($50)</a>
+<a class="py-3 px-5 rounded-xl border border-white/20 hover:border-white text-white text-xs font-semibold text-center transition-all" href="tel:+17024569200">Inquire</a>
 </div>
 </div>
 </article>
 </div>
 </section>
 <!-- END: TourExplorationPackages -->
+
 <!-- BEGIN: CustomerReviewsTrust -->
-<section class="py-24 bg-brand-surface relative" id="reviews">
+<section class="relative z-10 glass-section-dark py-24 border-t border-white/10" id="reviews">
 <div class="max-w-[1720px] mx-auto px-6 lg:px-10">
 <div class="flex flex-col lg:flex-row items-start lg:items-end justify-between mb-16">
 <div>
@@ -569,7 +502,6 @@
 </div>
 <h2 class="text-3xl md:text-5xl font-cinzel font-bold text-white">Trusted by Thousands of Adventurers</h2>
 </div>
-<!-- Rating Aggregate -->
 <div class="mt-6 lg:mt-0 flex items-center space-x-4 glass-panel px-6 py-3 rounded-2xl border border-white/10">
 <div class="text-3xl font-bold font-syne text-brand-ochre">★ 4.9</div>
 <div class="border-l border-white/15 pl-4 text-xs">
@@ -578,50 +510,34 @@
 </div>
 </div>
 </div>
-<!-- Testimonial Cards Grid -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-<!-- Review 1 -->
 <div class="glass-panel p-8 rounded-2xl border border-white/10 relative">
 <div class="flex text-brand-ochre mb-4 text-sm">★★★★★</div>
-<p class="text-brand-sand text-sm leading-relaxed mb-6 italic">
-            "The best day trip we took! Pickup at our hotel was right on the dot. Our driver-guide made the history of the Hoover Dam and the canyon so captivating. Highly recommend this informative experience."
-          </p>
+<p class="text-brand-sand text-sm leading-relaxed mb-6 italic">"The best day trip we took! Pickup at our hotel was right on the dot. Our driver-guide made the history of the Hoover Dam and the canyon so captivating. Highly recommend this informative experience."</p>
 <div class="flex items-center space-x-3 pt-4 border-t border-white/10">
-<div class="w-10 h-10 rounded-full bg-brand-terracotta/20 flex items-center justify-center font-bold text-brand-terracotta text-xs">
-              M
-            </div>
+<div class="w-10 h-10 rounded-full bg-brand-terracotta/20 flex items-center justify-center font-bold text-brand-terracotta text-xs">M</div>
 <div>
 <p class="text-sm font-bold text-white">Verified Traveler</p>
 <p class="text-[11px] text-brand-muted">Grand Canyon West Rim</p>
 </div>
 </div>
 </div>
-<!-- Review 2 -->
 <div class="glass-panel p-8 rounded-2xl border border-white/10 relative">
 <div class="flex text-brand-ochre mb-4 text-sm">★★★★★</div>
-<p class="text-brand-sand text-sm leading-relaxed mb-6 italic">
-            "We had limited time and booked the half-day Hoover Dam tour. It was seamless! Clean bus, great air conditioning, and plenty of time to take pictures without feeling rushed. We felt safe the entire trip."
-          </p>
+<p class="text-brand-sand text-sm leading-relaxed mb-6 italic">"We had limited time and booked the half-day Hoover Dam tour. It was seamless! Clean bus, great air conditioning, and plenty of time to take pictures without feeling rushed. We felt safe the entire trip."</p>
 <div class="flex items-center space-x-3 pt-4 border-t border-white/10">
-<div class="w-10 h-10 rounded-full bg-brand-turquoise/20 flex items-center justify-center font-bold text-brand-turquoise text-xs">
-              E
-            </div>
+<div class="w-10 h-10 rounded-full bg-brand-turquoise/20 flex items-center justify-center font-bold text-brand-turquoise text-xs">E</div>
 <div>
 <p class="text-sm font-bold text-white">Verified Traveler</p>
 <p class="text-[11px] text-brand-muted">Hoover Dam Highlights</p>
 </div>
 </div>
 </div>
-<!-- Review 3 -->
 <div class="glass-panel p-8 rounded-2xl border border-white/10 relative">
 <div class="flex text-brand-ochre mb-4 text-sm">★★★★★</div>
-<p class="text-brand-sand text-sm leading-relaxed mb-6 italic">
-            "The driver was entertaining, friendly and very knowledgeable. The bus wasn’t crowded like the cattle cars, and Guano Point was breathtaking. I'll definitely recommend them."
-          </p>
+<p class="text-brand-sand text-sm leading-relaxed mb-6 italic">"The driver was entertaining, friendly and very knowledgeable. The bus wasn’t crowded like the cattle cars, and Guano Point was breathtaking. I'll definitely recommend them."</p>
 <div class="flex items-center space-x-3 pt-4 border-t border-white/10">
-<div class="w-10 h-10 rounded-full bg-brand-ochre/20 flex items-center justify-center font-bold text-brand-ochre text-xs">
-              D
-            </div>
+<div class="w-10 h-10 rounded-full bg-brand-ochre/20 flex items-center justify-center font-bold text-brand-ochre text-xs">D</div>
 <div>
 <p class="text-sm font-bold text-white">Verified Traveler</p>
 <p class="text-[11px] text-brand-muted">Grand Canyon West Rim</p>
@@ -632,8 +548,9 @@
 </div>
 </section>
 <!-- END: CustomerReviewsTrust -->
+
 <!-- BEGIN: CinematicGallery -->
-<section class="py-24 max-w-[1720px] mx-auto px-6 lg:px-10" id="gallery">
+<section class="relative z-10 glass-section py-24 max-w-[1720px] mx-auto px-6 lg:px-10" id="gallery">
 <div class="max-w-3xl mb-12">
 <div class="flex items-center space-x-2 text-brand-terracotta text-xs font-bold uppercase tracking-widest2 mb-3">
 <span class="w-6 h-[2px] bg-brand-terracotta"></span>
@@ -641,7 +558,6 @@
 </div>
 <h2 class="text-3xl md:text-5xl font-cinzel font-bold text-white">Scenes From the Expedition</h2>
 </div>
-<!-- Gallery Composition -->
 <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
 <div class="md:col-span-8 rounded-2xl overflow-hidden relative group h-[400px]">
 <img alt="Grand Canyon West Canyon Gorge" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida/AEtjO1XotMXw9VUOOt1Qv48v9Nh0DxlwCXKGYPqSOs5VJlxng3o1G_REP6WAV9D94zOfQfssmgN0H0LVO2Xzvb1j8nPqTAq5Rq2K2iIrsqhv9DNVHyWFSX7CylTIn52sQoXgAw7UvBZDP9ETlB-USJnoYpaq9qS5Huz9zFCiYSlE11DZ_J19qL5082yqzckhf1h32gciopr40W4KFOhHh9H1C-hCAf3v036zOLvXqqlW9W73CbpYlDa-knOO3fbS"/>
@@ -664,11 +580,11 @@
 </div>
 </section>
 <!-- END: CinematicGallery -->
+
 <!-- BEGIN: PlanYourTripAndFAQ -->
-<section class="py-24 bg-brand-surface border-t border-white/10" id="plan-trip">
+<section class="relative z-10 glass-section-dark py-24 border-t border-white/10" id="plan-trip">
 <div class="max-w-[1720px] mx-auto px-6 lg:px-10">
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
-<!-- Left: Plan Trip Information -->
 <div class="lg:col-span-5">
 <div class="flex items-center space-x-2 text-brand-terracotta text-xs font-bold uppercase tracking-widest2 mb-3">
 <span class="w-6 h-[2px] bg-brand-terracotta"></span>
@@ -678,25 +594,18 @@
 <div class="space-y-6 text-sm text-brand-sand/80">
 <div class="glass-panel p-6 rounded-2xl">
 <h4 class="font-syne font-bold text-white text-base mb-1">What to Bring</h4>
-<p class="text-brand-muted text-xs leading-relaxed">
-                Comfortable walking shoes, sunglasses, SPF sunscreen, a government-issued photo ID (required for entry check points), and your camera or smartphone.
-              </p>
+<p class="text-brand-muted text-xs leading-relaxed">Comfortable walking shoes, sunglasses, SPF sunscreen, a government-issued photo ID (required for entry check points), and your camera or smartphone.</p>
 </div>
 <div class="glass-panel p-6 rounded-2xl">
 <h4 class="font-syne font-bold text-white text-base mb-1">Strip Pickup Logistics</h4>
-<p class="text-brand-muted text-xs leading-relaxed">
-                You will receive a confirmation SMS and email 24 hours prior with your exact tour lobby door number and the driver’s contact phone number.
-              </p>
+<p class="text-brand-muted text-xs leading-relaxed">You will receive a confirmation SMS and email 24 hours prior with your exact tour lobby door number and the driver’s contact phone number.</p>
 </div>
 <div class="glass-panel p-6 rounded-2xl">
 <h4 class="font-syne font-bold text-white text-base mb-1">Weather &amp; Seasonal Tips</h4>
-<p class="text-brand-muted text-xs leading-relaxed">
-                The West Rim sits at 4,000+ ft elevation and is typically 10–12°F cooler than Las Vegas. Bringing a light layer during spring and autumn is recommended.
-              </p>
+<p class="text-brand-muted text-xs leading-relaxed">The West Rim sits at 4,000+ ft elevation and is typically 10–12°F cooler than Las Vegas. Bringing a light layer during spring and autumn is recommended.</p>
 </div>
 </div>
 </div>
-<!-- Right: FAQ Accordion -->
 <div class="lg:col-span-7" id="faq">
 <div class="flex items-center space-x-2 text-brand-terracotta text-xs font-bold uppercase tracking-widest2 mb-3">
 <span class="w-6 h-[2px] bg-brand-terracotta"></span>
@@ -704,45 +613,33 @@
 </div>
 <h2 class="text-3xl md:text-4xl font-cinzel font-bold text-white mb-6">Frequently Asked Questions</h2>
 <div class="space-y-4">
-<!-- FAQ 1 -->
 <div class="glass-panel rounded-2xl overflow-hidden border border-white/10 faq-item">
 <button class="w-full p-6 text-left flex justify-between items-center text-white font-syne font-bold hover:text-brand-terracotta transition-colors faq-btn">
 <span>Can we walk out onto the glass Grand Canyon Skywalk?</span>
 <span class="text-xl transition-transform faq-icon">+</span>
 </button>
-<div class="px-6 pb-6 text-xs text-brand-muted leading-relaxed hidden faq-content">
-                Yes! Skywalk upgrade tickets can be added directly during checkout or purchased on-site through our tour coordinator at Eagle Point.
-              </div>
+<div class="px-6 pb-6 text-xs text-brand-muted leading-relaxed hidden faq-content">Yes! Skywalk upgrade tickets can be added directly during checkout or purchased on-site through our tour coordinator at Eagle Point.</div>
 </div>
-<!-- FAQ 2 -->
 <div class="glass-panel rounded-2xl overflow-hidden border border-white/10 faq-item">
 <button class="w-full p-6 text-left flex justify-between items-center text-white font-syne font-bold hover:text-brand-terracotta transition-colors faq-btn">
 <span>What is the cancellation policy?</span>
 <span class="text-xl transition-transform faq-icon">+</span>
 </button>
-<div class="px-6 pb-6 text-xs text-brand-muted leading-relaxed hidden faq-content">
-                We offer a 100% full refund guarantee up to 24 hours prior to your scheduled hotel pickup time. No questions asked.
-              </div>
+<div class="px-6 pb-6 text-xs text-brand-muted leading-relaxed hidden faq-content">We offer a 100% full refund guarantee up to 24 hours prior to your scheduled hotel pickup time. No questions asked.</div>
 </div>
-<!-- FAQ 3 -->
 <div class="glass-panel rounded-2xl overflow-hidden border border-white/10 faq-item">
 <button class="w-full p-6 text-left flex justify-between items-center text-white font-syne font-bold hover:text-brand-terracotta transition-colors faq-btn">
 <span>Are children and families welcome on these tours?</span>
 <span class="text-xl transition-transform faq-icon">+</span>
 </button>
-<div class="px-6 pb-6 text-xs text-brand-muted leading-relaxed hidden faq-content">
-                Absolutely. Children of all ages are welcome. Booster seats and child seats can be accommodated upon advance reservation request.
-              </div>
+<div class="px-6 pb-6 text-xs text-brand-muted leading-relaxed hidden faq-content">Absolutely. Children of all ages are welcome. Booster seats and child seats can be accommodated upon advance reservation request.</div>
 </div>
-<!-- FAQ 4 -->
 <div class="glass-panel rounded-2xl overflow-hidden border border-white/10 faq-item">
 <button class="w-full p-6 text-left flex justify-between items-center text-white font-syne font-bold hover:text-brand-terracotta transition-colors faq-btn">
 <span>Is lunch provided on the full-day tour?</span>
 <span class="text-xl transition-transform faq-icon">+</span>
 </button>
-<div class="px-6 pb-6 text-xs text-brand-muted leading-relaxed hidden faq-content">
-                Yes, our Grand Canyon West Rim Tour includes a complimentary deli boxed meal with dietary options (Turkey, Roast Beef, or Vegetarian) plus chilled bottled water throughout the journey.
-              </div>
+<div class="px-6 pb-6 text-xs text-brand-muted leading-relaxed hidden faq-content">Yes, our Grand Canyon West Rim Tour includes a complimentary deli boxed meal with dietary options (Turkey, Roast Beef, or Vegetarian) plus chilled bottled water throughout the journey.</div>
 </div>
 </div>
 </div>
@@ -750,22 +647,17 @@
 </div>
 </section>
 <!-- END: PlanYourTripAndFAQ -->
+
 <!-- BEGIN: FinalBookingCTA -->
-<section class="relative py-28 overflow-hidden bg-brand-charcoal" id="booking-cta">
-<div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-brand-terracotta/20 via-brand-charcoal to-brand-charcoal pointer-events-none"></div>
+<section class="relative z-10 py-28 overflow-hidden glass-section-dark border-t border-white/10" id="booking-cta">
 <div class="relative max-w-4xl mx-auto px-6 text-center">
 <div class="inline-flex items-center space-x-2 text-brand-terracotta text-xs font-bold uppercase tracking-widest2 mb-4">
 <span class="w-6 h-[2px] bg-brand-terracotta"></span>
 <span>08 / Reserve Your Seat</span>
 <span class="w-6 h-[2px] bg-brand-terracotta"></span>
 </div>
-<h2 class="text-4xl md:text-6xl font-cinzel font-bold text-white tracking-tight leading-tight mb-6">
-        Your Southwestern Adventure Starts Here
-      </h2>
-<p class="text-brand-muted text-base max-w-xl mx-auto mb-10">
-        Experience the timeless majesty of the American frontier with Las Vegas's most dependable day tour specialists. Seats are limited to maintain comfort.
-      </p>
-<!-- Booking Quick Form Bar -->
+<h2 class="text-4xl md:text-6xl font-cinzel font-bold text-white tracking-tight leading-tight mb-6">Your Southwestern Adventure Starts Here</h2>
+<p class="text-brand-muted text-base max-w-xl mx-auto mb-10">Experience the timeless majesty of the American frontier with Las Vegas's most dependable day tour specialists. Seats are limited to maintain comfort.</p>
 <div class="glass-panel-elevated p-4 sm:p-5 rounded-2xl border border-brand-terracotta/40 max-w-3xl mx-auto shadow-2xl mb-8">
 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
 <div class="text-left bg-black/40 rounded-xl px-4 py-2.5 border border-white/10">
@@ -779,9 +671,7 @@
 <label class="block text-[10px] uppercase font-mono tracking-wider text-brand-muted">Date</label>
 <input class="w-full bg-transparent text-white text-xs font-semibold focus:outline-none border-none p-0 cursor-pointer" type="date" value="2025-05-15"/>
 </div>
-<a class="flex items-center justify-center py-3 px-6 rounded-xl bg-brand-terracotta hover:bg-brand-terracottaDark text-white text-xs font-bold uppercase tracking-wider transition-all shadow-lg shadow-brand-terracotta/30" href="tel:+17024569200">
-            Call to Book
-          </a>
+<a class="flex items-center justify-center py-3 px-6 rounded-xl bg-brand-terracotta hover:bg-brand-terracottaDark text-white text-xs font-bold uppercase tracking-wider transition-all shadow-lg shadow-brand-terracotta/30" href="tel:+17024569200">Call to Book</a>
 </div>
 </div>
 <div class="flex items-center justify-center space-x-6 text-xs text-brand-muted">
@@ -791,20 +681,17 @@
 </div>
 </section>
 <!-- END: FinalBookingCTA -->
+
 <!-- BEGIN: MainFooter -->
-<footer class="border-t border-white/10 bg-brand-surface py-16">
+<footer class="relative z-10 border-t border-white/10 glass-section-dark py-16">
 <div class="max-w-[1720px] mx-auto px-6 lg:px-10">
 <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-<!-- Brand Summary -->
 <div class="md:col-span-1">
-<div class="h-10 flex items-center bg-white/95 rounded-lg px-2.5 py-1 w-fit mb-4">
-<img alt="Christianson Tours" class="h-7 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XuN-JAcSsHH2elPZb7_iotvLWa0IHiDj7CVMBs9DY-Z7PjCZCpZGmVhCHKVMuYgKPDrnp6nO88Qp8k4mat9ekiG-r9pLHCly4AiFlvXso42dmtRkVQ-a6V18-kRXsD1BrzCG1Tbt2JO1eJegxQg3TyM9-F__G2mhtRty79YmA6WPSJ2JNnx5ZanWIA8tNoCoyuUBFJ7ogjlivzrvNo5z9dXvSkfdjsxJC1Uw6Qg4Bm-diyAkGQqdZpc9Ne"/>
+<div class="h-10 flex items-center bg-white/95 rounded-lg px-3 py-1 w-fit mb-4">
+<span class="text-brand-charcoal font-cinzel font-bold text-base">CHRISTIANSON TOURS</span>
 </div>
-<p class="text-xs text-brand-muted leading-relaxed">
-            Las Vegas's premier sightseeing operator providing comfortable, personalized day excursions to the Grand Canyon West Rim and Hoover Dam.
-          </p>
+<p class="text-xs text-brand-muted leading-relaxed">Las Vegas's premier sightseeing operator providing comfortable, personalized day excursions to the Grand Canyon West Rim and Hoover Dam.</p>
 </div>
-<!-- Tours Links -->
 <div>
 <h4 class="text-xs font-mono uppercase tracking-widest text-brand-sand font-bold mb-4">Day Tours</h4>
 <ul class="space-y-2 text-xs text-brand-muted">
@@ -814,7 +701,6 @@
 <li><a class="hover:text-brand-terracotta transition-colors" href="#tours">Group Bus Tour Packages</a></li>
 </ul>
 </div>
-<!-- Navigation Links -->
 <div>
 <h4 class="text-xs font-mono uppercase tracking-widest text-brand-sand font-bold mb-4">Traveler Info</h4>
 <ul class="space-y-2 text-xs text-brand-muted">
@@ -824,18 +710,16 @@
 <li><a class="hover:text-brand-terracotta transition-colors" href="#reviews">Guest Reviews &amp; Ratings</a></li>
 </ul>
 </div>
-<!-- Contact & Operations -->
 <div>
 <h4 class="text-xs font-mono uppercase tracking-widest text-brand-sand font-bold mb-4">Vegas Operations</h4>
 <p class="text-xs text-brand-muted mb-2">Christianson Tours Las Vegas</p>
-<p class="text-xs text-brand-muted mb-2">Las Vegas Boulevard S, Las Vegas, NV</p>
+<p class="text-xs text-brand-muted mb-2">3162 W Teco Ave, Las Vegas, NV 89118</p>
 <p class="text-xs text-white font-semibold mb-1">Direct: +1 (702) 456-9200</p>
-<p class="text-xs text-brand-muted">Email: reservations@christiansontours.com</p>
+<p class="text-xs text-brand-muted">Email: info@sweetours.com</p>
 </div>
 </div>
-<!-- Legal & Copyright -->
 <div class="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-xs text-brand-muted">
-<p>© 2025 Christianson Tours. All rights reserved.</p>
+<p>© 2026 Christianson Tours. All rights reserved.</p>
 <div class="flex space-x-6 mt-4 sm:mt-0">
 <a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
 <a class="hover:text-white transition-colors" href="#">Terms of Transport</a>
@@ -845,10 +729,11 @@
 </div>
 </footer>
 <!-- END: MainFooter -->
+
 <!-- BEGIN: InteractiveHandlersScript -->
 <script data-purpose="interaction-coordination">
 document.addEventListener('DOMContentLoaded', () => {
-    // --- WEBP Scroll Frame Animation Setup ---
+    // --- WEBP Scroll Frame Animation Engine ---
     const canvas = document.getElementById("animation-canvas");
     const context = canvas ? canvas.getContext("2d") : null;
     const frameCount = 240;
@@ -878,7 +763,7 @@ document.addEventListener('DOMContentLoaded', () => {
         var c = ctx.canvas;
         var hRatio = c.width / img.width;
         var vRatio = c.height / img.height;
-        var ratio = Math.max(hRatio, vRatio); // cover
+        var ratio = Math.max(hRatio, vRatio); // cover entire viewport
         var centerShift_x = (c.width - img.width * ratio) / 2;
         var centerShift_y = (c.height - img.height * ratio) / 2;  
         ctx.clearRect(0, 0, c.width, c.height);
@@ -888,16 +773,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function resizeCanvas() {
         if (!canvas) return;
-        const rect = canvas.parentElement ? canvas.parentElement.getBoundingClientRect() : { width: window.innerWidth, height: window.innerHeight };
-        canvas.width = rect.width || window.innerWidth;
-        canvas.height = rect.height || window.innerHeight;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
     }
+
     window.addEventListener('resize', () => {
         resizeCanvas();
-        if (window.lastProgress !== undefined) {
-            const frameIndex = Math.min(frameCount - 1, Math.floor(window.lastProgress * frameCount));
-            drawFrame(frameIndex);
-        }
+        onScroll();
     });
 
     resizeCanvas();
@@ -908,10 +790,13 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // --- Hero Scroll Controller ---
+    // --- Hero & Full Page Scroll Controller ---
     const heroSection = document.getElementById('hero-scroll-section');
-    const track = document.getElementById('hero-card-track');
-    const visualProgressBar = document.getElementById('visual-progress-bar');
+    const heroCenterTitle = document.getElementById('hero-center-title');
+    const heroWaypointBar = document.getElementById('hero-waypoint-bar');
+    const heroCardsContainer = document.getElementById('hero-cards-container');
+    const heroProgressBar = document.getElementById('hero-progress-bar');
+    const heroCardTrack = document.getElementById('hero-card-track');
     const activeWaypoint = document.getElementById('active-waypoint-indicator');
     
     const pins = {
@@ -919,18 +804,7 @@ document.addEventListener('DOMContentLoaded', () => {
         hoover: { pin: document.getElementById('pin-hoover'), text: document.getElementById('text-hoover') },
         canyon: { pin: document.getElementById('pin-canyon'), text: document.getElementById('text-canyon') }
     };
-    
-    // Driven API for the WEBP Frame Sequence & progress bar
-    window.setHeroVisualProgress = function(progress) {
-        window.lastProgress = progress;
-        if (visualProgressBar) {
-            visualProgressBar.style.width = (progress * 100) + '%';
-        }
-        const frameIndex = Math.min(frameCount - 1, Math.floor(progress * frameCount));
-        drawFrame(frameIndex);
-    };
-    
-    // Direct Interaction Handler
+
     window.scrollToDestination = function(destIndex) {
         if (!heroSection) return;
         const rect = heroSection.getBoundingClientRect();
@@ -942,97 +816,81 @@ document.addEventListener('DOMContentLoaded', () => {
         window.scrollTo({ top: targetScroll, behavior: 'smooth' });
     };
 
-    function updateHeroState(progress) {
-        // Horizontal Translation (0 to -66.666%)
-        if (track) {
-            track.style.transform = `translate3d(${-progress * 66.666}%, 0, 0)`;
-        }
-        
-        // Notify visual canvas API
-        window.setHeroVisualProgress(progress);
-        
-        // Transition 50/50 split to full width background on desktop
-        const visualLayer = document.getElementById('hero-visual-layer');
-        const contentLayer = document.getElementById('hero-content-layer');
-        
-        if (window.innerWidth >= 1024) {
-            let expansionProgress = Math.min(1, progress / 0.15); // Animates during the first 15% of scroll
-            let widthPct = 50 + (50 * expansionProgress);
-            
-            if (visualLayer && contentLayer) {
-                visualLayer.style.width = widthPct + '%';
-                contentLayer.style.width = widthPct + '%';
-                
-                // Fade visual into background layer
-                visualLayer.style.opacity = 1 - (0.4 * expansionProgress); 
-                
-                // Content layer becomes a semi-transparent glass overlay
-                let alpha = 1 - (0.4 * expansionProgress); 
-                contentLayer.style.backgroundColor = `rgba(10, 14, 18, ${alpha})`;
-                
-                if (expansionProgress > 0) {
-                    contentLayer.style.backdropFilter = `blur(${expansionProgress * 12}px)`;
-                    contentLayer.style.borderLeftColor = `rgba(255,255,255, ${0.1 * (1 - expansionProgress)})`;
-                    visualLayer.style.borderRightColor = `rgba(255,255,255, ${0.1 * (1 - expansionProgress)})`;
-                } else {
-                    contentLayer.style.backdropFilter = 'none';
-                    contentLayer.style.borderLeftColor = 'rgba(255,255,255,0.1)';
-                    visualLayer.style.borderRightColor = 'rgba(255,255,255,0.1)';
-                }
-            }
-        } else {
-            // Reset inline styles for mobile if resized
-            if (visualLayer && contentLayer) {
-                visualLayer.style.width = '';
-                contentLayer.style.width = '';
-                visualLayer.style.opacity = '';
-                contentLayer.style.backgroundColor = '';
-                contentLayer.style.backdropFilter = '';
-                contentLayer.style.borderLeftColor = '';
-                visualLayer.style.borderRightColor = '';
-            }
-        }
-        
-        // Active Destination Logic
-        let activeDest = 'las-vegas';
-        if (progress > 0.75) {
-            activeDest = 'grand-canyon';
-        } else if (progress > 0.25) {
-            activeDest = 'hoover-dam';
-        }
-        
-        // Update Indicators
-        Object.values(pins).forEach(p => {
-            if(p.pin) p.pin.className = 'w-2.5 h-2.5 rounded-full bg-white/20 transition-all cursor-pointer pointer-events-auto';
-            if(p.text) p.text.className = 'text-xs text-brand-muted transition-colors';
-        });
-        
-        if (activeDest === 'las-vegas') {
-            if (pins.vegas.pin) pins.vegas.pin.className = 'w-2.5 h-2.5 rounded-full bg-brand-ochre ring-4 ring-brand-ochre/30 transition-all cursor-pointer pointer-events-auto';
-            if (pins.vegas.text) pins.vegas.text.className = 'text-xs font-semibold text-white transition-colors';
-            if (activeWaypoint) activeWaypoint.innerHTML = '01 / 03 - Las Vegas';
-        } else if (activeDest === 'hoover-dam') {
-            if (pins.hoover.pin) pins.hoover.pin.className = 'w-2.5 h-2.5 rounded-full bg-brand-turquoise ring-4 ring-brand-turquoise/30 transition-all cursor-pointer pointer-events-auto';
-            if (pins.hoover.text) pins.hoover.text.className = 'text-xs font-semibold text-white transition-colors';
-            if (activeWaypoint) activeWaypoint.innerHTML = '02 / 03 - Hoover Dam';
-        } else {
-            if (pins.canyon.pin) pins.canyon.pin.className = 'w-2.5 h-2.5 rounded-full bg-brand-terracotta ring-4 ring-brand-terracotta/30 transition-all cursor-pointer pointer-events-auto';
-            if (pins.canyon.text) pins.canyon.text.className = 'text-xs font-semibold text-white transition-colors';
-            if (activeWaypoint) activeWaypoint.innerHTML = '03 / 03 - Grand Canyon West Rim';
-        }
-    }
-
     function onScroll() {
-        if (!heroSection) return;
-        const rect = heroSection.getBoundingClientRect();
-        const scrollDistance = rect.height - window.innerHeight;
+        const scrollTop = window.scrollY;
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        const totalProgress = Math.max(0, Math.min(1, maxScroll > 0 ? scrollTop / maxScroll : 0));
         
-        let progress = -rect.top / scrollDistance;
-        progress = Math.max(0, Math.min(1, progress));
-        
-        // Only update if in view
-        if (rect.top <= window.innerHeight && rect.bottom >= 0) {
-            updateHeroState(progress);
+        // 1. Draw continuous frame across full website scroll
+        const frameIndex = Math.min(frameCount - 1, Math.floor(totalProgress * frameCount));
+        drawFrame(frameIndex);
+
+        // 2. Hero Interactive Sequence Logic
+        if (heroSection) {
+            const rect = heroSection.getBoundingClientRect();
+            const heroScrollDist = rect.height - window.innerHeight;
+            let heroProgress = -rect.top / heroScrollDist;
+            heroProgress = Math.max(0, Math.min(1, heroProgress));
+            
+            // Progress Bar
+            if (heroProgressBar) {
+                heroProgressBar.style.width = (heroProgress * 100) + '%';
+            }
+
+            // Scene 1: Center Title Fade Out (0% to 15% of hero scroll)
+            if (heroCenterTitle) {
+                let titleOpacity = 1 - Math.min(1, heroProgress / 0.12);
+                heroCenterTitle.style.opacity = titleOpacity;
+                heroCenterTitle.style.transform = `translateY(${- (1 - titleOpacity) * 50}px)`;
+                heroCenterTitle.style.pointerEvents = titleOpacity < 0.1 ? 'none' : 'auto';
+            }
+
+            // Scene 2 & 3: Waypoint Bar and Cards Track Fade In (10% to 100% of hero scroll)
+            let scene2Opacity = Math.max(0, Math.min(1, (heroProgress - 0.08) / 0.10));
+            if (heroWaypointBar) heroWaypointBar.style.opacity = scene2Opacity;
+            if (heroCardsContainer) heroCardsContainer.style.opacity = scene2Opacity;
+
+            // Horizontal Translation (0% to -66.666%)
+            if (heroCardTrack) {
+                let cardScrollProgress = Math.max(0, (heroProgress - 0.10) / 0.90);
+                heroCardTrack.style.transform = `translate3d(${-cardScrollProgress * 66.666}%, 0, 0)`;
+            }
+
+            // Waypoint Indicators
+            let activeDest = 'las-vegas';
+            if (heroProgress > 0.70) {
+                activeDest = 'grand-canyon';
+            } else if (heroProgress > 0.35) {
+                activeDest = 'hoover-dam';
+            }
+            
+            Object.values(pins).forEach(p => {
+                if(p.pin) p.pin.className = 'w-3 h-3 rounded-full bg-white/20 transition-all cursor-pointer';
+                if(p.text) p.text.className = 'text-xs text-brand-muted transition-colors';
+            });
+            
+            if (activeDest === 'las-vegas') {
+                if (pins.vegas.pin) pins.vegas.pin.className = 'w-3 h-3 rounded-full bg-brand-ochre ring-4 ring-brand-ochre/30 transition-all cursor-pointer';
+                if (pins.vegas.text) pins.vegas.text.className = 'text-xs font-semibold text-white transition-colors';
+                if (activeWaypoint) activeWaypoint.innerHTML = '01 / 03 - Las Vegas';
+            } else if (activeDest === 'hoover-dam') {
+                if (pins.hoover.pin) pins.hoover.pin.className = 'w-3 h-3 rounded-full bg-brand-turquoise ring-4 ring-brand-turquoise/30 transition-all cursor-pointer';
+                if (pins.hoover.text) pins.hoover.text.className = 'text-xs font-semibold text-white transition-colors';
+                if (activeWaypoint) activeWaypoint.innerHTML = '02 / 03 - Hoover Dam';
+            } else {
+                if (pins.canyon.pin) pins.canyon.pin.className = 'w-3 h-3 rounded-full bg-brand-terracotta ring-4 ring-brand-terracotta/30 transition-all cursor-pointer';
+                if (pins.canyon.text) pins.canyon.text.className = 'text-xs font-semibold text-white transition-colors';
+                if (activeWaypoint) activeWaypoint.innerHTML = '03 / 03 - Grand Canyon West Rim';
+            }
+        }
+
+        // 3. Canvas Background Blur Controller as user scrolls down into content
+        if (canvas) {
+            let blurAmount = 0;
+            if (scrollTop > window.innerHeight * 0.5) {
+                blurAmount = Math.min(10, (scrollTop - window.innerHeight * 0.5) / 200);
+            }
+            canvas.style.filter = blurAmount > 0 ? `blur(${blurAmount}px) brightness(0.85)` : 'none';
         }
     }
 
@@ -1047,7 +905,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    // Initial call
+    // Initial Trigger
     onScroll();
 
     // --- FAQ Accordion Toggle Interaction ---
