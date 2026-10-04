@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html class="scroll-smooth" lang="en">
-<head>
+
+<html class="scroll-smooth" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Christianson Tours Las Vegas | Premier Grand Canyon &amp; Hoover Dam Day Tours</title>
@@ -131,15 +131,17 @@
 <!-- BEGIN: HeroSplitExperience -->
 <section class="hero-scroll-section relative w-full h-[400vh] bg-brand-charcoal" id="hero-scroll-section">
 <div class="hero-sticky sticky top-0 w-full h-screen min-h-[760px] overflow-hidden relative">
-<!-- LEFT SIDE: Interactive Visual Layer with WEBP Scroll Canvas -->
+<!-- LEFT SIDE: Interactive Visual Placeholder -->
 <div id="hero-visual-layer" class="absolute top-20 lg:bottom-0 left-0 w-full lg:w-1/2 h-[45%] lg:h-auto z-0 overflow-hidden border-b lg:border-b-0 lg:border-r border-white/10 bg-brand-charcoal">
-<!-- Scroll Animation Canvas Container -->
-<div id="hero-visual-container" class="w-full h-full absolute inset-0 bg-black">
-<canvas id="animation-canvas" class="w-full h-full object-cover absolute inset-0"></canvas>
-<div id="visual-progress-bar" class="absolute bottom-0 left-0 h-1 bg-brand-terracotta w-0 transition-all duration-75 z-20"></div>
+<!-- Visual Placeholder Component -->
+<div id="hero-visual-container" class="w-full h-full absolute inset-0">
+<div id="hero-visual-placeholder" class="w-full h-full flex flex-col items-center justify-center bg-brand-charcoal text-brand-muted/30 font-mono text-sm tracking-widest relative">
+<span class="z-10">[ FUTURE 3D / IMAGE SEQUENCE ASSET ]</span>
+<div id="visual-progress-bar" class="absolute bottom-0 left-0 h-1 bg-brand-terracotta w-0 transition-all duration-75"></div>
+</div>
 </div>
 <!-- Tactical Overlay Elements -->
-<div class="absolute inset-0 pointer-events-none p-4 lg:p-10 flex flex-col justify-between z-10">
+<div class="absolute inset-0 pointer-events-none p-4 lg:p-10 flex flex-col justify-between">
 <!-- Top Status Bar -->
 <div class="flex items-center justify-between z-10">
 <div class="flex items-center space-x-2.5 px-3 py-1.5 rounded bg-black/60 backdrop-blur-md border border-white/10">
@@ -276,7 +278,6 @@
 <a class="flex-1 py-2 px-3 sm:px-4 rounded-xl bg-brand-terracotta hover:bg-brand-terracottaDark text-center text-[10px] sm:text-xs font-bold text-white uppercase tracking-wider transition-all shadow-md" href="tel:+17024569200">
                 Call to Book
               </a>
-</div>
 </div>
 </div>
 </div>
@@ -848,66 +849,6 @@
 <!-- BEGIN: InteractiveHandlersScript -->
 <script data-purpose="interaction-coordination">
 document.addEventListener('DOMContentLoaded', () => {
-    // --- WEBP Scroll Frame Animation Setup ---
-    const canvas = document.getElementById("animation-canvas");
-    const context = canvas ? canvas.getContext("2d") : null;
-    const frameCount = 240;
-    const currentFrame = index => (
-      `pics.wepg/ezgif-frame-${(index + 1).toString().padStart(3, '0')}_wepg.webp`
-    );
-
-    const images = [];
-    function preloadImages() {
-      for (let i = 0; i < frameCount; i++) {
-        const imgObj = new Image();
-        imgObj.src = currentFrame(i);
-        images.push(imgObj);
-      }
-    }
-    preloadImages();
-
-    function drawFrame(index) {
-        if (!canvas || !context) return;
-        const img = images[index];
-        if (img && img.complete) {
-            drawImageScaled(img, context);
-        }
-    }
-
-    function drawImageScaled(img, ctx) {
-        var c = ctx.canvas;
-        var hRatio = c.width / img.width;
-        var vRatio = c.height / img.height;
-        var ratio = Math.max(hRatio, vRatio); // cover
-        var centerShift_x = (c.width - img.width * ratio) / 2;
-        var centerShift_y = (c.height - img.height * ratio) / 2;  
-        ctx.clearRect(0, 0, c.width, c.height);
-        ctx.drawImage(img, 0, 0, img.width, img.height,
-                           centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);  
-    }
-
-    function resizeCanvas() {
-        if (!canvas) return;
-        const rect = canvas.parentElement ? canvas.parentElement.getBoundingClientRect() : { width: window.innerWidth, height: window.innerHeight };
-        canvas.width = rect.width || window.innerWidth;
-        canvas.height = rect.height || window.innerHeight;
-    }
-    window.addEventListener('resize', () => {
-        resizeCanvas();
-        if (window.lastProgress !== undefined) {
-            const frameIndex = Math.min(frameCount - 1, Math.floor(window.lastProgress * frameCount));
-            drawFrame(frameIndex);
-        }
-    });
-
-    resizeCanvas();
-    if (images[0]) {
-        images[0].onload = () => {
-            resizeCanvas();
-            drawFrame(0);
-        };
-    }
-
     // --- Hero Scroll Controller ---
     const heroSection = document.getElementById('hero-scroll-section');
     const track = document.getElementById('hero-card-track');
@@ -920,14 +861,11 @@ document.addEventListener('DOMContentLoaded', () => {
         canyon: { pin: document.getElementById('pin-canyon'), text: document.getElementById('text-canyon') }
     };
     
-    // Driven API for the WEBP Frame Sequence & progress bar
+    // Future API Placeholder for the 3D/Image Sequence
     window.setHeroVisualProgress = function(progress) {
-        window.lastProgress = progress;
         if (visualProgressBar) {
             visualProgressBar.style.width = (progress * 100) + '%';
         }
-        const frameIndex = Math.min(frameCount - 1, Math.floor(progress * frameCount));
-        drawFrame(frameIndex);
     };
     
     // Direct Interaction Handler
@@ -948,7 +886,7 @@ document.addEventListener('DOMContentLoaded', () => {
             track.style.transform = `translate3d(${-progress * 66.666}%, 0, 0)`;
         }
         
-        // Notify visual canvas API
+        // Notify visual placeholder API
         window.setHeroVisualProgress(progress);
         
         // Transition 50/50 split to full width background on desktop
@@ -1071,5 +1009,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 <!-- END: InteractiveHandlersScript -->
-</body>
-</html>
+</body></html>
