@@ -90,14 +90,14 @@
 
     /* Card Panels Translucent Glass */
     .glass-panel {
-      background: rgba(14, 19, 25, 0.55);
+      background: rgba(14, 19, 25, 0.65);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.12);
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     }
     .glass-panel-elevated {
-      background: rgba(20, 26, 34, 0.72);
+      background: rgba(20, 26, 34, 0.78);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(224, 109, 68, 0.35);
@@ -159,11 +159,11 @@
 <!-- END: MainHeader -->
 
 <!-- BEGIN: HeroScrollExperience -->
-<section class="relative z-10 w-full h-[400vh]" id="hero-scroll-section">
+<section class="relative z-10 w-full h-[450vh]" id="hero-scroll-section">
 <div class="sticky top-0 w-full h-screen overflow-hidden flex flex-col justify-between pt-24 pb-8 px-6 lg:px-12">
 
-<!-- SCENE 1: Fullscreen Opening Title (Centered over the crisp WEBP animation background) -->
-<div class="absolute inset-0 flex flex-col items-center justify-center text-center px-6 z-20 transition-all duration-500 pointer-events-auto" id="hero-center-title">
+<!-- SCENE 1: Fullscreen Opening Title (Centered over the WEBP animation background) -->
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center px-6 z-10 transition-all duration-500 pointer-events-auto" id="hero-center-title">
 <div class="inline-flex items-center space-x-2 text-brand-terracotta text-xs sm:text-sm font-bold uppercase tracking-widest2 mb-4 px-5 py-2 rounded-full bg-black/50 backdrop-blur-md border border-white/20 shadow-2xl">
 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
 <span>★ 4.9 Rated · 1,990+ Google Reviews</span>
@@ -184,95 +184,102 @@
 </div>
 <!-- Scroll Prompt -->
 <div class="mt-16 flex flex-col items-center opacity-90 animate-bounce">
-<span class="text-xs font-mono uppercase tracking-widest text-brand-sand mb-2 drop-shadow-md">Scroll Down to Explore</span>
+<span class="text-xs font-mono uppercase tracking-widest text-brand-sand mb-2 drop-shadow-md">Scroll Down for Interactive Tour Map</span>
 <svg class="w-5 h-5 text-brand-terracotta" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 14l-7 7m0 0l-7-7m7 7V3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </div>
 </div>
 
 <!-- SCENE 2: Waypoint Navigation Bar (Fades in on scroll) -->
-<div class="w-full max-w-4xl mx-auto z-10 transition-opacity duration-300 opacity-0" id="hero-waypoint-bar">
-<div class="bg-black/50 backdrop-blur-md p-4 rounded-2xl border border-white/20 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="w-full max-w-4xl mx-auto z-30 transition-all duration-300 opacity-0 pointer-events-none" id="hero-waypoint-bar">
+<div class="bg-black/60 backdrop-blur-md p-4 rounded-2xl border border-white/20 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
 <div class="flex items-center space-x-2 text-[11px] font-mono tracking-widest text-brand-sand/80 uppercase">
 <span>Expedition Waypoints:</span>
-<span class="text-brand-ochre font-semibold" id="active-waypoint-indicator">01 / 03 - Las Vegas</span>
+<span class="text-brand-ochre font-semibold" id="active-waypoint-indicator">01 / 03 - Las Vegas Departure</span>
 </div>
 <div class="flex items-center space-x-4">
 <div class="flex items-center space-x-2 cursor-pointer" onclick="window.scrollToDestination(0)">
-<span class="w-3 h-3 rounded-full bg-brand-ochre ring-4 ring-brand-ochre/30 transition-all" id="pin-vegas"></span>
-<span class="text-xs font-semibold text-white" id="text-vegas">Las Vegas</span>
+<span class="w-3.5 h-3.5 rounded-full bg-brand-ochre ring-4 ring-brand-ochre/30 transition-all" id="pin-vegas"></span>
+<span class="text-xs font-bold text-white" id="text-vegas">Las Vegas</span>
 </div>
 <div class="w-6 h-[1px] bg-white/30"></div>
 <div class="flex items-center space-x-2 cursor-pointer" onclick="window.scrollToDestination(1)">
 <span class="w-3 h-3 rounded-full bg-white/30 transition-all" id="pin-hoover"></span>
-<span class="text-xs text-brand-sand/80" id="text-hoover">Hoover Dam</span>
+<span class="text-xs text-brand-sand/70" id="text-hoover">Hoover Dam</span>
 </div>
 <div class="w-6 h-[1px] bg-white/30"></div>
 <div class="flex items-center space-x-2 cursor-pointer" onclick="window.scrollToDestination(2)">
 <span class="w-3 h-3 rounded-full bg-white/30 transition-all" id="pin-canyon"></span>
-<span class="text-xs text-brand-sand/80" id="text-canyon">Grand Canyon</span>
+<span class="text-xs text-brand-sand/70" id="text-canyon">Grand Canyon</span>
 </div>
 </div>
 </div>
 </div>
 
 <!-- SCENE 3: Horizontal Tour Cards Track (Slides smoothly across screen over WEBP background) -->
-<div class="relative w-full overflow-hidden my-auto opacity-0 transition-opacity duration-500 z-10" id="hero-cards-container">
+<div class="relative w-full overflow-hidden my-auto opacity-0 transition-all duration-500 z-30 pointer-events-none" id="hero-cards-container">
 <div class="flex w-[300%] items-center will-change-transform" id="hero-card-track">
+
 <!-- CARD 1: Las Vegas Departure -->
 <div class="w-1/3 px-6 lg:px-16 flex items-center justify-center">
-<div class="w-full max-w-xl glass-panel-elevated rounded-3xl p-8 sm:p-10 border border-brand-ochre/40 shadow-2xl">
-<span class="text-xs font-mono uppercase tracking-widest text-brand-ochre font-bold block mb-2">Stage 01</span>
+<div class="w-full max-w-xl glass-panel-elevated rounded-3xl p-8 sm:p-10 border border-brand-ochre/50 shadow-2xl">
+<div class="flex items-center justify-between mb-3">
+<span class="text-xs font-mono uppercase tracking-widest text-brand-ochre font-bold">Stage 01 / 03</span>
+<span class="px-3 py-1 rounded-full bg-brand-ochre/20 border border-brand-ochre/40 text-[10px] font-mono text-brand-ochre font-bold uppercase">Strip Hotel Pickup</span>
+</div>
 <h3 class="text-2xl sm:text-4xl font-cinzel font-bold text-white mb-4">Las Vegas Departure</h3>
-<p class="text-sm sm:text-base text-brand-sand/90 mb-6 leading-relaxed">Begin your journey directly from the Las Vegas Strip. We provide VIP hotel lobby pickup at major resort properties in modern, comfortable executive vehicles.</p>
+<p class="text-sm sm:text-base text-brand-sand/90 mb-6 leading-relaxed">Begin your southwestern excursion directly from the Las Vegas Strip. We provide VIP hotel lobby pickup at all major resort properties in comfortable, executive vehicles.</p>
 <div class="pt-6 border-t border-white/10 flex items-center justify-between">
-<span class="text-xs uppercase font-mono tracking-widest text-brand-sand/70">Complimentary Pickup Included</span>
+<span class="text-xs uppercase font-mono tracking-widest text-brand-sand/70">Daily Morning Departures</span>
 <span class="w-10 h-1 rounded-full bg-brand-ochre"></span>
 </div>
 </div>
 </div>
+
 <!-- CARD 2: Hoover Dam Highlights -->
 <div class="w-1/3 px-6 lg:px-16 flex items-center justify-center">
-<div class="w-full max-w-xl glass-panel-elevated rounded-3xl overflow-hidden border border-brand-turquoise/40 shadow-2xl">
+<div class="w-full max-w-xl glass-panel-elevated rounded-3xl overflow-hidden border border-brand-turquoise/50 shadow-2xl">
 <div class="relative h-48 sm:h-56 w-full overflow-hidden">
 <img alt="Hoover Dam Tour" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1VJcOp5we5Ddu4quv_s8ZI7Dr5C3Zj7Q8T9mbQtttXHTVC_GRBxmLstPcOHeEHC9Vz8kgE7GwUaVZkg98i8BQw0_cpDS7Zg5GQ34UZ_TRHimb7hgApY0Idz-9lSFECN55hZ6VwFVFOqPwQ9igX1ZP-ITbSg44yHWLGogyArm2F4PDfbCJovKx21lTHZKd-01zFsdjZlROLfXQ6ORSekrEUh6Eiraq5uZujX7MgbId916f44ia1qRIOfxj6x"/>
 <div class="absolute inset-0 bg-gradient-to-t from-brand-charcoal via-transparent to-black/30"></div>
-<span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-brand-turquoise text-xs font-bold uppercase tracking-wider text-brand-charcoal">Half Day · 4.5 Hours</span>
+<span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-brand-turquoise text-xs font-bold uppercase tracking-wider text-brand-charcoal shadow-md">Stage 02 / 03 · Half Day</span>
 <span class="absolute top-4 right-4 px-3 py-1 rounded-lg bg-black/70 backdrop-blur text-xs font-mono font-bold text-brand-ochre">From $50</span>
 </div>
 <div class="p-6 sm:p-8">
 <h3 class="text-xl sm:text-3xl font-cinzel font-bold text-white mb-2">Hoover Dam Highlights</h3>
-<p class="text-xs sm:text-sm text-brand-sand/90 mb-6">Mike O'Callaghan-Pat Tillman Bypass Bridge walkway, Lake Mead vistas, and historic Boulder City.</p>
+<p class="text-xs sm:text-sm text-brand-sand/90 mb-6">Walk the Mike O'Callaghan-Pat Tillman Memorial Bypass Bridge, enjoy 900-ft views into Black Canyon, Lake Mead vistas, and historic Boulder City.</p>
 <div class="flex items-center space-x-3">
-<a class="flex-1 py-3 rounded-xl bg-brand-turquoise hover:bg-cyan-400 text-center text-xs font-bold text-brand-charcoal uppercase tracking-wider transition-all" href="#tour-hoover-details">View Details</a>
+<a class="flex-1 py-3 rounded-xl bg-brand-turquoise hover:bg-cyan-400 text-center text-xs font-bold text-brand-charcoal uppercase tracking-wider transition-all shadow-md" href="#tour-hoover-details">View Tour Details</a>
 <a class="flex-1 py-3 rounded-xl border border-white/20 hover:border-white text-center text-xs font-semibold text-white uppercase tracking-wider transition-all" href="tel:+17024569200">Call to Book</a>
-</div>
-</div>
-</div>
-</div>
-<!-- CARD 3: Grand Canyon West Rim -->
-<div class="w-1/3 px-6 lg:px-16 flex items-center justify-center">
-<div class="w-full max-w-xl glass-panel-elevated rounded-3xl overflow-hidden border border-brand-terracotta/40 shadow-2xl">
-<div class="relative h-48 sm:h-56 w-full overflow-hidden">
-<img alt="Grand Canyon West Rim" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1XotMXw9VUOOt1Qv48v9Nh0DxlwCXKGYPqSOs5VJlxng3o1G_REP6WAV9D94zOfQfssmgN0H0LVO2Xzvb1j8nPqTAq5Rq2K2iIrsqhv9DNVHyWFSX7CylTIn52sQoXgAw7UvBZDP9ETlB-USJnoYpaq9qS5Huz9zFCiYSlE11DZ_J19qL5082yqzckhf1h32gciopr40W4KFOhHh9H1C-hCAf3v036zOLvXqqlW9W73CbpYlDa-knOO3fbS"/>
-<div class="absolute inset-0 bg-gradient-to-t from-brand-charcoal via-transparent to-black/30"></div>
-<span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-brand-terracotta text-xs font-bold uppercase tracking-wider text-white">Full Day · 10.5 Hours</span>
-<span class="absolute top-4 right-4 px-3 py-1 rounded-lg bg-black/70 backdrop-blur text-xs font-mono font-bold text-brand-ochre">From $97</span>
-</div>
-<div class="p-6 sm:p-8">
-<h3 class="text-xl sm:text-3xl font-cinzel font-bold text-white mb-2">Grand Canyon West Rim</h3>
-<p class="text-xs sm:text-sm text-brand-sand/90 mb-6">Eagle Point, Guano Point 360° overlook, Hualapai Nation, and deli picnic lunch included.</p>
-<div class="flex items-center space-x-3">
-<a class="flex-1 py-3 rounded-xl bg-brand-terracotta hover:bg-brand-terracottaDark text-center text-xs font-bold text-white uppercase tracking-wider transition-all" href="#tour-canyon-details">View Details</a>
-<a class="flex-1 py-3 rounded-xl border border-white/20 hover:border-white text-center text-xs font-semibold text-white uppercase tracking-wider transition-all" href="tel:+17024569200">Call to Book</a>
-</div>
-</div>
 </div>
 </div>
 </div>
 </div>
 
+<!-- CARD 3: Grand Canyon West Rim -->
+<div class="w-1/3 px-6 lg:px-16 flex items-center justify-center">
+<div class="w-full max-w-xl glass-panel-elevated rounded-3xl overflow-hidden border border-brand-terracotta/50 shadow-2xl">
+<div class="relative h-48 sm:h-56 w-full overflow-hidden">
+<img alt="Grand Canyon West Rim" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1XotMXw9VUOOt1Qv48v9Nh0DxlwCXKGYPqSOs5VJlxng3o1G_REP6WAV9D94zOfQfssmgN0H0LVO2Xzvb1j8nPqTAq5Rq2K2iIrsqhv9DNVHyWFSX7CylTIn52sQoXgAw7UvBZDP9ETlB-USJnoYpaq9qS5Huz9zFCiYSlE11DZ_J19qL5082yqzckhf1h32gciopr40W4KFOhHh9H1C-hCAf3v036zOLvXqqlW9W73CbpYlDa-knOO3fbS"/>
+<div class="absolute inset-0 bg-gradient-to-t from-brand-charcoal via-transparent to-black/30"></div>
+<span class="absolute top-4 left-4 px-3 py-1 rounded-full bg-brand-terracotta text-xs font-bold uppercase tracking-wider text-white shadow-md">Stage 03 / 03 · Full Day</span>
+<span class="absolute top-4 right-4 px-3 py-1 rounded-lg bg-black/70 backdrop-blur text-xs font-mono font-bold text-brand-ochre">From $97</span>
+</div>
+<div class="p-6 sm:p-8">
+<h3 class="text-xl sm:text-3xl font-cinzel font-bold text-white mb-2">Grand Canyon West Rim</h3>
+<p class="text-xs sm:text-sm text-brand-sand/90 mb-6">4 full hours at the rim! Eagle Point, Guano Point 360° overlook, Skywalk access, Hualapai Nation, and deli picnic lunch included.</p>
+<div class="flex items-center space-x-3">
+<a class="flex-1 py-3 rounded-xl bg-brand-terracotta hover:bg-brand-terracottaDark text-center text-xs font-bold text-white uppercase tracking-wider transition-all shadow-md" href="#tour-canyon-details">View Tour Details</a>
+<a class="flex-1 py-3 rounded-xl border border-white/20 hover:border-white text-center text-xs font-semibold text-white uppercase tracking-wider transition-all" href="tel:+17024569200">Call to Book</a>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
 <!-- Hero Progress Bar -->
-<div class="w-full h-1 bg-white/10 rounded-full overflow-hidden relative z-10">
+<div class="w-full h-1.5 bg-white/15 rounded-full overflow-hidden relative z-30">
 <div class="h-full bg-brand-terracotta w-0 transition-all duration-75" id="hero-progress-bar"></div>
 </div>
 </div>
@@ -776,7 +783,7 @@ document.addEventListener('DOMContentLoaded', () => {
         var c = ctx.canvas;
         var hRatio = c.width / img.width;
         var vRatio = c.height / img.height;
-        var ratio = Math.max(hRatio, vRatio); // cover viewport
+        var ratio = Math.max(hRatio, vRatio); // Cover full screen
         var centerShift_x = (c.width - img.width * ratio) / 2;
         var centerShift_y = (c.height - img.height * ratio) / 2;  
         ctx.clearRect(0, 0, c.width, c.height);
@@ -822,7 +829,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!heroSection) return;
         const rect = heroSection.getBoundingClientRect();
         const absoluteTop = window.scrollY + rect.top;
-        const targetProgress = destIndex / 2;
+        const targetProgress = (destIndex / 2) * 0.90 + 0.10;
         const scrollDistance = rect.height - window.innerHeight;
         const targetScroll = absoluteTop + (scrollDistance * targetProgress);
         
@@ -834,7 +841,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
         const totalProgress = Math.max(0, Math.min(1, maxScroll > 0 ? scrollTop / maxScroll : 0));
         
-        // 1. Draw continuous frame across full website scroll - Canvas is ALWAYS Crisp & 100% HD
+        // 1. Draw continuous frame across full website scroll - Canvas is ALWAYS Crisp & HD
         const frameIndex = Math.min(frameCount - 1, Math.floor(totalProgress * frameCount));
         drawFrame(frameIndex);
 
@@ -850,50 +857,57 @@ document.addEventListener('DOMContentLoaded', () => {
                 heroProgressBar.style.width = (heroProgress * 100) + '%';
             }
 
-            // Scene 1: Center Title Fade Out (0% to 15% of hero scroll)
+            // Scene 1: Center Title Fade Out (0.00 to 0.12)
             if (heroCenterTitle) {
                 let titleOpacity = 1 - Math.min(1, heroProgress / 0.12);
                 heroCenterTitle.style.opacity = titleOpacity;
-                heroCenterTitle.style.transform = `translateY(${- (1 - titleOpacity) * 50}px)`;
-                heroCenterTitle.style.pointerEvents = titleOpacity < 0.1 ? 'none' : 'auto';
+                heroCenterTitle.style.transform = `translateY(${- (1 - titleOpacity) * 60}px)`;
+                if (titleOpacity <= 0.01) {
+                    heroCenterTitle.style.visibility = 'hidden';
+                    heroCenterTitle.style.pointerEvents = 'none';
+                } else {
+                    heroCenterTitle.style.visibility = 'visible';
+                    heroCenterTitle.style.pointerEvents = 'auto';
+                }
             }
 
-            // Scene 2 & 3: Waypoint Bar and Cards Track Fade In (8% to 100% of hero scroll)
-            let scene2Opacity = Math.max(0, Math.min(1, (heroProgress - 0.08) / 0.10));
-            if (heroWaypointBar) heroWaypointBar.style.opacity = scene2Opacity;
-            if (heroCardsContainer) heroCardsContainer.style.opacity = scene2Opacity;
+            // Scene 2 & 3: Waypoint Bar & Horizontal Cards Track Fade In (0.05 to 1.0)
+            let cardsOpacity = Math.max(0, Math.min(1, (heroProgress - 0.05) / 0.10));
+            if (heroWaypointBar) {
+                heroWaypointBar.style.opacity = cardsOpacity;
+                heroWaypointBar.style.pointerEvents = cardsOpacity > 0.1 ? 'auto' : 'none';
+            }
+            if (heroCardsContainer) {
+                heroCardsContainer.style.opacity = cardsOpacity;
+                heroCardsContainer.style.pointerEvents = cardsOpacity > 0.1 ? 'auto' : 'none';
+            }
 
-            // Horizontal Translation (0% to -66.666%)
+            // Horizontal Translation across the 3 cards (0.08 to 1.0)
             if (heroCardTrack) {
-                let cardScrollProgress = Math.max(0, (heroProgress - 0.10) / 0.90);
+                let cardScrollProgress = Math.max(0, Math.min(1, (heroProgress - 0.08) / 0.92));
                 heroCardTrack.style.transform = `translate3d(${-cardScrollProgress * 66.666}%, 0, 0)`;
             }
 
-            // Waypoint Indicators
-            let activeDest = 'las-vegas';
-            if (heroProgress > 0.70) {
-                activeDest = 'grand-canyon';
-            } else if (heroProgress > 0.35) {
-                activeDest = 'hoover-dam';
+            // Active Waypoint Indicator
+            let activeDest = 0;
+            if (heroProgress > 0.65) {
+                activeDest = 2; // Grand Canyon
+            } else if (heroProgress > 0.30) {
+                activeDest = 1; // Hoover Dam
             }
             
-            Object.values(pins).forEach(p => {
-                if(p.pin) p.pin.className = 'w-3 h-3 rounded-full bg-white/30 transition-all cursor-pointer';
-                if(p.text) p.text.className = 'text-xs text-brand-sand/80 transition-colors';
-            });
+            if (pins.vegas.pin) pins.vegas.pin.className = activeDest === 0 ? 'w-3.5 h-3.5 rounded-full bg-brand-ochre ring-4 ring-brand-ochre/30 transition-all cursor-pointer' : 'w-3 h-3 rounded-full bg-white/40 transition-all cursor-pointer';
+            if (pins.vegas.text) pins.vegas.text.className = activeDest === 0 ? 'text-xs font-bold text-white transition-colors' : 'text-xs text-brand-sand/70 transition-colors';
             
-            if (activeDest === 'las-vegas') {
-                if (pins.vegas.pin) pins.vegas.pin.className = 'w-3 h-3 rounded-full bg-brand-ochre ring-4 ring-brand-ochre/30 transition-all cursor-pointer';
-                if (pins.vegas.text) pins.vegas.text.className = 'text-xs font-semibold text-white transition-colors';
-                if (activeWaypoint) activeWaypoint.innerHTML = '01 / 03 - Las Vegas';
-            } else if (activeDest === 'hoover-dam') {
-                if (pins.hoover.pin) pins.hoover.pin.className = 'w-3 h-3 rounded-full bg-brand-turquoise ring-4 ring-brand-turquoise/30 transition-all cursor-pointer';
-                if (pins.hoover.text) pins.hoover.text.className = 'text-xs font-semibold text-white transition-colors';
-                if (activeWaypoint) activeWaypoint.innerHTML = '02 / 03 - Hoover Dam';
-            } else {
-                if (pins.canyon.pin) pins.canyon.pin.className = 'w-3 h-3 rounded-full bg-brand-terracotta ring-4 ring-brand-terracotta/30 transition-all cursor-pointer';
-                if (pins.canyon.text) pins.canyon.text.className = 'text-xs font-semibold text-white transition-colors';
-                if (activeWaypoint) activeWaypoint.innerHTML = '03 / 03 - Grand Canyon West Rim';
+            if (pins.hoover.pin) pins.hoover.pin.className = activeDest === 1 ? 'w-3.5 h-3.5 rounded-full bg-brand-turquoise ring-4 ring-brand-turquoise/30 transition-all cursor-pointer' : 'w-3 h-3 rounded-full bg-white/40 transition-all cursor-pointer';
+            if (pins.hoover.text) pins.hoover.text.className = activeDest === 1 ? 'text-xs font-bold text-white transition-colors' : 'text-xs text-brand-sand/70 transition-colors';
+
+            if (pins.canyon.pin) pins.canyon.pin.className = activeDest === 2 ? 'w-3.5 h-3.5 rounded-full bg-brand-terracotta ring-4 ring-brand-terracotta/30 transition-all cursor-pointer' : 'w-3 h-3 rounded-full bg-white/40 transition-all cursor-pointer';
+            if (pins.canyon.text) pins.canyon.text.className = activeDest === 2 ? 'text-xs font-bold text-white transition-colors' : 'text-xs text-brand-sand/70 transition-colors';
+
+            if (activeWaypoint) {
+                const labels = ['01 / 03 - Las Vegas Departure', '02 / 03 - Hoover Dam Highlights', '03 / 03 - Grand Canyon West Rim'];
+                activeWaypoint.innerHTML = labels[activeDest];
             }
         }
     }
