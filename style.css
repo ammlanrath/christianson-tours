@@ -1,0 +1,19 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background-color: #000; /* Dark background to make the images pop */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+#scroll-container {
+    height: 600vh; /* Make this larger to slow down the scroll speed. 600vh means 6 times the viewport height */
+}
+
+#animation-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+}
