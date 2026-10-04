@@ -37,39 +37,26 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 
+  <!-- Custom Unified CSS -->
+  <link rel="stylesheet" href="style.css">
   <style>
-    body { background-color: #0a0e12; color: #e8ded4; overflow-x: clip; }
-    .glass-header {
-      background: rgba(10, 14, 18, 0.75);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .glass-panel {
-      background: rgba(14, 19, 25, 0.75);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    }
-    .glass-panel-elevated {
-      background: rgba(12, 16, 22, 0.90);
-      backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 20px 50px 0 rgba(0, 0, 0, 0.7);
-    }
+    body { background-color: #f2ede4; color: #161b22; overflow-x: clip; }
   </style>
 </head>
-<body class="antialiased selection:bg-brand-terracotta selection:text-white">
+<body class="bg-desert antialiased selection:bg-brand-terracotta selection:text-white relative">
+<div class="foliage-overlay-left"></div>
+<div class="foliage-overlay-right"></div>
 
 <!-- HEADER NAVIGATION -->
-<header class="fixed top-0 left-0 right-0 z-50 glass-header">
+<header class="fixed top-0 left-0 right-0 z-50 glass-header-warm">
   <div class="max-w-[1720px] mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
     <a class="flex items-center space-x-3 group" href="index.html">
-      <div class="h-11 flex items-center bg-white/95 rounded-lg px-3.5 py-1 shadow-md group-hover:scale-105 transition-transform">
-        <span class="text-brand-charcoal font-cinzel font-bold text-lg tracking-tight">CHRISTIANSON TOURS</span>
+      <div class="h-11 flex items-center bg-brand-charcoal rounded-lg px-3.5 py-1 shadow-md group-hover:scale-105 transition-transform">
+        <span class="text-brand-sand font-cinzel font-bold text-lg tracking-tight">CHRISTIANSON TOURS</span>
       </div>
     </a>
-    <nav class="hidden lg:flex items-center space-x-8 text-xs font-semibold uppercase tracking-wider text-brand-sand/90">
-      <a class="hover:text-brand-terracotta transition-colors text-brand-terracotta" href="tours.html">Tours</a>
+    <nav class="hidden lg:flex items-center space-x-8 text-xs font-semibold uppercase tracking-wider text-slate-800">
+      <a class="hover:text-brand-terracotta transition-colors text-brand-terracotta font-bold" href="tours.html">Tours</a>
       <a class="hover:text-brand-terracotta transition-colors" href="plan.html">Plan My Trip</a>
       <a class="hover:text-brand-terracotta transition-colors" href="compare.html">Compare</a>
       <a class="hover:text-brand-terracotta transition-colors" href="reviews.html">Reviews</a>
@@ -122,8 +109,8 @@
   </div>
 </section>
 
-<!-- SECTION: INTERACTIVE ITINERARY TIMELINE -->
-<section class="py-20 px-6 lg:px-10 max-w-[1720px] mx-auto" id="itinerary">
+<!-- SECTION: INTERACTIVE ITINERARY TIMELINE (Dark Contrast Rhythm Section) -->
+<section class="py-20 px-6 lg:px-10 max-w-[1720px] mx-auto bg-brand-charcoal rounded-3xl my-12 text-white shadow-2xl relative overflow-hidden" id="itinerary">
   <div class="max-w-3xl mb-12">
     <div class="flex items-center space-x-2 text-brand-terracotta text-xs font-bold uppercase tracking-widest mb-3">
       <span class="w-6 h-[2px] bg-brand-terracotta"></span>
@@ -140,63 +127,63 @@
     </div>
 
     <!-- Active Stop Detail Viewer Card -->
-    <div class="lg:col-span-8 glass-panel-elevated rounded-3xl overflow-hidden p-8 border border-white/15 shadow-2xl" id="itinerary-display">
+    <div class="lg:col-span-8 bg-slate-900/90 backdrop-blur-xl rounded-3xl overflow-hidden p-8 border border-white/15 shadow-2xl" id="itinerary-display">
       <!-- Populated via JS -->
     </div>
   </div>
 </section>
 
-<!-- SECTION: TOUR HIGHLIGHTS & INCLUSIONS -->
-<section class="py-20 px-6 lg:px-10 max-w-[1720px] mx-auto border-t border-white/10">
+<!-- SECTION: TOUR HIGHLIGHTS & INCLUSIONS (Warm Sandstone Section) -->
+<section class="py-20 px-6 lg:px-10 max-w-[1720px] mx-auto">
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
     <div>
-      <div class="flex items-center space-x-2 text-brand-turquoise text-xs font-bold uppercase tracking-widest mb-3">
-        <span class="w-6 h-[2px] bg-brand-turquoise"></span>
+      <div class="flex items-center space-x-2 text-brand-terracotta text-xs font-bold uppercase tracking-widest mb-3">
+        <span class="w-6 h-[2px] bg-brand-terracotta"></span>
         <span>What Makes This Special</span>
       </div>
-      <h2 class="text-3xl sm:text-4xl font-cinzel font-bold text-white mb-6">Why Book the Hoover Dam Express?</h2>
-      <ul class="space-y-4 text-brand-sand/90 text-sm sm:text-base">
+      <h2 class="text-3xl sm:text-4xl font-cinzel font-bold text-slate-900 mb-6">Why Book the Hoover Dam Express?</h2>
+      <ul class="space-y-4 text-slate-700 text-sm sm:text-base">
         <li class="flex items-start space-x-3">
-          <span class="text-brand-turquoise font-bold text-lg">✓</span>
+          <span class="text-brand-terracotta font-bold text-lg">✓</span>
           <span><strong>Perfect Timeframe:</strong> Finished by 1:00 PM so you have the entire afternoon available for Las Vegas shows, dining, or poolside relaxing.</span>
         </li>
         <li class="flex items-start space-x-3">
-          <span class="text-brand-turquoise font-bold text-lg">✓</span>
+          <span class="text-brand-terracotta font-bold text-lg">✓</span>
           <span><strong>Bypass Bridge Walkway:</strong> Walk high above the Colorado River on the Mike O'Callaghan-Pat Tillman Memorial Bridge for iconic photos.</span>
         </li>
         <li class="flex items-start space-x-3">
-          <span class="text-brand-turquoise font-bold text-lg">✓</span>
+          <span class="text-brand-terracotta font-bold text-lg">✓</span>
           <span><strong>Lake Mead Overlook:</strong> Breathtaking vantage points across North America's largest man-made water reservoir.</span>
         </li>
         <li class="flex items-start space-x-3">
-          <span class="text-brand-turquoise font-bold text-lg">✓</span>
+          <span class="text-brand-terracotta font-bold text-lg">✓</span>
           <span><strong>Historic Boulder City:</strong> Drive through the town built specifically for 1930s dam construction workers.</span>
         </li>
         <li class="flex items-start space-x-3">
-          <span class="text-brand-turquoise font-bold text-lg">✓</span>
+          <span class="text-brand-terracotta font-bold text-lg">✓</span>
           <span><strong>Hotel Lobby Pickup:</strong> Door-to-door luxury transport so you never have to navigate traffic or paid parking.</span>
         </li>
       </ul>
     </div>
     
-    <div class="glass-panel p-8 rounded-3xl border border-white/10 space-y-6">
-      <h3 class="text-2xl font-cinzel font-bold text-white">Tour Summary</h3>
+    <div class="glass-panel-warm-elevated p-8 rounded-3xl border border-brand-terracotta/20 space-y-6">
+      <h3 class="text-2xl font-cinzel font-bold text-slate-900">Tour Summary</h3>
       <div class="grid grid-cols-2 gap-4 text-xs">
-        <div class="glass-panel p-4 rounded-xl">
-          <span class="text-brand-sand/60 block mb-1 uppercase font-mono">Departure</span>
-          <span class="text-white font-bold text-sm">7:30 AM - 8:00 AM</span>
+        <div class="glass-panel-warm p-4 rounded-xl">
+          <span class="text-slate-500 block mb-1 uppercase font-mono">Departure</span>
+          <span class="text-slate-900 font-bold text-sm">7:30 AM - 8:00 AM</span>
         </div>
-        <div class="glass-panel p-4 rounded-xl">
-          <span class="text-brand-sand/60 block mb-1 uppercase font-mono">Return Time</span>
-          <span class="text-white font-bold text-sm">~1:00 PM</span>
+        <div class="glass-panel-warm p-4 rounded-xl">
+          <span class="text-slate-500 block mb-1 uppercase font-mono">Return Time</span>
+          <span class="text-slate-900 font-bold text-sm">~1:00 PM</span>
         </div>
-        <div class="glass-panel p-4 rounded-xl">
-          <span class="text-brand-sand/60 block mb-1 uppercase font-mono">Distance</span>
-          <span class="text-white font-bold text-sm">35 Miles from Strip</span>
+        <div class="glass-panel-warm p-4 rounded-xl">
+          <span class="text-slate-500 block mb-1 uppercase font-mono">Distance</span>
+          <span class="text-slate-900 font-bold text-sm">35 Miles from Strip</span>
         </div>
-        <div class="glass-panel p-4 rounded-xl">
-          <span class="text-brand-sand/60 block mb-1 uppercase font-mono">Group Size</span>
-          <span class="text-white font-bold text-sm">Small Group Express</span>
+        <div class="glass-panel-warm p-4 rounded-xl">
+          <span class="text-slate-500 block mb-1 uppercase font-mono">Group Size</span>
+          <span class="text-slate-900 font-bold text-sm">Small Group Express</span>
         </div>
       </div>
       <a href="booking.html?tour=hoover-dam" class="block w-full py-4 rounded-2xl bg-brand-terracotta hover:bg-brand-terracottaDark text-center font-bold text-sm uppercase tracking-widest text-white shadow-xl transition-all">
@@ -207,24 +194,24 @@
 </section>
 
 <!-- SECTION: HOTEL PICKUP PREVIEW -->
-<section class="py-20 px-6 lg:px-10 max-w-[1720px] mx-auto border-t border-white/10">
-  <div class="glass-panel p-8 sm:p-12 rounded-3xl border border-white/15">
+<section class="py-20 px-6 lg:px-10 max-w-[1720px] mx-auto border-t border-slate-200">
+  <div class="glass-panel-warm-elevated p-8 sm:p-12 rounded-3xl border border-brand-terracotta/20">
     <div class="max-w-3xl mb-8">
-      <div class="text-xs uppercase font-mono text-brand-turquoise font-bold tracking-widest mb-2">Door-to-Door Service</div>
-      <h2 class="text-3xl font-cinzel font-bold text-white">Check Your Las Vegas Hotel Pickup</h2>
-      <p class="text-brand-sand/80 text-sm mt-2">We pick up directly from all major Strip and Downtown hotel lobby entrances.</p>
+      <div class="text-xs uppercase font-mono text-brand-terracotta font-bold tracking-widest mb-2">Door-to-Door Service</div>
+      <h2 class="text-3xl font-cinzel font-bold text-slate-900">Check Your Las Vegas Hotel Pickup</h2>
+      <p class="text-slate-700 text-sm mt-2">We pick up directly from all major Strip and Downtown hotel lobby entrances.</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
       <div>
-        <label class="block text-xs uppercase font-mono text-brand-sand/60 mb-2">Select Your Las Vegas Resort</label>
-        <select id="hotel-select" class="w-full bg-brand-charcoal border border-white/20 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-turquoise">
+        <label class="block text-xs uppercase font-mono text-slate-500 mb-2">Select Your Las Vegas Resort</label>
+        <select id="hotel-select" class="w-full bg-white border border-slate-300 text-slate-900 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-terracotta shadow-sm">
           <!-- Populated via JS -->
         </select>
       </div>
-      <div id="hotel-info" class="glass-panel p-4 rounded-xl border border-white/10 text-xs">
-        <span class="text-brand-sand/60 block">Pickup Details:</span>
-        <span class="text-white font-bold text-sm block mt-1">Select a hotel above to view pickup time and location.</span>
+      <div id="hotel-info" class="glass-panel-warm p-4 rounded-xl border border-slate-200 text-xs">
+        <span class="text-slate-500 block">Pickup Details:</span>
+        <span class="text-slate-900 font-bold text-sm block mt-1">Select a hotel above to view pickup time and location.</span>
       </div>
     </div>
   </div>

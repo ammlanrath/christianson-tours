@@ -37,39 +37,26 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 
+  <!-- Custom Unified CSS -->
+  <link rel="stylesheet" href="style.css">
   <style>
-    body { background-color: #0a0e12; color: #e8ded4; overflow-x: clip; }
-    .glass-header {
-      background: rgba(10, 14, 18, 0.75);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .glass-panel {
-      background: rgba(14, 19, 25, 0.75);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    }
-    .glass-panel-elevated {
-      background: rgba(12, 16, 22, 0.90);
-      backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 20px 50px 0 rgba(0, 0, 0, 0.7);
-    }
+    body { background-color: #f2ede4; color: #161b22; overflow-x: clip; }
   </style>
 </head>
-<body class="antialiased selection:bg-brand-terracotta selection:text-white">
+<body class="bg-desert antialiased selection:bg-brand-terracotta selection:text-white relative">
+<div class="foliage-overlay-left"></div>
+<div class="foliage-overlay-right"></div>
 
 <!-- HEADER NAVIGATION -->
-<header class="fixed top-0 left-0 right-0 z-50 glass-header">
+<header class="fixed top-0 left-0 right-0 z-50 glass-header-warm">
   <div class="max-w-[1720px] mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
     <a class="flex items-center space-x-3 group" href="index.html">
-      <div class="h-11 flex items-center bg-white/95 rounded-lg px-3.5 py-1 shadow-md group-hover:scale-105 transition-transform">
-        <span class="text-brand-charcoal font-cinzel font-bold text-lg tracking-tight">CHRISTIANSON TOURS</span>
+      <div class="h-11 flex items-center bg-brand-charcoal rounded-lg px-3.5 py-1 shadow-md group-hover:scale-105 transition-transform">
+        <span class="text-brand-sand font-cinzel font-bold text-lg tracking-tight">CHRISTIANSON TOURS</span>
       </div>
     </a>
-    <nav class="hidden lg:flex items-center space-x-8 text-xs font-semibold uppercase tracking-wider text-brand-sand/90">
-      <a class="hover:text-brand-terracotta transition-colors" href="tours.html">Tours</a>
+    <nav class="hidden lg:flex items-center space-x-8 text-xs font-semibold uppercase tracking-wider text-slate-800">
+      <a class="hover:text-brand-terracotta transition-colors text-brand-terracotta font-bold" href="tours.html">Tours</a>
       <a class="hover:text-brand-terracotta transition-colors" href="plan.html">Plan My Trip</a>
       <a class="hover:text-brand-terracotta transition-colors" href="compare.html">Compare</a>
       <a class="hover:text-brand-terracotta transition-colors" href="reviews.html">Reviews</a>
@@ -122,8 +109,8 @@
   </div>
 </section>
 
-<!-- SECTION: INTERACTIVE ITINERARY TIMELINE -->
-<section class="py-20 px-6 lg:px-10 max-w-[1720px] mx-auto" id="itinerary">
+<!-- SECTION: INTERACTIVE ITINERARY TIMELINE (Dark Contrast Rhythm Section) -->
+<section class="py-20 px-6 lg:px-10 max-w-[1720px] mx-auto bg-brand-charcoal rounded-3xl my-12 text-white shadow-2xl relative overflow-hidden" id="itinerary">
   <div class="max-w-3xl mb-12">
     <div class="flex items-center space-x-2 text-brand-terracotta text-xs font-bold uppercase tracking-widest mb-3">
       <span class="w-6 h-[2px] bg-brand-terracotta"></span>
@@ -140,21 +127,21 @@
     </div>
 
     <!-- Active Stop Detail Viewer Card -->
-    <div class="lg:col-span-8 glass-panel-elevated rounded-3xl overflow-hidden p-8 border border-white/15 shadow-2xl" id="itinerary-display">
+    <div class="lg:col-span-8 bg-slate-900/90 backdrop-blur-xl rounded-3xl overflow-hidden p-8 border border-white/15 shadow-2xl" id="itinerary-display">
       <!-- Populated via JS -->
     </div>
   </div>
 </section>
 
-<!-- SECTION: PACKAGE SELECTOR MATRIX -->
-<section class="py-20 px-6 lg:px-10 max-w-[1720px] mx-auto border-t border-white/10" id="packages">
+<!-- SECTION: PACKAGE SELECTOR MATRIX (Warm Sandstone Section) -->
+<section class="py-20 px-6 lg:px-10 max-w-[1720px] mx-auto" id="packages">
   <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
     <div>
       <div class="flex items-center space-x-2 text-brand-terracotta text-xs font-bold uppercase tracking-widest mb-3">
         <span class="w-6 h-[2px] bg-brand-terracotta"></span>
         <span>Transparent Tier Selection</span>
       </div>
-      <h2 class="text-3xl md:text-5xl font-cinzel font-bold text-white">Choose Your Experience Tier</h2>
+      <h2 class="text-3xl md:text-5xl font-cinzel font-bold text-slate-900">Choose Your Experience Tier</h2>
     </div>
     <button id="btn-help-me-choose" class="mt-4 md:mt-0 px-6 py-3 rounded-full bg-brand-ochre hover:bg-amber-400 text-brand-charcoal text-xs font-bold uppercase tracking-widest transition-all shadow-lg">
       💡 Help Me Choose
@@ -162,63 +149,63 @@
   </div>
 
   <!-- Comparison Matrix Table -->
-  <div class="glass-panel rounded-3xl overflow-x-auto p-6 border border-white/10">
+  <div class="glass-panel-warm-elevated rounded-3xl overflow-x-auto p-6 border border-brand-terracotta/20">
     <table class="w-full text-left border-collapse">
       <thead>
-        <tr class="border-b border-white/10">
-          <th class="p-4 text-xs font-mono uppercase tracking-widest text-brand-sand/70">Inclusions</th>
+        <tr class="border-b border-slate-200">
+          <th class="p-4 text-xs font-mono uppercase tracking-widest text-slate-500">Inclusions</th>
           <th class="p-4 text-center">
-            <div class="text-base font-cinzel font-bold text-white">Standard</div>
+            <div class="text-base font-cinzel font-bold text-slate-900">Standard</div>
             <div class="text-2xl font-syne font-bold text-brand-terracotta mt-1">$97</div>
           </th>
-          <th class="p-4 text-center bg-white/5 rounded-t-2xl">
-            <div class="text-base font-cinzel font-bold text-white">Plus Experience</div>
-            <div class="text-2xl font-syne font-bold text-brand-ochre mt-1">$119</div>
-            <span class="inline-block px-2 py-0.5 rounded text-[10px] uppercase font-bold bg-brand-ochre/20 text-brand-ochre mt-1">Most Booked</span>
+          <th class="p-4 text-center bg-brand-terracotta/10 rounded-t-2xl">
+            <div class="text-base font-cinzel font-bold text-slate-900">Plus Experience</div>
+            <div class="text-2xl font-syne font-bold text-brand-terracottaDark mt-1">$119</div>
+            <span class="inline-block px-2 py-0.5 rounded text-[10px] uppercase font-bold bg-brand-ochre text-brand-charcoal mt-1">Most Booked</span>
           </th>
           <th class="p-4 text-center">
-            <div class="text-base font-cinzel font-bold text-white">Ultimate VIP</div>
-            <div class="text-2xl font-syne font-bold text-emerald-400 mt-1">$149</div>
+            <div class="text-base font-cinzel font-bold text-slate-900">Ultimate VIP</div>
+            <div class="text-2xl font-syne font-bold text-emerald-700 mt-1">$149</div>
           </th>
         </tr>
       </thead>
-      <tbody class="divide-y divide-white/5 text-sm">
+      <tbody class="divide-y divide-slate-200 text-sm text-slate-800">
         <tr>
-          <td class="p-4 font-semibold text-white">Las Vegas Hotel Pickup & Return</td>
-          <td class="p-4 text-center text-emerald-400 font-bold">✓</td>
-          <td class="p-4 text-center text-emerald-400 font-bold bg-white/5">✓</td>
-          <td class="p-4 text-center text-emerald-400 font-bold">✓</td>
+          <td class="p-4 font-semibold text-slate-900">Las Vegas Hotel Pickup & Return</td>
+          <td class="p-4 text-center text-emerald-600 font-bold">✓</td>
+          <td class="p-4 text-center text-emerald-600 font-bold bg-brand-terracotta/5">✓</td>
+          <td class="p-4 text-center text-emerald-600 font-bold">✓</td>
         </tr>
         <tr>
-          <td class="p-4 font-semibold text-white">Hualapai Park Entry ($50 value)</td>
-          <td class="p-4 text-center text-emerald-400 font-bold">✓</td>
-          <td class="p-4 text-center text-emerald-400 font-bold bg-white/5">✓</td>
-          <td class="p-4 text-center text-emerald-400 font-bold">✓</td>
+          <td class="p-4 font-semibold text-slate-900">Hualapai Park Entry ($50 value)</td>
+          <td class="p-4 text-center text-emerald-600 font-bold">✓</td>
+          <td class="p-4 text-center text-emerald-600 font-bold bg-brand-terracotta/5">✓</td>
+          <td class="p-4 text-center text-emerald-600 font-bold">✓</td>
         </tr>
         <tr>
-          <td class="p-4 font-semibold text-white">Morning Continental Breakfast</td>
-          <td class="p-4 text-center text-emerald-400 font-bold">✓</td>
-          <td class="p-4 text-center text-emerald-400 font-bold bg-white/5">✓</td>
-          <td class="p-4 text-center text-emerald-400 font-bold">✓</td>
+          <td class="p-4 font-semibold text-slate-900">Morning Continental Breakfast</td>
+          <td class="p-4 text-center text-emerald-600 font-bold">✓</td>
+          <td class="p-4 text-center text-emerald-600 font-bold bg-brand-terracotta/5">✓</td>
+          <td class="p-4 text-center text-emerald-600 font-bold">✓</td>
         </tr>
         <tr>
-          <td class="p-4 font-semibold text-white">Catered Deli Picnic Lunch at Rim</td>
-          <td class="p-4 text-center text-brand-sand/30 font-bold">—</td>
-          <td class="p-4 text-center text-emerald-400 font-bold bg-white/5">✓</td>
-          <td class="p-4 text-center text-emerald-400 font-bold">✓</td>
+          <td class="p-4 font-semibold text-slate-900">Catered Deli Picnic Lunch at Rim</td>
+          <td class="p-4 text-center text-slate-300 font-bold">—</td>
+          <td class="p-4 text-center text-emerald-600 font-bold bg-brand-terracotta/5">✓</td>
+          <td class="p-4 text-center text-emerald-600 font-bold">✓</td>
         </tr>
         <tr>
-          <td class="p-4 font-semibold text-white">Skywalk Glass Bridge Ticket ($35 value)</td>
-          <td class="p-4 text-center text-brand-sand/30 font-bold">—</td>
-          <td class="p-4 text-center text-brand-sand/30 font-bold bg-white/5">—</td>
-          <td class="p-4 text-center text-emerald-400 font-bold">✓</td>
+          <td class="p-4 font-semibold text-slate-900">Skywalk Glass Bridge Ticket ($35 value)</td>
+          <td class="p-4 text-center text-slate-300 font-bold">—</td>
+          <td class="p-4 text-center text-slate-300 font-bold bg-brand-terracotta/5">—</td>
+          <td class="p-4 text-center text-emerald-600 font-bold">✓</td>
         </tr>
         <tr>
           <td class="p-4"></td>
           <td class="p-4 text-center">
-            <a href="booking.html?tour=grand-canyon-west&package=good" class="inline-block py-2.5 px-5 rounded-xl border border-white/20 hover:border-white text-xs font-bold uppercase tracking-wider text-white">Book Standard</a>
+            <a href="booking.html?tour=grand-canyon-west&package=good" class="inline-block py-2.5 px-5 rounded-xl border border-slate-300 hover:border-slate-800 text-xs font-bold uppercase tracking-wider text-slate-800">Book Standard</a>
           </td>
-          <td class="p-4 text-center bg-white/5 rounded-b-2xl">
+          <td class="p-4 text-center bg-brand-terracotta/10 rounded-b-2xl">
             <a href="booking.html?tour=grand-canyon-west&package=better" class="inline-block py-2.5 px-5 rounded-xl bg-brand-ochre text-brand-charcoal text-xs font-bold uppercase tracking-wider hover:bg-amber-400">Book Plus</a>
           </td>
           <td class="p-4 text-center">
@@ -231,10 +218,10 @@
 </section>
 
 <!-- SECTION: ADDONS & LIVE SUMMARY -->
-<section class="py-20 px-6 lg:px-10 max-w-[1720px] mx-auto border-t border-white/10">
+<section class="py-20 px-6 lg:px-10 max-w-[1720px] mx-auto border-t border-slate-200">
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
     <div class="lg:col-span-7">
-      <h3 class="text-2xl font-cinzel font-bold text-white mb-6">Customize Your Experience (Add-ons)</h3>
+      <h3 class="text-2xl font-cinzel font-bold text-slate-900 mb-6">Customize Your Experience (Add-ons)</h3>
       <div class="space-y-4" id="addons-container">
         <!-- Rendered via JS -->
       </div>
@@ -242,24 +229,24 @@
 
     <!-- Live Booking Summary Box -->
     <div class="lg:col-span-5">
-      <div class="glass-panel-elevated p-8 rounded-3xl border border-brand-terracotta/40">
-        <h4 class="text-xl font-cinzel font-bold text-white mb-4">Your Custom Trip Estimate</h4>
-        <div class="space-y-3 text-sm pb-6 border-b border-white/10">
+      <div class="glass-panel-warm-elevated p-8 rounded-3xl border border-brand-terracotta/40">
+        <h4 class="text-xl font-cinzel font-bold text-slate-900 mb-4">Your Custom Trip Estimate</h4>
+        <div class="space-y-3 text-sm pb-6 border-b border-slate-200">
           <div class="flex justify-between">
-            <span class="text-brand-sand/70">Selected Tour:</span>
-            <span class="font-bold text-white">Grand Canyon West Rim</span>
+            <span class="text-slate-600">Selected Tour:</span>
+            <span class="font-bold text-slate-900">Grand Canyon West Rim</span>
           </div>
           <div class="flex justify-between">
-            <span class="text-brand-sand/70">Base Package:</span>
-            <span id="summary-package-name" class="font-bold text-brand-ochre">Standard ($97)</span>
+            <span class="text-slate-600">Base Package:</span>
+            <span id="summary-package-name" class="font-bold text-brand-terracotta">Standard ($97)</span>
           </div>
           <div class="flex justify-between">
-            <span class="text-brand-sand/70">Selected Add-ons:</span>
-            <span id="summary-addons-text" class="font-semibold text-white">None</span>
+            <span class="text-slate-600">Selected Add-ons:</span>
+            <span id="summary-addons-text" class="font-semibold text-slate-900">None</span>
           </div>
         </div>
         <div class="flex items-baseline justify-between pt-6 mb-6">
-          <span class="text-base font-bold text-white">Total per Person:</span>
+          <span class="text-base font-bold text-slate-900">Total per Person:</span>
           <span id="summary-total-price" class="text-4xl font-syne font-bold text-brand-terracotta">$97</span>
         </div>
         <a id="btn-proceed-booking" href="booking.html?tour=grand-canyon-west&package=good" class="block w-full py-4 rounded-xl bg-brand-terracotta hover:bg-brand-terracottaDark text-center font-bold text-xs uppercase tracking-widest text-white transition-all shadow-xl">

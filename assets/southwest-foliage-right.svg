@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" fill="none" opacity="0.35">
+  <g transform="translate(50, 50)">
+    <!-- Branch stem -->
+    <path d="M350 600 C 280 480, 200 320, 150 100" stroke="#4a5d4e" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M260 420 C 190 380, 120 340, 60 320" stroke="#4a5d4e" stroke-width="2" fill="none"/>
+    <path d="M200 280 C 140 230, 80 180, 30 150" stroke="#4a5d4e" stroke-width="2" fill="none"/>
+
+    <!-- Leaves -->
+    <path d="M60 320 Q 20 300 0 330 Q 40 340 60 320 Z" fill="#6b7f6e" opacity="0.8"/>
+    <path d="M30 150 Q -10 130 -30 160 Q 10 170 30 150 Z" fill="#5c7060" opacity="0.85"/>
+    <path d="M120 360 Q 80 330 60 350 Q 100 370 120 360 Z" fill="#4a5d4e" opacity="0.75"/>
+    <path d="M140 220 Q 100 190 80 210 Q 120 230 140 220 Z" fill="#6b7f6e" opacity="0.8"/>
+
+    <!-- Desert Grasses Accent -->
+    <path d="M300 550 Q 240 450 200 400" stroke="#e0a944" stroke-width="1.5" stroke-dasharray="3 2" fill="none" opacity="0.5"/>
+    <path d="M320 580 Q 260 490 220 420" stroke="#e06d44" stroke-width="1.5" fill="none" opacity="0.4"/>
+  </g>
+</svg>

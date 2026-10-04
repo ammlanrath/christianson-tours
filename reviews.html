@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,12 +15,12 @@
         extend: {
           colors: {
             brand: {
-              charcoal: '#0a0e12',
-              sand: '#e8ded4',
+              charcoal: '#161b22',
+              sand: '#f7f3ee',
               terracotta: '#e06d44',
               terracottaDark: '#c2542e',
-              ochre: '#e0a944',
-              turquoise: '#44b8e0'
+              ochre: '#d9922b',
+              turquoise: '#208ba6'
             }
           },
           fontFamily: {
@@ -36,43 +36,27 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-
-  <style>
-    body { background-color: #0a0e12; color: #e8ded4; overflow-x: clip; }
-    .glass-header {
-      background: rgba(10, 14, 18, 0.75);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .glass-panel {
-      background: rgba(14, 19, 25, 0.75);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    }
-    .glass-panel-elevated {
-      background: rgba(12, 16, 22, 0.90);
-      backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 20px 50px 0 rgba(0, 0, 0, 0.7);
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="antialiased selection:bg-brand-terracotta selection:text-white">
+<body class="bg-sandstone antialiased selection:bg-brand-terracotta selection:text-white">
+
+<!-- BOTANICAL EDGE OVERLAYS -->
+<div class="foliage-overlay-left"></div>
+<div class="foliage-overlay-right"></div>
 
 <!-- HEADER NAVIGATION -->
-<header class="fixed top-0 left-0 right-0 z-50 glass-header">
+<header class="fixed top-0 left-0 right-0 z-50 glass-header-warm">
   <div class="max-w-[1720px] mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
     <a class="flex items-center space-x-3 group" href="index.html">
-      <div class="h-11 flex items-center bg-white/95 rounded-lg px-3.5 py-1 shadow-md group-hover:scale-105 transition-transform">
+      <div class="h-11 flex items-center bg-white/95 rounded-lg px-3.5 py-1 shadow-md group-hover:scale-105 transition-transform border border-brand-terracotta/20">
         <span class="text-brand-charcoal font-cinzel font-bold text-lg tracking-tight">CHRISTIANSON TOURS</span>
       </div>
     </a>
-    <nav class="hidden lg:flex items-center space-x-8 text-xs font-semibold uppercase tracking-wider text-brand-sand/90">
+    <nav class="hidden lg:flex items-center space-x-8 text-xs font-semibold uppercase tracking-wider text-slate-800">
       <a class="hover:text-brand-terracotta transition-colors" href="tours.html">Tours</a>
       <a class="hover:text-brand-terracotta transition-colors" href="plan.html">Plan My Trip</a>
       <a class="hover:text-brand-terracotta transition-colors" href="compare.html">Compare</a>
-      <a class="hover:text-brand-terracotta transition-colors text-brand-terracotta" href="reviews.html">Reviews</a>
+      <a class="hover:text-brand-terracotta transition-colors text-brand-terracotta font-bold" href="reviews.html">Reviews</a>
       <a class="hover:text-brand-terracotta transition-colors" href="faq.html">FAQ</a>
     </nav>
     <div class="flex items-center space-x-4">
@@ -84,56 +68,56 @@
 </header>
 
 <!-- HERO HEADER & VERIFIED METRICS -->
-<section class="pt-32 pb-12 px-6 lg:px-10 max-w-[1720px] mx-auto">
+<section class="pt-32 pb-12 px-6 lg:px-10 max-w-[1720px] mx-auto z-10 relative">
   <div class="max-w-3xl mb-12">
     <div class="flex items-center space-x-2 text-brand-terracotta text-xs font-bold uppercase tracking-widest mb-3">
       <span class="w-6 h-[2px] bg-brand-terracotta"></span>
       <span>Authentic Traveler Feedback</span>
     </div>
-    <h1 class="text-4xl sm:text-6xl font-cinzel font-extrabold text-white tracking-tight mb-4">
+    <h1 class="text-4xl sm:text-6xl font-cinzel font-extrabold text-brand-charcoal tracking-tight mb-4">
       Real Experiences.<br>Real Travelers.
     </h1>
-    <p class="text-brand-sand/90 text-base sm:text-lg font-sans leading-relaxed">
+    <p class="text-slate-700 text-base sm:text-lg font-sans leading-relaxed">
       Read unedited testimonials from guests who took our Grand Canyon West Rim and Hoover Dam Express day excursions.
     </p>
   </div>
 
   <!-- Verified Trust Cards -->
   <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-16">
-    <div class="glass-panel p-6 rounded-2xl border border-white/10 text-center">
-      <div class="text-4xl font-syne font-extrabold text-brand-ochre mb-1">4.9 / 5.0</div>
-      <div class="text-xs uppercase font-mono text-brand-sand/70">Google Star Rating</div>
-      <div class="text-[11px] text-brand-sand/50 mt-1">Verified Customer Score</div>
+    <div class="glass-panel-warm p-6 rounded-2xl border border-brand-terracotta/20 text-center shadow">
+      <div class="text-4xl font-syne font-extrabold text-brand-terracotta mb-1">4.9 / 5.0</div>
+      <div class="text-xs uppercase font-mono text-slate-600">Google Star Rating</div>
+      <div class="text-[11px] text-slate-500 mt-1">Verified Customer Score</div>
     </div>
-    <div class="glass-panel p-6 rounded-2xl border border-white/10 text-center">
-      <div class="text-4xl font-syne font-extrabold text-white mb-1">1,990+</div>
-      <div class="text-xs uppercase font-mono text-brand-sand/70">Google Reviews</div>
-      <div class="text-[11px] text-brand-sand/50 mt-1">Independent Submissions</div>
+    <div class="glass-panel-warm p-6 rounded-2xl border border-brand-terracotta/20 text-center shadow">
+      <div class="text-4xl font-syne font-extrabold text-slate-900 mb-1">1,990+</div>
+      <div class="text-xs uppercase font-mono text-slate-600">Google Reviews</div>
+      <div class="text-[11px] text-slate-500 mt-1">Independent Submissions</div>
     </div>
-    <div class="glass-panel p-6 rounded-2xl border border-white/10 text-center">
-      <div class="text-4xl font-syne font-extrabold text-emerald-400 mb-1">100%</div>
-      <div class="text-xs uppercase font-mono text-brand-sand/70">Hotel Pickup Commitment</div>
-      <div class="text-[11px] text-brand-sand/50 mt-1">Punctual Lobby Service</div>
+    <div class="glass-panel-warm p-6 rounded-2xl border border-brand-terracotta/20 text-center shadow">
+      <div class="text-4xl font-syne font-extrabold text-emerald-700 mb-1">100%</div>
+      <div class="text-xs uppercase font-mono text-slate-600">Hotel Pickup Commitment</div>
+      <div class="text-[11px] text-slate-500 mt-1">Punctual Lobby Service</div>
     </div>
   </div>
 
   <!-- What Travelers Mention Most Section -->
-  <div class="glass-panel p-8 rounded-3xl border border-white/15 mb-16">
-    <h3 class="text-xl font-cinzel font-bold text-white mb-4">What Travelers Mention Most</h3>
+  <div class="glass-panel-warm p-8 rounded-3xl border border-brand-terracotta/20 mb-16 shadow">
+    <h3 class="text-xl font-cinzel font-bold text-slate-900 mb-4">What Travelers Mention Most</h3>
     <div class="flex flex-wrap gap-3">
-      <span class="px-4 py-2 rounded-full glass-panel border border-brand-terracotta/40 text-brand-sand text-xs font-bold">🚍 Punctual Pickup Times</span>
-      <span class="px-4 py-2 rounded-full glass-panel border border-brand-turquoise/40 text-brand-sand text-xs font-bold">👨‍✈️ Knowledgeable & Witty Guides</span>
-      <span class="px-4 py-2 rounded-full glass-panel border border-emerald-500/40 text-brand-sand text-xs font-bold">🧼 Clean & Comfortable Coaches</span>
-      <span class="px-4 py-2 rounded-full glass-panel border border-brand-ochre/40 text-brand-sand text-xs font-bold">🥪 Delicious Picnic Lunch</span>
-      <span class="px-4 py-2 rounded-full glass-panel border border-white/20 text-brand-sand text-xs font-bold">📸 Unrushed Photo Time at Rim</span>
+      <span class="px-4 py-2 rounded-full glass-panel-warm border border-brand-terracotta/40 text-slate-800 text-xs font-bold">🚍 Punctual Pickup Times</span>
+      <span class="px-4 py-2 rounded-full glass-panel-warm border border-brand-turquoise/40 text-slate-800 text-xs font-bold">👨‍✈️ Knowledgeable & Witty Guides</span>
+      <span class="px-4 py-2 rounded-full glass-panel-warm border border-emerald-600/40 text-slate-800 text-xs font-bold">🧼 Clean & Comfortable Coaches</span>
+      <span class="px-4 py-2 rounded-full glass-panel-warm border border-brand-ochre/40 text-slate-800 text-xs font-bold">🥪 Delicious Picnic Lunch</span>
+      <span class="px-4 py-2 rounded-full glass-panel-warm border border-slate-300 text-slate-800 text-xs font-bold">📸 Unrushed Photo Time at Rim</span>
     </div>
   </div>
 
   <!-- SEARCH & FILTER BAR -->
-  <div class="glass-panel p-6 rounded-2xl border border-white/10 mb-10 space-y-4">
+  <div class="glass-panel-warm p-6 rounded-2xl border border-brand-terracotta/20 mb-10 space-y-4 shadow">
     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
       <div class="sm:col-span-6">
-        <input type="text" id="review-search" class="w-full bg-brand-charcoal border border-white/20 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-terracotta" placeholder="🔍 Search reviews (e.g. guide, bus, Paul, Jackie, lunch)..."/>
+        <input type="text" id="review-search" class="w-full bg-white border border-slate-300 text-slate-900 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-terracotta shadow-sm" placeholder="🔍 Search reviews (e.g. guide, bus, Paul, Jackie, lunch)..."/>
       </div>
       <div class="sm:col-span-6 flex flex-wrap gap-2 items-center" id="filter-tag-container">
         <!-- Tag buttons generated via JS -->
@@ -148,44 +132,19 @@
 </section>
 
 <!-- GLOBAL FOOTER -->
-<footer class="border-t border-white/10 bg-black/60 py-16 px-6 lg:px-10">
-  <div class="max-w-[1720px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 text-xs text-brand-sand/70">
-    <div class="space-y-4">
-      <div class="h-10 flex items-center bg-white/95 rounded-lg px-3 inline-block">
-        <span class="text-brand-charcoal font-cinzel font-bold text-base">CHRISTIANSON TOURS</span>
-      </div>
-      <p class="leading-relaxed">Premier day excursions from Las Vegas to Grand Canyon West Rim and Hoover Dam.</p>
-      <div class="text-brand-ochre font-semibold">★ 4.9 / 5.0 (1,990+ Google Reviews)</div>
+<footer class="glass-header-warm border-t border-brand-terracotta/15 py-12 px-6 lg:px-10">
+  <div class="max-w-[1720px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-slate-600">
+    <div class="flex items-center space-x-3">
+      <span class="font-cinzel font-bold text-slate-900 text-sm">CHRISTIANSON TOURS</span>
+      <span>© 2026. All rights reserved. Production Database System.</span>
     </div>
-
-    <div>
-      <h4 class="font-cinzel font-bold text-white text-sm uppercase tracking-wider mb-4">Navigation</h4>
-      <ul class="space-y-2.5">
-        <li><a class="hover:text-brand-terracotta transition-colors" href="tours.html">All Tour Packages</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="grand-canyon-west.html">Grand Canyon West Rim</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="hoover-dam.html">Hoover Dam Express</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="compare.html">Compare Excursions</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="plan.html">Plan My Trip Assistant</a></li>
-      </ul>
+    <div class="flex space-x-6">
+      <a href="tours.html" class="hover:text-brand-terracotta font-semibold">All Tours</a>
+      <a href="compare.html" class="hover:text-brand-terracotta font-semibold">Compare Packages</a>
+      <a href="plan.html" class="hover:text-brand-terracotta font-semibold">Plan Trip</a>
+      <a href="reviews.html" class="hover:text-brand-terracotta font-semibold">Guest Reviews</a>
+      <a href="faq.html" class="hover:text-brand-terracotta font-semibold">FAQ</a>
     </div>
-
-    <div>
-      <h4 class="font-cinzel font-bold text-white text-sm uppercase tracking-wider mb-4">Guest Info</h4>
-      <ul class="space-y-2.5">
-        <li><a class="hover:text-brand-terracotta transition-colors" href="reviews.html">Verified Guest Reviews</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="faq.html">Frequently Asked Questions</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="booking.html">Online Booking System</a></li>
-      </ul>
-    </div>
-
-    <div>
-      <h4 class="font-cinzel font-bold text-white text-sm uppercase tracking-wider mb-4">Local Office</h4>
-      <p class="leading-relaxed">Las Vegas, NV<br>Daily Pickup 6:00 AM – 7:00 AM<br>Support: support@christiansontours.com</p>
-    </div>
-  </div>
-  <div class="max-w-[1720px] mx-auto mt-12 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between text-[11px] text-brand-sand/50">
-    <p>© 2026 Christianson Tours. All rights reserved. Demo prototype created for Christianson Tours presentation.</p>
-    <p class="mt-2 sm:mt-0 font-mono">Las Vegas, NV · Grand Canyon · Hoover Dam</p>
   </div>
 </footer>
 
@@ -202,7 +161,7 @@
       <button onclick="setTag('${tag}')" class="px-3 py-1.5 rounded-full text-xs font-bold font-mono transition-all ${
         activeTag === tag
           ? 'bg-brand-terracotta text-white shadow-md'
-          : 'bg-black/40 border border-white/10 text-brand-sand/70 hover:border-white/30'
+          : 'bg-white border border-slate-300 text-slate-700 hover:border-slate-500'
       }">
         ${tag}
       </button>
@@ -226,30 +185,30 @@
     });
 
     if (filtered.length === 0) {
-      grid.innerHTML = `<div class="col-span-2 text-center py-12 text-brand-sand/50">No reviews found matching your filter criteria.</div>`;
+      grid.innerHTML = `<div class="col-span-2 text-center py-12 text-slate-500">No reviews found matching your filter criteria.</div>`;
       return;
     }
 
     grid.innerHTML = filtered.map(r => `
-      <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-white/15 space-y-4">
+      <div class="glass-panel-warm-elevated p-6 sm:p-8 rounded-3xl border border-brand-terracotta/15 space-y-4 shadow-md">
         <div class="flex items-center justify-between">
           <div>
-            <div class="text-brand-ochre text-sm font-bold">★★★★★</div>
-            <h4 class="text-lg font-cinzel font-bold text-white mt-1">${r.author}</h4>
+            <div class="text-brand-terracotta text-sm font-bold">★★★★★</div>
+            <h4 class="text-lg font-cinzel font-bold text-slate-900 mt-1">${r.author}</h4>
           </div>
-          <span class="text-xs font-mono text-brand-sand/50">${r.date}</span>
+          <span class="text-xs font-mono text-slate-500">${r.date}</span>
         </div>
 
-        <div class="text-xs font-mono text-brand-turquoise font-semibold">📍 Tour: ${r.tour}</div>
+        <div class="text-xs font-mono text-brand-turquoise font-bold">📍 Tour: ${r.tour}</div>
 
-        <p class="text-brand-sand/90 text-sm leading-relaxed">"${r.comment}"</p>
+        <p class="text-slate-700 text-sm leading-relaxed">"${r.comment}"</p>
 
         <div class="flex flex-wrap gap-1.5 pt-2">
-          ${r.tags.map(t => `<span class="px-2.5 py-0.5 rounded-md bg-white/5 border border-white/10 text-[10px] font-mono text-brand-sand/60">${t}</span>`).join('')}
+          ${r.tags.map(t => `<span class="px-2.5 py-0.5 rounded-md bg-slate-100 border border-slate-300 text-[10px] font-mono text-slate-600">${t}</span>`).join('')}
         </div>
 
         ${r.ownerResponse ? `
-          <div class="mt-4 p-4 rounded-xl bg-black/40 border-l-2 border-brand-terracotta text-xs text-brand-sand/80">
+          <div class="mt-4 p-4 rounded-xl bg-slate-100 border-l-2 border-brand-terracotta text-xs text-slate-700">
             <span class="text-brand-terracotta font-bold block mb-1">Christianson Tours Response:</span>
             "${r.ownerResponse}"
           </div>

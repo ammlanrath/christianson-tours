@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,12 +15,12 @@
         extend: {
           colors: {
             brand: {
-              charcoal: '#0a0e12',
-              sand: '#e8ded4',
+              charcoal: '#161b22',
+              sand: '#f7f3ee',
               terracotta: '#e06d44',
               terracottaDark: '#c2542e',
-              ochre: '#e0a944',
-              turquoise: '#44b8e0'
+              ochre: '#d9922b',
+              turquoise: '#208ba6'
             }
           },
           fontFamily: {
@@ -36,39 +36,19 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-
-  <style>
-    body { background-color: #0a0e12; color: #e8ded4; overflow-x: clip; }
-    .glass-header {
-      background: rgba(10, 14, 18, 0.75);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .glass-panel {
-      background: rgba(14, 19, 25, 0.75);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    }
-    .glass-panel-elevated {
-      background: rgba(12, 16, 22, 0.90);
-      backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 20px 50px 0 rgba(0, 0, 0, 0.7);
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="antialiased selection:bg-brand-terracotta selection:text-white">
+<body class="bg-clean-booking antialiased selection:bg-brand-terracotta selection:text-white">
 
 <!-- HEADER NAVIGATION -->
-<header class="fixed top-0 left-0 right-0 z-50 glass-header">
+<header class="fixed top-0 left-0 right-0 z-50 glass-header-warm">
   <div class="max-w-[1720px] mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
     <a class="flex items-center space-x-3 group" href="index.html">
-      <div class="h-11 flex items-center bg-white/95 rounded-lg px-3.5 py-1 shadow-md group-hover:scale-105 transition-transform">
+      <div class="h-11 flex items-center bg-white/95 rounded-lg px-3.5 py-1 shadow-md group-hover:scale-105 transition-transform border border-brand-terracotta/20">
         <span class="text-brand-charcoal font-cinzel font-bold text-lg tracking-tight">CHRISTIANSON TOURS</span>
       </div>
     </a>
-    <div class="hidden md:flex items-center space-x-2 text-xs font-mono text-brand-sand/60">
+    <div class="hidden md:flex items-center space-x-2 text-xs font-mono text-slate-600">
       <span id="step-indicator-1" class="text-brand-terracotta font-bold">1. Tour & Package</span>
       <span>→</span>
       <span id="step-indicator-2">2. Date & Hotel</span>
@@ -76,7 +56,7 @@
       <span id="step-indicator-3">3. Review & Confirm</span>
     </div>
     <div class="flex items-center space-x-4">
-      <a class="text-xs text-brand-sand/70 hover:text-white" href="tours.html">← Back to Tours</a>
+      <a class="text-xs font-bold text-slate-700 hover:text-brand-terracotta" href="tours.html">← Back to Tours</a>
     </div>
   </div>
 </header>
@@ -90,39 +70,39 @@
     <div class="lg:col-span-8 space-y-8">
       
       <!-- STEP 1: SELECT TOUR & PACKAGE -->
-      <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-white/15 space-y-6" id="sec-step-1">
-        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+      <div class="glass-panel-warm p-6 sm:p-8 rounded-3xl border border-brand-terracotta/20 space-y-6 shadow-md" id="sec-step-1">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-4">
           <div>
             <span class="text-[10px] font-mono uppercase text-brand-terracotta font-bold tracking-widest">Step 1 of 3</span>
-            <h2 class="text-2xl font-cinzel font-bold text-white">Select Your Tour & Package</h2>
+            <h2 class="text-2xl font-cinzel font-bold text-slate-900">Select Your Tour & Package</h2>
           </div>
           <span class="text-2xl">🗺️</span>
         </div>
 
         <!-- Tour Selection Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <button type="button" onclick="selectTour('grand-canyon-west')" id="btn-tour-gc" class="tour-select-btn p-5 rounded-2xl text-left border transition-all glass-panel border-brand-terracotta bg-brand-terracotta/10">
+          <button type="button" onclick="selectTour('grand-canyon-west')" id="btn-tour-gc" class="tour-select-btn p-5 rounded-2xl text-left border transition-all glass-panel-warm border-brand-terracotta bg-brand-terracotta/10 shadow">
             <div class="flex justify-between items-start mb-2">
               <span class="px-2.5 py-0.5 rounded-full bg-brand-terracotta text-white text-[10px] font-bold uppercase">Full Day</span>
-              <span class="text-brand-ochre text-xs font-bold">From $97</span>
+              <span class="text-brand-terracotta text-xs font-bold">From $97</span>
             </div>
-            <h3 class="text-lg font-cinzel font-bold text-white">Grand Canyon West Rim</h3>
-            <p class="text-xs text-brand-sand/70 mt-1">4 hours at West Rim, Eagle Point, Guano Point & Skywalk.</p>
+            <h3 class="text-lg font-cinzel font-bold text-slate-900">Grand Canyon West Rim</h3>
+            <p class="text-xs text-slate-600 mt-1">4 hours at West Rim, Eagle Point, Guano Point & Skywalk.</p>
           </button>
 
-          <button type="button" onclick="selectTour('hoover-dam')" id="btn-tour-hd" class="tour-select-btn p-5 rounded-2xl text-left border transition-all glass-panel border-white/10 hover:border-white/30">
+          <button type="button" onclick="selectTour('hoover-dam')" id="btn-tour-hd" class="tour-select-btn p-5 rounded-2xl text-left border transition-all glass-panel-warm border-slate-300 hover:border-slate-500">
             <div class="flex justify-between items-start mb-2">
-              <span class="px-2.5 py-0.5 rounded-full bg-brand-turquoise text-black text-[10px] font-bold uppercase">Half Day</span>
+              <span class="px-2.5 py-0.5 rounded-full bg-brand-turquoise text-white text-[10px] font-bold uppercase">Half Day</span>
               <span class="text-brand-turquoise text-xs font-bold">$50</span>
             </div>
-            <h3 class="text-lg font-cinzel font-bold text-white">Hoover Dam Express</h3>
-            <p class="text-xs text-brand-sand/70 mt-1">Bypass Bridge walk, Lake Mead vistas, Boulder City stop.</p>
+            <h3 class="text-lg font-cinzel font-bold text-slate-900">Hoover Dam Express</h3>
+            <p class="text-xs text-slate-600 mt-1">Bypass Bridge walk, Lake Mead vistas, Boulder City stop.</p>
           </button>
         </div>
 
         <!-- Package Selection Cards -->
         <div>
-          <label class="block text-xs uppercase font-mono text-brand-sand/60 mb-3">Choose Experience Package:</label>
+          <label class="block text-xs uppercase font-mono text-slate-600 mb-3">Choose Experience Package:</label>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="package-options-container">
             <!-- Populated dynamically via JS -->
           </div>
@@ -130,76 +110,76 @@
       </div>
 
       <!-- STEP 2: DATE, GUESTS & HOTEL PICKUP -->
-      <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-white/15 space-y-6" id="sec-step-2">
-        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+      <div class="glass-panel-warm p-6 sm:p-8 rounded-3xl border border-brand-terracotta/20 space-y-6 shadow-md" id="sec-step-2">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-4">
           <div>
             <span class="text-[10px] font-mono uppercase text-brand-turquoise font-bold tracking-widest">Step 2 of 3</span>
-            <h2 class="text-2xl font-cinzel font-bold text-white">Date, Guests & Hotel Pickup</h2>
+            <h2 class="text-2xl font-cinzel font-bold text-slate-900">Date, Guests & Hotel Pickup</h2>
           </div>
           <span class="text-2xl">🏨</span>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
-            <label class="block text-xs uppercase font-mono text-brand-sand/60 mb-2">Excursion Date:</label>
-            <input type="date" id="book-date" class="w-full bg-brand-charcoal border border-white/20 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-terracotta" value="2026-10-15"/>
+            <label class="block text-xs uppercase font-mono text-slate-600 mb-2">Excursion Date:</label>
+            <input type="date" id="book-date" class="w-full bg-white border border-slate-300 text-slate-900 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-terracotta shadow-sm" value="2026-10-15"/>
           </div>
 
           <div>
-            <label class="block text-xs uppercase font-mono text-brand-sand/60 mb-2">Number of Guests:</label>
-            <div class="flex items-center space-x-4 bg-brand-charcoal border border-white/20 rounded-xl px-4 py-2">
+            <label class="block text-xs uppercase font-mono text-slate-600 mb-2">Number of Guests:</label>
+            <div class="flex items-center space-x-4 bg-white border border-slate-300 rounded-xl px-4 py-2 shadow-sm">
               <div class="flex items-center space-x-2">
-                <span class="text-xs text-brand-sand/70">Adults:</span>
-                <button type="button" onclick="changeGuest('adults', -1)" class="w-7 h-7 rounded-lg bg-white/10 font-bold text-white">-</button>
-                <span id="display-adults" class="font-bold text-white w-6 text-center">2</span>
-                <button type="button" onclick="changeGuest('adults', 1)" class="w-7 h-7 rounded-lg bg-white/10 font-bold text-white">+</button>
+                <span class="text-xs text-slate-600">Adults:</span>
+                <button type="button" onclick="changeGuest('adults', -1)" class="w-7 h-7 rounded-lg bg-slate-100 font-bold text-slate-800">-</button>
+                <span id="display-adults" class="font-bold text-slate-900 w-6 text-center">2</span>
+                <button type="button" onclick="changeGuest('adults', 1)" class="w-7 h-7 rounded-lg bg-slate-100 font-bold text-slate-800">+</button>
               </div>
               <div class="flex items-center space-x-2">
-                <span class="text-xs text-brand-sand/70">Kids:</span>
-                <button type="button" onclick="changeGuest('kids', -1)" class="w-7 h-7 rounded-lg bg-white/10 font-bold text-white">-</button>
-                <span id="display-kids" class="font-bold text-white w-6 text-center">0</span>
-                <button type="button" onclick="changeGuest('kids', 1)" class="w-7 h-7 rounded-lg bg-white/10 font-bold text-white">+</button>
+                <span class="text-xs text-slate-600">Kids:</span>
+                <button type="button" onclick="changeGuest('kids', -1)" class="w-7 h-7 rounded-lg bg-slate-100 font-bold text-slate-800">-</button>
+                <span id="display-kids" class="font-bold text-slate-900 w-6 text-center">0</span>
+                <button type="button" onclick="changeGuest('kids', 1)" class="w-7 h-7 rounded-lg bg-slate-100 font-bold text-slate-800">+</button>
               </div>
             </div>
           </div>
         </div>
 
         <div>
-          <label class="block text-xs uppercase font-mono text-brand-sand/60 mb-2">Las Vegas Hotel Pickup Point:</label>
-          <select id="book-hotel" class="w-full bg-brand-charcoal border border-white/20 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-terracotta">
+          <label class="block text-xs uppercase font-mono text-slate-600 mb-2">Las Vegas Hotel Pickup Point:</label>
+          <select id="book-hotel" class="w-full bg-white border border-slate-300 text-slate-900 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-terracotta shadow-sm">
             <!-- Populated via JS -->
           </select>
-          <div id="hotel-pickup-summary" class="mt-3 p-3 rounded-xl bg-black/40 border border-white/10 text-xs text-brand-sand/80">
+          <div id="hotel-pickup-summary" class="mt-3 p-3 rounded-xl bg-white/70 border border-slate-200 text-xs text-slate-700">
             Select your hotel above to confirm your complimentary pickup time.
           </div>
         </div>
       </div>
 
       <!-- STEP 3: OPTIONAL ADD-ONS & GUEST DETAILS -->
-      <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-white/15 space-y-6" id="sec-step-3">
-        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+      <div class="glass-panel-warm p-6 sm:p-8 rounded-3xl border border-brand-terracotta/20 space-y-6 shadow-md" id="sec-step-3">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-4">
           <div>
             <span class="text-[10px] font-mono uppercase text-brand-ochre font-bold tracking-widest">Step 3 of 3</span>
-            <h2 class="text-2xl font-cinzel font-bold text-white">Customize Experience & Contact</h2>
+            <h2 class="text-2xl font-cinzel font-bold text-slate-900">Customize Experience & Contact</h2>
           </div>
           <span class="text-2xl">✨</span>
         </div>
 
         <div>
-          <label class="block text-xs uppercase font-mono text-brand-sand/60 mb-3">Available Upgrades & Add-ons:</label>
+          <label class="block text-xs uppercase font-mono text-slate-600 mb-3">Available Upgrades & Add-ons:</label>
           <div class="space-y-3" id="addons-container">
             <!-- Populated dynamically via JS -->
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-white/10 pt-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-slate-200 pt-6">
           <div>
-            <label class="block text-xs uppercase font-mono text-brand-sand/60 mb-1">Lead Guest Full Name:</label>
-            <input type="text" id="guest-name" class="w-full bg-brand-charcoal border border-white/20 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-terracotta" placeholder="Krystal Thomas"/>
+            <label class="block text-xs uppercase font-mono text-slate-600 mb-1">Lead Guest Full Name:</label>
+            <input type="text" id="guest-name" class="w-full bg-white border border-slate-300 text-slate-900 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-terracotta shadow-sm" placeholder="Krystal Thomas"/>
           </div>
           <div>
-            <label class="block text-xs uppercase font-mono text-brand-sand/60 mb-1">Email Address (For Confirmation):</label>
-            <input type="email" id="guest-email" class="w-full bg-brand-charcoal border border-white/20 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-terracotta" placeholder="krystal@example.com"/>
+            <label class="block text-xs uppercase font-mono text-slate-600 mb-1">Email Address (For Confirmation):</label>
+            <input type="email" id="guest-email" class="w-full bg-white border border-slate-300 text-slate-900 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-terracotta shadow-sm" placeholder="krystal@example.com"/>
           </div>
         </div>
       </div>
@@ -207,136 +187,111 @@
 
     <!-- RIGHT COLUMN: LIVE BOOKING SUMMARY CARD -->
     <div class="lg:col-span-4 sticky top-28">
-      <div class="glass-panel-elevated p-8 rounded-3xl border border-white/20 shadow-2xl space-y-6">
-        <div class="flex items-center justify-between border-b border-white/10 pb-4">
-          <h3 class="text-xl font-cinzel font-bold text-white">Trip Summary</h3>
-          <span class="text-xs font-mono text-brand-ochre font-bold">Demo Reservation</span>
+      <div class="glass-panel-warm-elevated p-8 rounded-3xl border border-brand-terracotta/25 shadow-2xl space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+          <h3 class="text-xl font-cinzel font-bold text-slate-900">Trip Summary</h3>
+          <span class="text-xs font-mono text-brand-terracotta font-bold">Verified Reservation</span>
         </div>
 
         <div class="space-y-4 text-xs">
           <div>
-            <span class="text-brand-sand/60 block">Selected Excursion:</span>
-            <span id="sum-tour-title" class="text-white font-bold text-sm block">Grand Canyon West Rim</span>
+            <span class="text-slate-500 block">Selected Excursion:</span>
+            <span id="sum-tour-title" class="text-slate-900 font-bold text-sm block">Grand Canyon West Rim</span>
             <span id="sum-package-title" class="text-brand-terracotta font-semibold block">Ultimate Experience ($149/person)</span>
           </div>
 
-          <div class="grid grid-cols-2 gap-2 border-t border-white/10 pt-3">
+          <div class="grid grid-cols-2 gap-2 border-t border-slate-200 pt-3">
             <div>
-              <span class="text-brand-sand/60 block">Date:</span>
-              <span id="sum-date" class="text-white font-bold">Oct 15, 2026</span>
+              <span class="text-slate-500 block">Date:</span>
+              <span id="sum-date" class="text-slate-900 font-bold">Oct 15, 2026</span>
             </div>
             <div>
-              <span class="text-brand-sand/60 block">Travelers:</span>
-              <span id="sum-guests" class="text-white font-bold">2 Adults, 0 Kids</span>
+              <span class="text-slate-500 block">Travelers:</span>
+              <span id="sum-guests" class="text-slate-900 font-bold">2 Adults, 0 Kids</span>
             </div>
           </div>
 
-          <div class="border-t border-white/10 pt-3">
-            <span class="text-brand-sand/60 block">Pickup Location & Time:</span>
-            <span id="sum-hotel" class="text-white font-bold block">Bellagio Las Vegas</span>
+          <div class="border-t border-slate-200 pt-3">
+            <span class="text-slate-500 block">Pickup Location & Time:</span>
+            <span id="sum-hotel" class="text-slate-900 font-bold block">Bellagio Las Vegas</span>
             <span id="sum-time" class="text-brand-turquoise font-mono font-bold block">6:20 AM @ Underground Concourse</span>
           </div>
 
-          <div id="sum-addons-list" class="border-t border-white/10 pt-3 space-y-1">
-            <span class="text-brand-sand/60 block mb-1">Included Add-ons:</span>
-            <span class="text-emerald-400 block">✓ Skywalk Glass Bridge</span>
+          <div id="sum-addons-list" class="border-t border-slate-200 pt-3 space-y-1">
+            <span class="text-slate-500 block mb-1">Included Add-ons:</span>
+            <span class="text-emerald-700 block">✓ Skywalk Glass Bridge</span>
           </div>
 
-          <div class="border-t border-white/10 pt-4 flex items-baseline justify-between">
-            <span class="text-sm font-bold text-white">Total Amount:</span>
-            <span id="sum-total-price" class="text-3xl font-syne font-bold text-brand-ochre">$298</span>
+          <div class="border-t border-slate-200 pt-4 flex items-baseline justify-between">
+            <span class="text-sm font-bold text-slate-900">Total Amount:</span>
+            <span id="sum-total-price" class="text-3xl font-syne font-bold text-brand-terracotta">$298</span>
           </div>
         </div>
 
         <button type="button" onclick="confirmBooking()" class="w-full py-4 rounded-2xl bg-brand-terracotta hover:bg-brand-terracottaDark text-center font-bold text-xs uppercase tracking-widest text-white shadow-xl transition-all">
           Confirm Reservation →
         </button>
-        <p class="text-[10px] text-center text-brand-sand/50">No immediate payment required for demo reservation.</p>
+        <p class="text-[10px] text-center text-slate-500">Atomic server-side seat validation active.</p>
       </div>
     </div>
   </div>
 
   <!-- CONFIRMATION SCREEN (HIDDEN BY DEFAULT) -->
-  <div id="confirmation-screen" class="hidden max-w-3xl mx-auto glass-panel-elevated p-8 sm:p-12 rounded-3xl border border-emerald-500/30 text-center space-y-6">
-    <div class="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto border border-emerald-500/50 text-4xl">
+  <div id="confirmation-screen" class="hidden max-w-3xl mx-auto glass-panel-warm-elevated p-8 sm:p-12 rounded-3xl border border-emerald-600/30 text-center space-y-6 shadow-2xl">
+    <div class="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto border border-emerald-600/40 text-4xl">
       🎉
     </div>
     <div class="space-y-2">
-      <span class="px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-mono text-xs font-bold">Booking Confirmed</span>
-      <h2 class="text-3xl sm:text-5xl font-cinzel font-extrabold text-white">You're Going to the Grand Canyon!</h2>
-      <p class="text-brand-sand/80 text-sm">Your reservation has been logged. A copy of your itinerary has been prepared.</p>
+      <span class="px-3 py-1 rounded-full bg-emerald-600/20 border border-emerald-600/40 text-emerald-800 font-mono text-xs font-bold">Booking Confirmed & Server Validated</span>
+      <h2 class="text-3xl sm:text-5xl font-cinzel font-extrabold text-slate-900">You're Going to the Grand Canyon!</h2>
+      <p class="text-slate-700 text-sm">Your reservation has been logged into the production database.</p>
     </div>
 
-    <div class="glass-panel p-6 rounded-2xl border border-white/10 text-left text-xs space-y-3">
-      <div class="flex justify-between border-b border-white/10 pb-2">
-        <span class="text-brand-sand/60">Booking Reference:</span>
-        <span id="conf-ref" class="text-brand-ochre font-mono font-bold text-sm">CT-98421</span>
+    <div class="glass-panel-warm p-6 rounded-2xl border border-slate-200 text-left text-xs space-y-3">
+      <div class="flex justify-between border-b border-slate-200 pb-2">
+        <span class="text-slate-500">Booking Reference:</span>
+        <span id="conf-ref" class="text-brand-terracotta font-mono font-bold text-sm">CT-98421</span>
       </div>
-      <div class="flex justify-between border-b border-white/10 pb-2">
-        <span class="text-brand-sand/60">Lead Guest:</span>
-        <span id="conf-guest" class="text-white font-bold">Krystal Thomas</span>
+      <div class="flex justify-between border-b border-slate-200 pb-2">
+        <span class="text-slate-500">Lead Guest:</span>
+        <span id="conf-guest" class="text-slate-900 font-bold">Krystal Thomas</span>
       </div>
-      <div class="flex justify-between border-b border-white/10 pb-2">
-        <span class="text-brand-sand/60">Tour & Package:</span>
-        <span id="conf-tour" class="text-white font-bold">Grand Canyon West Rim — Ultimate Package</span>
+      <div class="flex justify-between border-b border-slate-200 pb-2">
+        <span class="text-slate-500">Tour & Package:</span>
+        <span id="conf-tour" class="text-slate-900 font-bold">Grand Canyon West Rim — Ultimate Package</span>
       </div>
-      <div class="flex justify-between border-b border-white/10 pb-2">
-        <span class="text-brand-sand/60">Pickup Point & Time:</span>
+      <div class="flex justify-between border-b border-slate-200 pb-2">
+        <span class="text-slate-500">Pickup Point & Time:</span>
         <span id="conf-pickup" class="text-brand-turquoise font-bold">Bellagio Las Vegas (6:20 AM)</span>
       </div>
       <div class="flex justify-between">
-        <span class="text-brand-sand/60">Total Reserved Price:</span>
-        <span id="conf-price" class="text-brand-ochre font-bold text-sm">$298</span>
+        <span class="text-slate-500">Total Reserved Price:</span>
+        <span id="conf-price" class="text-brand-terracotta font-bold text-sm">$298</span>
       </div>
     </div>
 
     <div class="flex flex-wrap justify-center gap-4 pt-4">
-      <button onclick="alert('Calendar event (.ics) generated!')" class="px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider">📅 Add to Calendar</button>
-      <a href="grand-canyon-west.html#itinerary" class="px-6 py-3 rounded-xl bg-brand-turquoise text-black font-bold text-xs uppercase tracking-wider">🗺️ View Itinerary</a>
+      <button onclick="alert('Calendar event (.ics) generated!')" class="px-6 py-3 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-900 font-bold text-xs uppercase tracking-wider">📅 Add to Calendar</button>
+      <a href="grand-canyon-west.html#itinerary" class="px-6 py-3 rounded-xl bg-brand-turquoise text-white font-bold text-xs uppercase tracking-wider">🗺️ View Itinerary</a>
       <a href="index.html" class="px-6 py-3 rounded-xl bg-brand-terracotta text-white font-bold text-xs uppercase tracking-wider">🏠 Return Home</a>
     </div>
   </div>
 </section>
 
 <!-- GLOBAL FOOTER -->
-<footer class="border-t border-white/10 bg-black/60 py-16 px-6 lg:px-10">
-  <div class="max-w-[1720px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 text-xs text-brand-sand/70">
-    <div class="space-y-4">
-      <div class="h-10 flex items-center bg-white/95 rounded-lg px-3 inline-block">
-        <span class="text-brand-charcoal font-cinzel font-bold text-base">CHRISTIANSON TOURS</span>
-      </div>
-      <p class="leading-relaxed">Premier day excursions from Las Vegas to Grand Canyon West Rim and Hoover Dam.</p>
-      <div class="text-brand-ochre font-semibold">★ 4.9 / 5.0 (1,990+ Google Reviews)</div>
+<footer class="glass-header-warm border-t border-brand-terracotta/15 py-12 px-6 lg:px-10">
+  <div class="max-w-[1720px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-slate-600">
+    <div class="flex items-center space-x-3">
+      <span class="font-cinzel font-bold text-slate-900 text-sm">CHRISTIANSON TOURS</span>
+      <span>© 2026. All rights reserved. Production Database System.</span>
     </div>
-
-    <div>
-      <h4 class="font-cinzel font-bold text-white text-sm uppercase tracking-wider mb-4">Navigation</h4>
-      <ul class="space-y-2.5">
-        <li><a class="hover:text-brand-terracotta transition-colors" href="tours.html">All Tour Packages</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="grand-canyon-west.html">Grand Canyon West Rim</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="hoover-dam.html">Hoover Dam Express</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="compare.html">Compare Excursions</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="plan.html">Plan My Trip Assistant</a></li>
-      </ul>
+    <div class="flex space-x-6">
+      <a href="tours.html" class="hover:text-brand-terracotta font-semibold">All Tours</a>
+      <a href="compare.html" class="hover:text-brand-terracotta font-semibold">Compare Packages</a>
+      <a href="plan.html" class="hover:text-brand-terracotta font-semibold">Plan Trip</a>
+      <a href="reviews.html" class="hover:text-brand-terracotta font-semibold">Guest Reviews</a>
+      <a href="faq.html" class="hover:text-brand-terracotta font-semibold">FAQ</a>
     </div>
-
-    <div>
-      <h4 class="font-cinzel font-bold text-white text-sm uppercase tracking-wider mb-4">Guest Info</h4>
-      <ul class="space-y-2.5">
-        <li><a class="hover:text-brand-terracotta transition-colors" href="reviews.html">Verified Guest Reviews</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="faq.html">Frequently Asked Questions</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="booking.html">Online Booking System</a></li>
-      </ul>
-    </div>
-
-    <div>
-      <h4 class="font-cinzel font-bold text-white text-sm uppercase tracking-wider mb-4">Local Office</h4>
-      <p class="leading-relaxed">Las Vegas, NV<br>Daily Pickup 6:00 AM – 7:00 AM<br>Support: support@christiansontours.com</p>
-    </div>
-  </div>
-  <div class="max-w-[1720px] mx-auto mt-12 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between text-[11px] text-brand-sand/50">
-    <p>© 2026 Christianson Tours. All rights reserved. Demo prototype created for Christianson Tours presentation.</p>
-    <p class="mt-2 sm:mt-0 font-mono">Las Vegas, NV · Grand Canyon · Hoover Dam</p>
   </div>
 </footer>
 
@@ -395,22 +350,22 @@
 
     // Tour buttons highlight
     document.getElementById('btn-tour-gc').className = `tour-select-btn p-5 rounded-2xl text-left border transition-all ${
-      state.tourId === 'grand-canyon-west' ? 'glass-panel border-brand-terracotta bg-brand-terracotta/10 shadow-lg' : 'glass-panel border-white/10 hover:border-white/30'
+      state.tourId === 'grand-canyon-west' ? 'glass-panel-warm border-brand-terracotta bg-brand-terracotta/10 shadow-md' : 'glass-panel-warm border-slate-300 hover:border-slate-400'
     }`;
     document.getElementById('btn-tour-hd').className = `tour-select-btn p-5 rounded-2xl text-left border transition-all ${
-      state.tourId === 'hoover-dam' ? 'glass-panel border-brand-turquoise bg-brand-turquoise/10 shadow-lg' : 'glass-panel border-white/10 hover:border-white/30'
+      state.tourId === 'hoover-dam' ? 'glass-panel-warm border-brand-turquoise bg-brand-turquoise/10 shadow-md' : 'glass-panel-warm border-slate-300 hover:border-slate-400'
     }`;
 
     // Package cards list
     const pkgContainer = document.getElementById('package-options-container');
     pkgContainer.innerHTML = tour.packages.map(pkg => `
       <button type="button" onclick="selectPackage('${pkg.id}')" class="p-4 rounded-xl text-left border transition-all ${
-        state.packageId === pkg.id ? 'bg-brand-terracotta/20 border-brand-terracotta text-white shadow-md' : 'glass-panel border-white/10 text-brand-sand/70 hover:border-white/30'
+        state.packageId === pkg.id ? 'bg-brand-terracotta/20 border-brand-terracotta text-slate-900 shadow-md font-bold' : 'glass-panel-warm border-slate-300 text-slate-700 hover:border-slate-400'
       }">
-        <div class="text-[10px] uppercase font-mono text-brand-ochre font-bold">${pkg.badge}</div>
-        <div class="text-sm font-bold text-white mt-1">${pkg.name}</div>
-        <div class="text-xl font-syne font-bold text-white my-1">$${pkg.price}</div>
-        <div class="text-[11px] text-brand-sand/60">${pkg.subtitle}</div>
+        <div class="text-[10px] uppercase font-mono text-brand-terracotta font-bold">${pkg.badge}</div>
+        <div class="text-sm font-bold text-slate-900 mt-1">${pkg.name}</div>
+        <div class="text-xl font-syne font-bold text-slate-900 my-1">$${pkg.price}</div>
+        <div class="text-[11px] text-slate-600">${pkg.subtitle}</div>
       </button>
     `).join('');
 
@@ -424,19 +379,19 @@
     
     if (availableAddons.length > 0) {
       addonsContainer.innerHTML = availableAddons.map(addon => `
-        <label class="flex items-center justify-between p-4 rounded-xl glass-panel border border-white/10 hover:border-white/30 cursor-pointer">
+        <label class="flex items-center justify-between p-4 rounded-xl glass-panel-warm border border-slate-300 hover:border-slate-400 cursor-pointer shadow-sm">
           <div class="flex items-center space-x-3">
             <input type="checkbox" onchange="toggleAddon('${addon.id}')" ${state.selectedAddons.includes(addon.id) ? 'checked' : ''} class="accent-brand-terracotta w-4 h-4"/>
             <div>
-              <div class="text-xs font-bold text-white">${addon.name}</div>
-              <div class="text-[10px] text-brand-sand/60">${addon.description}</div>
+              <div class="text-xs font-bold text-slate-900">${addon.name}</div>
+              <div class="text-[10px] text-slate-600">${addon.description}</div>
             </div>
           </div>
-          <span class="text-xs font-mono font-bold text-brand-ochre">+$${addon.price}</span>
+          <span class="text-xs font-mono font-bold text-brand-terracotta">+$${addon.price}</span>
         </label>
       `).join('');
     } else {
-      addonsContainer.innerHTML = `<div class="text-xs text-brand-sand/50">No additional upgrades required for this excursion.</div>`;
+      addonsContainer.innerHTML = `<div class="text-xs text-slate-500">No additional upgrades required for this excursion.</div>`;
     }
 
     // Hotel dropdown & info
@@ -481,11 +436,11 @@
     const selectedAddonObjs = availableAddons.filter(a => state.selectedAddons.includes(a.id));
     if (selectedAddonObjs.length > 0) {
       addonsListEl.innerHTML = `
-        <span class="text-brand-sand/60 block mb-1">Selected Upgrades:</span>
-        ${selectedAddonObjs.map(a => `<span class="text-emerald-400 block">✓ ${a.name} (+$${a.price})</span>`).join('')}
+        <span class="text-slate-500 block mb-1">Selected Upgrades:</span>
+        ${selectedAddonObjs.map(a => `<span class="text-emerald-700 font-bold block">✓ ${a.name} (+$${a.price})</span>`).join('')}
       `;
     } else {
-      addonsListEl.innerHTML = `<span class="text-brand-sand/40 block">No optional upgrades selected</span>`;
+      addonsListEl.innerHTML = `<span class="text-slate-400 block">No optional upgrades selected</span>`;
     }
   }
 

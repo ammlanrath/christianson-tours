@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,12 +15,12 @@
         extend: {
           colors: {
             brand: {
-              charcoal: '#0a0e12',
-              sand: '#e8ded4',
+              charcoal: '#161b22',
+              sand: '#f7f3ee',
               terracotta: '#e06d44',
               terracottaDark: '#c2542e',
-              ochre: '#e0a944',
-              turquoise: '#44b8e0'
+              ochre: '#d9922b',
+              turquoise: '#208ba6'
             }
           },
           fontFamily: {
@@ -36,44 +36,28 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-
-  <style>
-    body { background-color: #0a0e12; color: #e8ded4; overflow-x: clip; }
-    .glass-header {
-      background: rgba(10, 14, 18, 0.75);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .glass-panel {
-      background: rgba(14, 19, 25, 0.75);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    }
-    .glass-panel-elevated {
-      background: rgba(12, 16, 22, 0.90);
-      backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 20px 50px 0 rgba(0, 0, 0, 0.7);
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="antialiased selection:bg-brand-terracotta selection:text-white">
+<body class="bg-sandstone antialiased selection:bg-brand-terracotta selection:text-white">
+
+<!-- BOTANICAL EDGE OVERLAYS -->
+<div class="foliage-overlay-left"></div>
+<div class="foliage-overlay-right"></div>
 
 <!-- HEADER NAVIGATION -->
-<header class="fixed top-0 left-0 right-0 z-50 glass-header">
+<header class="fixed top-0 left-0 right-0 z-50 glass-header-warm">
   <div class="max-w-[1720px] mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
     <a class="flex items-center space-x-3 group" href="index.html">
-      <div class="h-11 flex items-center bg-white/95 rounded-lg px-3.5 py-1 shadow-md group-hover:scale-105 transition-transform">
+      <div class="h-11 flex items-center bg-white/95 rounded-lg px-3.5 py-1 shadow-md group-hover:scale-105 transition-transform border border-brand-terracotta/20">
         <span class="text-brand-charcoal font-cinzel font-bold text-lg tracking-tight">CHRISTIANSON TOURS</span>
       </div>
     </a>
-    <nav class="hidden lg:flex items-center space-x-8 text-xs font-semibold uppercase tracking-wider text-brand-sand/90">
+    <nav class="hidden lg:flex items-center space-x-8 text-xs font-semibold uppercase tracking-wider text-slate-800">
       <a class="hover:text-brand-terracotta transition-colors" href="tours.html">Tours</a>
       <a class="hover:text-brand-terracotta transition-colors" href="plan.html">Plan My Trip</a>
       <a class="hover:text-brand-terracotta transition-colors" href="compare.html">Compare</a>
       <a class="hover:text-brand-terracotta transition-colors" href="reviews.html">Reviews</a>
-      <a class="hover:text-brand-terracotta transition-colors text-brand-terracotta" href="faq.html">FAQ</a>
+      <a class="hover:text-brand-terracotta transition-colors text-brand-terracotta font-bold" href="faq.html">FAQ</a>
     </nav>
     <div class="flex items-center space-x-4">
       <a class="hidden sm:inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-brand-terracotta hover:bg-brand-terracottaDark text-white text-xs font-bold uppercase tracking-widest transition-all shadow-lg" href="booking.html">
@@ -84,24 +68,24 @@
 </header>
 
 <!-- HERO HEADER & SEARCH -->
-<section class="pt-32 pb-12 px-6 lg:px-10 max-w-[1720px] mx-auto">
+<section class="pt-32 pb-12 px-6 lg:px-10 max-w-[1720px] mx-auto z-10 relative">
   <div class="max-w-3xl mb-10">
     <div class="flex items-center space-x-2 text-brand-terracotta text-xs font-bold uppercase tracking-widest mb-3">
       <span class="w-6 h-[2px] bg-brand-terracotta"></span>
       <span>Comprehensive Excursion Knowledge Base</span>
     </div>
-    <h1 class="text-4xl sm:text-6xl font-cinzel font-extrabold text-white tracking-tight mb-4">
+    <h1 class="text-4xl sm:text-6xl font-cinzel font-extrabold text-brand-charcoal tracking-tight mb-4">
       Frequently Asked Questions
     </h1>
-    <p class="text-brand-sand/90 text-base sm:text-lg font-sans leading-relaxed">
+    <p class="text-slate-700 text-base sm:text-lg font-sans leading-relaxed">
       Everything you need to know about hotel pickups, cancellation terms, weather, food inclusions, and what to wear.
     </p>
   </div>
 
   <!-- SEARCH BAR -->
-  <div class="glass-panel p-6 rounded-3xl border border-white/15 max-w-4xl mb-10">
-    <label class="block text-xs uppercase font-mono text-brand-sand/60 mb-2">Search Questions:</label>
-    <input type="text" id="faq-search" class="w-full bg-brand-charcoal border border-white/20 text-white rounded-xl px-5 py-4 text-base focus:outline-none focus:border-brand-terracotta" placeholder="🔍 What would you like to know? (e.g., hotel pickup, cancellation, clothing, lunch)..."/>
+  <div class="glass-panel-warm p-6 rounded-3xl border border-brand-terracotta/20 max-w-4xl mb-10 shadow">
+    <label class="block text-xs uppercase font-mono text-slate-600 mb-2">Search Questions:</label>
+    <input type="text" id="faq-search" class="w-full bg-white border border-slate-300 text-slate-900 rounded-xl px-5 py-4 text-base focus:outline-none focus:border-brand-terracotta shadow-sm" placeholder="🔍 What would you like to know? (e.g., hotel pickup, cancellation, clothing, lunch)..."/>
   </div>
 
   <!-- CATEGORY PILLS -->
@@ -116,57 +100,32 @@
 </section>
 
 <!-- NEED HELP CALLOUT -->
-<section class="pb-24 px-6 lg:px-10 max-w-[1720px] mx-auto">
-  <div class="glass-panel-elevated p-8 sm:p-12 rounded-3xl border border-white/15 max-w-4xl flex flex-col sm:flex-row items-center justify-between gap-6">
+<section class="pb-24 px-6 lg:px-10 max-w-[1720px] mx-auto z-10 relative">
+  <div class="glass-panel-warm-elevated p-8 sm:p-12 rounded-3xl border border-brand-terracotta/20 max-w-4xl flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
     <div>
-      <h3 class="text-2xl font-cinzel font-bold text-white mb-2">Still Have Questions?</h3>
-      <p class="text-brand-sand/80 text-sm">Our local Las Vegas team is standing by to assist with custom bookings and special accommodations.</p>
+      <h3 class="text-2xl font-cinzel font-bold text-slate-900 mb-2">Still Have Questions?</h3>
+      <p class="text-slate-600 text-sm">Our local Las Vegas team is standing by to assist with custom bookings and special accommodations.</p>
     </div>
-    <a href="booking.html" class="px-8 py-4 rounded-2xl bg-brand-terracotta hover:bg-brand-terracottaDark text-white font-bold text-xs uppercase tracking-widest transition-all shadow-xl whitespace-nowrap">
+    <a href="booking.html" class="px-8 py-4 rounded-2xl bg-brand-terracotta hover:bg-brand-terracottaDark text-white font-bold text-xs uppercase tracking-widest transition-all shadow-lg whitespace-nowrap">
       Start Online Booking →
     </a>
   </div>
 </section>
 
 <!-- GLOBAL FOOTER -->
-<footer class="border-t border-white/10 bg-black/60 py-16 px-6 lg:px-10">
-  <div class="max-w-[1720px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 text-xs text-brand-sand/70">
-    <div class="space-y-4">
-      <div class="h-10 flex items-center bg-white/95 rounded-lg px-3 inline-block">
-        <span class="text-brand-charcoal font-cinzel font-bold text-base">CHRISTIANSON TOURS</span>
-      </div>
-      <p class="leading-relaxed">Premier day excursions from Las Vegas to Grand Canyon West Rim and Hoover Dam.</p>
-      <div class="text-brand-ochre font-semibold">★ 4.9 / 5.0 (1,990+ Google Reviews)</div>
+<footer class="glass-header-warm border-t border-brand-terracotta/15 py-12 px-6 lg:px-10">
+  <div class="max-w-[1720px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-slate-600">
+    <div class="flex items-center space-x-3">
+      <span class="font-cinzel font-bold text-slate-900 text-sm">CHRISTIANSON TOURS</span>
+      <span>© 2026. All rights reserved. Production Database System.</span>
     </div>
-
-    <div>
-      <h4 class="font-cinzel font-bold text-white text-sm uppercase tracking-wider mb-4">Navigation</h4>
-      <ul class="space-y-2.5">
-        <li><a class="hover:text-brand-terracotta transition-colors" href="tours.html">All Tour Packages</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="grand-canyon-west.html">Grand Canyon West Rim</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="hoover-dam.html">Hoover Dam Express</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="compare.html">Compare Excursions</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="plan.html">Plan My Trip Assistant</a></li>
-      </ul>
+    <div class="flex space-x-6">
+      <a href="tours.html" class="hover:text-brand-terracotta font-semibold">All Tours</a>
+      <a href="compare.html" class="hover:text-brand-terracotta font-semibold">Compare Packages</a>
+      <a href="plan.html" class="hover:text-brand-terracotta font-semibold">Plan Trip</a>
+      <a href="reviews.html" class="hover:text-brand-terracotta font-semibold">Guest Reviews</a>
+      <a href="faq.html" class="hover:text-brand-terracotta font-semibold">FAQ</a>
     </div>
-
-    <div>
-      <h4 class="font-cinzel font-bold text-white text-sm uppercase tracking-wider mb-4">Guest Info</h4>
-      <ul class="space-y-2.5">
-        <li><a class="hover:text-brand-terracotta transition-colors" href="reviews.html">Verified Guest Reviews</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="faq.html">Frequently Asked Questions</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="booking.html">Online Booking System</a></li>
-      </ul>
-    </div>
-
-    <div>
-      <h4 class="font-cinzel font-bold text-white text-sm uppercase tracking-wider mb-4">Local Office</h4>
-      <p class="leading-relaxed">Las Vegas, NV<br>Daily Pickup 6:00 AM – 7:00 AM<br>Support: support@christiansontours.com</p>
-    </div>
-  </div>
-  <div class="max-w-[1720px] mx-auto mt-12 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between text-[11px] text-brand-sand/50">
-    <p>© 2026 Christianson Tours. All rights reserved. Demo prototype created for Christianson Tours presentation.</p>
-    <p class="mt-2 sm:mt-0 font-mono">Las Vegas, NV · Grand Canyon · Hoover Dam</p>
   </div>
 </footer>
 
@@ -184,7 +143,7 @@
       <button onclick="setCategory('${cat}')" class="px-4 py-2 rounded-full text-xs font-bold font-mono transition-all ${
         activeCat === cat
           ? 'bg-brand-terracotta text-white shadow-md'
-          : 'glass-panel border border-white/10 text-brand-sand/70 hover:border-white/30'
+          : 'bg-white border border-slate-300 text-slate-700 hover:border-slate-500'
       }">
         ${cat}
       </button>
@@ -214,22 +173,22 @@
     });
 
     if (filtered.length === 0) {
-      list.innerHTML = `<div class="text-center py-12 text-brand-sand/50 glass-panel rounded-2xl">No questions found matching your search.</div>`;
+      list.innerHTML = `<div class="text-center py-12 text-slate-500 glass-panel-warm rounded-2xl">No questions found matching your search.</div>`;
       return;
     }
 
     list.innerHTML = filtered.map((item, idx) => `
-      <div class="glass-panel rounded-2xl border border-white/15 overflow-hidden transition-all">
-        <button onclick="toggleFAQ(${idx})" class="w-full text-left p-6 flex items-center justify-between space-x-4 hover:bg-white/5 transition-colors">
+      <div class="glass-panel-warm rounded-2xl border border-brand-terracotta/15 overflow-hidden transition-all shadow-sm">
+        <button onclick="toggleFAQ(${idx})" class="w-full text-left p-6 flex items-center justify-between space-x-4 hover:bg-white/50 transition-colors">
           <div class="flex items-center space-x-3">
-            <span class="px-2.5 py-1 rounded-md bg-white/10 text-[10px] font-mono text-brand-turquoise font-bold">${item.category}</span>
-            <h4 class="text-base sm:text-lg font-cinzel font-bold text-white">${item.question}</h4>
+            <span class="px-2.5 py-1 rounded-md bg-slate-200 text-[10px] font-mono text-brand-terracotta font-bold">${item.category}</span>
+            <h4 class="text-base sm:text-lg font-cinzel font-bold text-slate-900">${item.question}</h4>
           </div>
-          <span class="text-xl text-brand-sand/60 font-bold">${openIndex === idx ? '−' : '+'}</span>
+          <span class="text-xl text-slate-600 font-bold">${openIndex === idx ? '−' : '+'}</span>
         </button>
 
         ${openIndex === idx ? `
-          <div class="p-6 pt-0 border-t border-white/10 text-brand-sand/90 text-sm leading-relaxed bg-black/30">
+          <div class="p-6 pt-0 border-t border-slate-200 text-slate-700 text-sm leading-relaxed bg-white/40">
             ${item.answer}
           </div>
         ` : ''}

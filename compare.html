@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,12 +15,12 @@
         extend: {
           colors: {
             brand: {
-              charcoal: '#0a0e12',
-              sand: '#e8ded4',
+              charcoal: '#161b22',
+              sand: '#f7f3ee',
               terracotta: '#e06d44',
               terracottaDark: '#c2542e',
-              ochre: '#e0a944',
-              turquoise: '#44b8e0'
+              ochre: '#d9922b',
+              turquoise: '#208ba6'
             }
           },
           fontFamily: {
@@ -36,42 +36,26 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-
-  <style>
-    body { background-color: #0a0e12; color: #e8ded4; overflow-x: clip; }
-    .glass-header {
-      background: rgba(10, 14, 18, 0.75);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .glass-panel {
-      background: rgba(14, 19, 25, 0.75);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    }
-    .glass-panel-elevated {
-      background: rgba(12, 16, 22, 0.90);
-      backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 20px 50px 0 rgba(0, 0, 0, 0.7);
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="antialiased selection:bg-brand-terracotta selection:text-white">
+<body class="bg-sandstone antialiased selection:bg-brand-terracotta selection:text-white">
+
+<!-- BOTANICAL EDGE OVERLAYS -->
+<div class="foliage-overlay-left"></div>
+<div class="foliage-overlay-right"></div>
 
 <!-- HEADER NAVIGATION -->
-<header class="fixed top-0 left-0 right-0 z-50 glass-header">
+<header class="fixed top-0 left-0 right-0 z-50 glass-header-warm">
   <div class="max-w-[1720px] mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
     <a class="flex items-center space-x-3 group" href="index.html">
-      <div class="h-11 flex items-center bg-white/95 rounded-lg px-3.5 py-1 shadow-md group-hover:scale-105 transition-transform">
+      <div class="h-11 flex items-center bg-white/95 rounded-lg px-3.5 py-1 shadow-md group-hover:scale-105 transition-transform border border-brand-terracotta/20">
         <span class="text-brand-charcoal font-cinzel font-bold text-lg tracking-tight">CHRISTIANSON TOURS</span>
       </div>
     </a>
-    <nav class="hidden lg:flex items-center space-x-8 text-xs font-semibold uppercase tracking-wider text-brand-sand/90">
+    <nav class="hidden lg:flex items-center space-x-8 text-xs font-semibold uppercase tracking-wider text-slate-800">
       <a class="hover:text-brand-terracotta transition-colors" href="tours.html">Tours</a>
       <a class="hover:text-brand-terracotta transition-colors" href="plan.html">Plan My Trip</a>
-      <a class="hover:text-brand-terracotta transition-colors text-brand-terracotta" href="compare.html">Compare</a>
+      <a class="hover:text-brand-terracotta transition-colors text-brand-terracotta font-bold" href="compare.html">Compare</a>
       <a class="hover:text-brand-terracotta transition-colors" href="reviews.html">Reviews</a>
       <a class="hover:text-brand-terracotta transition-colors" href="faq.html">FAQ</a>
     </nav>
@@ -84,119 +68,119 @@
 </header>
 
 <!-- HERO HEADER -->
-<section class="pt-32 pb-12 px-6 lg:px-10 max-w-[1720px] mx-auto">
+<section class="pt-32 pb-12 px-6 lg:px-10 max-w-[1720px] mx-auto z-10 relative">
   <div class="max-w-3xl">
     <div class="flex items-center space-x-2 text-brand-terracotta text-xs font-bold uppercase tracking-widest mb-3">
       <span class="w-6 h-[2px] bg-brand-terracotta"></span>
       <span>Side-by-Side Excursion Comparison</span>
     </div>
-    <h1 class="text-4xl sm:text-6xl font-cinzel font-extrabold text-white tracking-tight mb-4">
+    <h1 class="text-4xl sm:text-6xl font-cinzel font-extrabold text-brand-charcoal tracking-tight mb-4">
       Which Tour Should You Book?
     </h1>
-    <p class="text-brand-sand/90 text-base sm:text-lg font-sans leading-relaxed">
+    <p class="text-slate-700 text-base sm:text-lg font-sans leading-relaxed">
       Compare durations, prices, meal inclusions, and key highlights to choose the perfect Las Vegas excursion for your schedule and budget.
     </p>
   </div>
 </section>
 
 <!-- COMPARISON MATRIX SECTION -->
-<section class="pb-24 px-6 lg:px-10 max-w-[1720px] mx-auto">
+<section class="pb-24 px-6 lg:px-10 max-w-[1720px] mx-auto z-10 relative">
   <!-- Desktop Comparison Table -->
-  <div class="hidden md:block glass-panel-elevated rounded-3xl overflow-hidden border border-white/15 shadow-2xl">
+  <div class="hidden md:block glass-panel-warm-elevated rounded-3xl overflow-hidden border border-brand-terracotta/20 shadow-2xl">
     <table class="w-full text-left border-collapse">
       <thead>
-        <tr class="border-b border-white/10 bg-black/40">
-          <th class="p-6 text-xs uppercase font-mono text-brand-sand/60 w-1/4">Features & Inclusions</th>
-          <th class="p-6 w-3/8 border-l border-white/10">
+        <tr class="border-b border-slate-200 bg-white/60">
+          <th class="p-6 text-xs uppercase font-mono text-slate-500 w-1/4">Features & Inclusions</th>
+          <th class="p-6 w-3/8 border-l border-slate-200">
             <div class="flex items-center justify-between">
               <div>
-                <span class="px-2.5 py-1 rounded-full bg-brand-terracotta text-white text-[10px] font-bold uppercase">Most Popular</span>
-                <h3 class="text-xl font-cinzel font-bold text-white mt-1">Grand Canyon West Rim</h3>
+                <span class="px-2.5 py-1 rounded-full bg-brand-terracotta text-white text-[10px] font-bold uppercase shadow">Most Popular</span>
+                <h3 class="text-xl font-cinzel font-bold text-slate-900 mt-1">Grand Canyon West Rim</h3>
               </div>
               <div class="text-right">
-                <span class="text-2xl font-syne font-bold text-white">$97</span>
-                <span class="text-xs text-brand-sand/60 block">per person</span>
+                <span class="text-2xl font-syne font-bold text-brand-terracotta">$97</span>
+                <span class="text-xs text-slate-500 block">per person</span>
               </div>
             </div>
           </th>
-          <th class="p-6 w-3/8 border-l border-white/10">
+          <th class="p-6 w-3/8 border-l border-slate-200">
             <div class="flex items-center justify-between">
               <div>
-                <span class="px-2.5 py-1 rounded-full bg-brand-turquoise text-black text-[10px] font-bold uppercase">Half-Day Option</span>
-                <h3 class="text-xl font-cinzel font-bold text-white mt-1">Hoover Dam Express</h3>
+                <span class="px-2.5 py-1 rounded-full bg-brand-turquoise text-white text-[10px] font-bold uppercase shadow">Half-Day Option</span>
+                <h3 class="text-xl font-cinzel font-bold text-slate-900 mt-1">Hoover Dam Express</h3>
               </div>
               <div class="text-right">
-                <span class="text-2xl font-syne font-bold text-white">$50</span>
-                <span class="text-xs text-brand-sand/60 block">per person</span>
+                <span class="text-2xl font-syne font-bold text-brand-turquoise">$50</span>
+                <span class="text-xs text-slate-500 block">per person</span>
               </div>
             </div>
           </th>
         </tr>
       </thead>
-      <tbody class="divide-y divide-white/10 text-sm">
+      <tbody class="divide-y divide-slate-200 text-sm">
         <tr>
-          <td class="p-6 font-bold text-white">Duration & Return</td>
-          <td class="p-6 border-l border-white/10 text-brand-sand/90">Full Day (10.5 Hours)<br><span class="text-xs text-brand-sand/60">Return ~5:30 PM</span></td>
-          <td class="p-6 border-l border-white/10 text-brand-sand/90">Half Day (4.5 Hours)<br><span class="text-xs text-brand-sand/60">Return ~1:00 PM</span></td>
+          <td class="p-6 font-bold text-slate-900">Duration & Return</td>
+          <td class="p-6 border-l border-slate-200 text-slate-700">Full Day (10.5 Hours)<br><span class="text-xs text-slate-500">Return ~5:30 PM</span></td>
+          <td class="p-6 border-l border-slate-200 text-slate-700">Half Day (4.5 Hours)<br><span class="text-xs text-slate-500">Return ~1:00 PM</span></td>
         </tr>
         <tr>
-          <td class="p-6 font-bold text-white">Starting Price</td>
-          <td class="p-6 border-l border-white/10 text-brand-terracotta font-mono font-bold text-lg">$97 <span class="text-xs text-brand-sand/60 font-sans font-normal">(Standard)</span></td>
-          <td class="p-6 border-l border-white/10 text-brand-turquoise font-mono font-bold text-lg">$50 <span class="text-xs text-brand-sand/60 font-sans font-normal">(Express)</span></td>
+          <td class="p-6 font-bold text-slate-900">Starting Price</td>
+          <td class="p-6 border-l border-slate-200 text-brand-terracotta font-mono font-bold text-lg">$97 <span class="text-xs text-slate-500 font-sans font-normal">(Standard)</span></td>
+          <td class="p-6 border-l border-slate-200 text-brand-turquoise font-mono font-bold text-lg">$50 <span class="text-xs text-slate-500 font-sans font-normal">(Express)</span></td>
         </tr>
         <tr>
-          <td class="p-6 font-bold text-white">Hotel Lobby Pickup</td>
-          <td class="p-6 border-l border-white/10 text-emerald-400 font-bold">✓ Strip & Downtown Included</td>
-          <td class="p-6 border-l border-white/10 text-emerald-400 font-bold">✓ Strip & Downtown Included</td>
+          <td class="p-6 font-bold text-slate-900">Hotel Lobby Pickup</td>
+          <td class="p-6 border-l border-slate-200 text-emerald-700 font-bold">✓ Strip & Downtown Included</td>
+          <td class="p-6 border-l border-slate-200 text-emerald-700 font-bold">✓ Strip & Downtown Included</td>
         </tr>
         <tr>
-          <td class="p-6 font-bold text-white">Breakfast Provided</td>
-          <td class="p-6 border-l border-white/10 text-emerald-400 font-bold">✓ Continental Breakfast</td>
-          <td class="p-6 border-l border-white/10 text-emerald-400 font-bold">✓ Snack Box Included</td>
+          <td class="p-6 font-bold text-slate-900">Breakfast Provided</td>
+          <td class="p-6 border-l border-slate-200 text-emerald-700 font-bold">✓ Continental Breakfast</td>
+          <td class="p-6 border-l border-slate-200 text-emerald-700 font-bold">✓ Snack Box Included</td>
         </tr>
         <tr>
-          <td class="p-6 font-bold text-white">Lunch Included</td>
-          <td class="p-6 border-l border-white/10 text-brand-sand/90">✓ Catered Deli Lunch <span class="text-xs text-brand-sand/60">(Better/Best packages)</span></td>
-          <td class="p-6 border-l border-white/10 text-brand-sand/40">— <span class="text-xs">(Finished before lunch)</span></td>
+          <td class="p-6 font-bold text-slate-900">Lunch Included</td>
+          <td class="p-6 border-l border-slate-200 text-slate-800 font-medium">✓ Catered Deli Lunch <span class="text-xs text-slate-500">(Better/Best packages)</span></td>
+          <td class="p-6 border-l border-slate-200 text-slate-400">— <span class="text-xs">(Finished before lunch)</span></td>
         </tr>
         <tr>
-          <td class="p-6 font-bold text-white">Canyon Overlooks</td>
-          <td class="p-6 border-l border-white/10 text-emerald-400 font-bold">✓ Eagle Point & Guano Point (4 hours)</td>
-          <td class="p-6 border-l border-white/10 text-brand-sand/40">—</td>
+          <td class="p-6 font-bold text-slate-900">Canyon Overlooks</td>
+          <td class="p-6 border-l border-slate-200 text-emerald-700 font-bold">✓ Eagle Point & Guano Point (4 hours)</td>
+          <td class="p-6 border-l border-slate-200 text-slate-400">—</td>
         </tr>
         <tr>
-          <td class="p-6 font-bold text-white">Hoover Dam Experience</td>
-          <td class="p-6 border-l border-white/10 text-emerald-400 font-bold">✓ Bypass Bridge Photo Stop</td>
-          <td class="p-6 border-l border-white/10 text-emerald-400 font-bold">✓ Full Bypass Bridge & Lake Mead Walk</td>
+          <td class="p-6 font-bold text-slate-900">Hoover Dam Experience</td>
+          <td class="p-6 border-l border-slate-200 text-emerald-700 font-bold">✓ Bypass Bridge Photo Stop</td>
+          <td class="p-6 border-l border-slate-200 text-emerald-700 font-bold">✓ Full Bypass Bridge & Lake Mead Walk</td>
         </tr>
         <tr>
-          <td class="p-6 font-bold text-white">Skywalk Glass Bridge</td>
-          <td class="p-6 border-l border-white/10 text-emerald-400 font-bold">✓ Optional VIP Upgrade ($35 value)</td>
-          <td class="p-6 border-l border-white/10 text-brand-sand/40">—</td>
+          <td class="p-6 font-bold text-slate-900">Skywalk Glass Bridge</td>
+          <td class="p-6 border-l border-slate-200 text-emerald-700 font-bold">✓ Optional VIP Upgrade ($35 value)</td>
+          <td class="p-6 border-l border-slate-200 text-slate-400">—</td>
         </tr>
         <tr>
-          <td class="p-6 font-bold text-white">Best For Travelers Who Want</td>
-          <td class="p-6 border-l border-white/10 text-brand-sand font-semibold">The complete bucket-list Grand Canyon wonder excursion.</td>
-          <td class="p-6 border-l border-white/10 text-brand-sand font-semibold">A fast, high-impact morning tour returning in time for Vegas afternoons.</td>
+          <td class="p-6 font-bold text-slate-900">Best For Travelers Who Want</td>
+          <td class="p-6 border-l border-slate-200 text-slate-800 font-semibold">The complete bucket-list Grand Canyon wonder excursion.</td>
+          <td class="p-6 border-l border-slate-200 text-slate-800 font-semibold">A fast, high-impact morning tour returning in time for Vegas afternoons.</td>
         </tr>
-        <tr class="bg-black/40">
+        <tr class="bg-white/60">
           <td class="p-6"></td>
-          <td class="p-6 border-l border-white/10">
+          <td class="p-6 border-l border-slate-200">
             <div class="space-y-3">
-              <a href="booking.html?tour=grand-canyon-west" class="block w-full py-3.5 rounded-xl bg-brand-terracotta hover:bg-brand-terracottaDark text-center font-bold text-xs uppercase tracking-widest text-white transition-all shadow-lg">
+              <a href="booking.html?tour=grand-canyon-west" class="block w-full py-3.5 rounded-xl bg-brand-terracotta hover:bg-brand-terracottaDark text-center font-bold text-xs uppercase tracking-widest text-white transition-all shadow-md">
                 Book Grand Canyon ($97) →
               </a>
-              <a href="grand-canyon-west.html" class="block w-full text-center text-xs font-semibold text-brand-sand/70 hover:text-white transition-colors">
+              <a href="grand-canyon-west.html" class="block w-full text-center text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors">
                 View Full Itinerary Details
               </a>
             </div>
           </td>
-          <td class="p-6 border-l border-white/10">
+          <td class="p-6 border-l border-slate-200">
             <div class="space-y-3">
-              <a href="booking.html?tour=hoover-dam" class="block w-full py-3.5 rounded-xl bg-brand-turquoise hover:bg-sky-400 text-center font-bold text-xs uppercase tracking-widest text-black transition-all shadow-lg">
+              <a href="booking.html?tour=hoover-dam" class="block w-full py-3.5 rounded-xl bg-brand-turquoise hover:bg-sky-600 text-center font-bold text-xs uppercase tracking-widest text-white transition-all shadow-md">
                 Book Hoover Dam ($50) →
               </a>
-              <a href="hoover-dam.html" class="block w-full text-center text-xs font-semibold text-brand-sand/70 hover:text-white transition-colors">
+              <a href="hoover-dam.html" class="block w-full text-center text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors">
                 View Full Itinerary Details
               </a>
             </div>
@@ -208,40 +192,40 @@
 
   <!-- Mobile Stacked Comparison Cards -->
   <div class="md:hidden space-y-8">
-    <div class="glass-panel p-6 rounded-3xl border border-brand-terracotta/40">
+    <div class="glass-panel-warm p-6 rounded-3xl border border-brand-terracotta/40 shadow-lg">
       <span class="px-3 py-1 rounded-full bg-brand-terracotta text-white text-[10px] font-bold uppercase">Most Popular</span>
-      <h3 class="text-2xl font-cinzel font-bold text-white mt-2">Grand Canyon West Rim</h3>
-      <div class="text-3xl font-syne font-bold text-brand-terracotta my-2">$97 <span class="text-xs text-brand-sand/60 font-normal">/ person</span></div>
+      <h3 class="text-2xl font-cinzel font-bold text-slate-900 mt-2">Grand Canyon West Rim</h3>
+      <div class="text-3xl font-syne font-bold text-brand-terracotta my-2">$97 <span class="text-xs text-slate-500 font-normal">/ person</span></div>
       
-      <ul class="space-y-3 text-xs text-brand-sand/90 border-t border-b border-white/10 py-4 my-4">
-        <li class="flex justify-between"><span>Duration:</span> <strong class="text-white">Full Day (10.5 Hours)</strong></li>
-        <li class="flex justify-between"><span>Hotel Pickup:</span> <strong class="text-emerald-400">✓ Included</strong></li>
-        <li class="flex justify-between"><span>Breakfast:</span> <strong class="text-emerald-400">✓ Included</strong></li>
-        <li class="flex justify-between"><span>Lunch:</span> <strong class="text-white">Deli Picnic (Better/Best)</strong></li>
-        <li class="flex justify-between"><span>Grand Canyon Time:</span> <strong class="text-white">4 Hours (Eagle & Guano)</strong></li>
-        <li class="flex justify-between"><span>Skywalk Access:</span> <strong class="text-white">Optional ($35)</strong></li>
+      <ul class="space-y-3 text-xs text-slate-700 border-t border-b border-slate-200 py-4 my-4">
+        <li class="flex justify-between"><span>Duration:</span> <strong class="text-slate-900">Full Day (10.5 Hours)</strong></li>
+        <li class="flex justify-between"><span>Hotel Pickup:</span> <strong class="text-emerald-700">✓ Included</strong></li>
+        <li class="flex justify-between"><span>Breakfast:</span> <strong class="text-emerald-700">✓ Included</strong></li>
+        <li class="flex justify-between"><span>Lunch:</span> <strong class="text-slate-900">Deli Picnic (Better/Best)</strong></li>
+        <li class="flex justify-between"><span>Grand Canyon Time:</span> <strong class="text-slate-900">4 Hours (Eagle & Guano)</strong></li>
+        <li class="flex justify-between"><span>Skywalk Access:</span> <strong class="text-slate-900">Optional ($35)</strong></li>
       </ul>
 
-      <a href="booking.html?tour=grand-canyon-west" class="block w-full py-3.5 rounded-xl bg-brand-terracotta text-center font-bold text-xs uppercase tracking-widest text-white">
+      <a href="booking.html?tour=grand-canyon-west" class="block w-full py-3.5 rounded-xl bg-brand-terracotta text-center font-bold text-xs uppercase tracking-widest text-white shadow-md">
         Book Grand Canyon ($97) →
       </a>
     </div>
 
-    <div class="glass-panel p-6 rounded-3xl border border-brand-turquoise/40">
-      <span class="px-3 py-1 rounded-full bg-brand-turquoise text-black text-[10px] font-bold uppercase">Half-Day Express</span>
-      <h3 class="text-2xl font-cinzel font-bold text-white mt-2">Hoover Dam Express</h3>
-      <div class="text-3xl font-syne font-bold text-brand-turquoise my-2">$50 <span class="text-xs text-brand-sand/60 font-normal">/ person</span></div>
+    <div class="glass-panel-warm p-6 rounded-3xl border border-brand-turquoise/40 shadow-lg">
+      <span class="px-3 py-1 rounded-full bg-brand-turquoise text-white text-[10px] font-bold uppercase">Half-Day Express</span>
+      <h3 class="text-2xl font-cinzel font-bold text-slate-900 mt-2">Hoover Dam Express</h3>
+      <div class="text-3xl font-syne font-bold text-brand-turquoise my-2">$50 <span class="text-xs text-slate-500 font-normal">/ person</span></div>
       
-      <ul class="space-y-3 text-xs text-brand-sand/90 border-t border-b border-white/10 py-4 my-4">
-        <li class="flex justify-between"><span>Duration:</span> <strong class="text-white">Half Day (4.5 Hours)</strong></li>
-        <li class="flex justify-between"><span>Hotel Pickup:</span> <strong class="text-emerald-400">✓ Included</strong></li>
-        <li class="flex justify-between"><span>Breakfast:</span> <strong class="text-emerald-400">✓ Included</strong></li>
-        <li class="flex justify-between"><span>Return Time:</span> <strong class="text-white">~1:00 PM</strong></li>
-        <li class="flex justify-between"><span>Bypass Bridge Walk:</span> <strong class="text-emerald-400">✓ Included</strong></li>
-        <li class="flex justify-between"><span>Boulder City Stop:</span> <strong class="text-emerald-400">✓ Included</strong></li>
+      <ul class="space-y-3 text-xs text-slate-700 border-t border-b border-slate-200 py-4 my-4">
+        <li class="flex justify-between"><span>Duration:</span> <strong class="text-slate-900">Half Day (4.5 Hours)</strong></li>
+        <li class="flex justify-between"><span>Hotel Pickup:</span> <strong class="text-emerald-700">✓ Included</strong></li>
+        <li class="flex justify-between"><span>Breakfast:</span> <strong class="text-emerald-700">✓ Included</strong></li>
+        <li class="flex justify-between"><span>Return Time:</span> <strong class="text-slate-900">~1:00 PM</strong></li>
+        <li class="flex justify-between"><span>Bypass Bridge Walk:</span> <strong class="text-emerald-700">✓ Included</strong></li>
+        <li class="flex justify-between"><span>Boulder City Stop:</span> <strong class="text-emerald-700">✓ Included</strong></li>
       </ul>
 
-      <a href="booking.html?tour=hoover-dam" class="block w-full py-3.5 rounded-xl bg-brand-turquoise text-center font-bold text-xs uppercase tracking-widest text-black">
+      <a href="booking.html?tour=hoover-dam" class="block w-full py-3.5 rounded-xl bg-brand-turquoise text-center font-bold text-xs uppercase tracking-widest text-white shadow-md">
         Book Hoover Dam ($50) →
       </a>
     </div>
@@ -249,44 +233,19 @@
 </section>
 
 <!-- GLOBAL FOOTER -->
-<footer class="border-t border-white/10 bg-black/60 py-16 px-6 lg:px-10">
-  <div class="max-w-[1720px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 text-xs text-brand-sand/70">
-    <div class="space-y-4">
-      <div class="h-10 flex items-center bg-white/95 rounded-lg px-3 inline-block">
-        <span class="text-brand-charcoal font-cinzel font-bold text-base">CHRISTIANSON TOURS</span>
-      </div>
-      <p class="leading-relaxed">Premier day excursions from Las Vegas to Grand Canyon West Rim and Hoover Dam.</p>
-      <div class="text-brand-ochre font-semibold">★ 4.9 / 5.0 (1,990+ Google Reviews)</div>
+<footer class="glass-header-warm border-t border-brand-terracotta/15 py-12 px-6 lg:px-10">
+  <div class="max-w-[1720px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-slate-600">
+    <div class="flex items-center space-x-3">
+      <span class="font-cinzel font-bold text-slate-900 text-sm">CHRISTIANSON TOURS</span>
+      <span>© 2026. All rights reserved. Production Database System.</span>
     </div>
-
-    <div>
-      <h4 class="font-cinzel font-bold text-white text-sm uppercase tracking-wider mb-4">Navigation</h4>
-      <ul class="space-y-2.5">
-        <li><a class="hover:text-brand-terracotta transition-colors" href="tours.html">All Tour Packages</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="grand-canyon-west.html">Grand Canyon West Rim</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="hoover-dam.html">Hoover Dam Express</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="compare.html">Compare Excursions</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="plan.html">Plan My Trip Assistant</a></li>
-      </ul>
+    <div class="flex space-x-6">
+      <a href="tours.html" class="hover:text-brand-terracotta font-semibold">All Tours</a>
+      <a href="compare.html" class="hover:text-brand-terracotta font-semibold">Compare Packages</a>
+      <a href="plan.html" class="hover:text-brand-terracotta font-semibold">Plan Trip</a>
+      <a href="reviews.html" class="hover:text-brand-terracotta font-semibold">Guest Reviews</a>
+      <a href="faq.html" class="hover:text-brand-terracotta font-semibold">FAQ</a>
     </div>
-
-    <div>
-      <h4 class="font-cinzel font-bold text-white text-sm uppercase tracking-wider mb-4">Guest Info</h4>
-      <ul class="space-y-2.5">
-        <li><a class="hover:text-brand-terracotta transition-colors" href="reviews.html">Verified Guest Reviews</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="faq.html">Frequently Asked Questions</a></li>
-        <li><a class="hover:text-brand-terracotta transition-colors" href="booking.html">Online Booking System</a></li>
-      </ul>
-    </div>
-
-    <div>
-      <h4 class="font-cinzel font-bold text-white text-sm uppercase tracking-wider mb-4">Local Office</h4>
-      <p class="leading-relaxed">Las Vegas, NV<br>Daily Pickup 6:00 AM – 7:00 AM<br>Support: support@christiansontours.com</p>
-    </div>
-  </div>
-  <div class="max-w-[1720px] mx-auto mt-12 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between text-[11px] text-brand-sand/50">
-    <p>© 2026 Christianson Tours. All rights reserved. Demo prototype created for Christianson Tours presentation.</p>
-    <p class="mt-2 sm:mt-0 font-mono">Las Vegas, NV · Grand Canyon · Hoover Dam</p>
   </div>
 </footer>
 
