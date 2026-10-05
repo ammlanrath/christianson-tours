@@ -279,4 +279,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     });
+
+    // --- Dynamic Price Update from Backend ---
+    async function updateTourPrices() {
+        if (!window.CHRISTIANSON_API) return;
+        try {
+            const tours = await window.CHRISTIANSON_API.getTours();
+            
+            // Grand Canyon
+            const canyonTour = tours.find(t => t.id === 'grand-canyon-west');
+            if (canyonTour && canyonTour.starting_price) {
+                const canyonCard = document.getElementById('tour-canyon-details');
+                if (canyonCard) {
+                    const priceEl = canyonCard.querySelector('.text-2xl.font-syne');
+                    if (priceEl) priceEl.textContent = '$' + canyonTour.starting_price;
+                    
+                    const btn = canyonCard.querySelector('a[href*="booking.html"]');
+                    if (btn) btn.textContent = `Book Canyon ($${canyonTour.starting_price})`;
+                }
+                const canyonHeroPrice = document.querySelector('#card-3 .absolute.top-4.right-4');
+                if (canyonHeroPrice) canyonHeroPrice.textContent = `From $${canyonTour.starting_price}`;
+            }
+
+            // Hoover Dam
+            const hooverTour = tours.find(t => t.id === 'hoover-dam');
+            if (hooverTour && hooverTour.starting_price) {
+                const hooverCard = document.getElementById('tour-hoover-details');
+                if (hooverCard) {
+                    const priceEl = hooverCard.querySelector('.text-2xl.font-syne');
+                    if (priceEl) priceEl.textContent = '$' + hooverTour.starting_price;
+                    
+                    const btn = hooverCard.querySelector('a[href*="booking.html"]');
+                    if (btn) btn.textContent = `Book Hoover ($${hooverTour.starting_price})`;
+                }
+                const hooverHeroPrice = document.querySelector('#card-2 .absolute.top-4.right-4');
+                if (hooverHeroPrice) hooverHeroPrice.textContent = `From $${hooverTour.starting_price}`;
+            }
+        } catch (e) {
+            console.error('Failed to update tour prices:', e);
+        }
+    }
+    
+    updateTourPrices();
 });
