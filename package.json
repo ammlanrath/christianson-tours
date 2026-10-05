@@ -6,9 +6,11 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "seed": "node db/seed.js"
+    "seed": "node db/seed.js",
+    "seed:supabase": "node db/seed_supabase.js"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.117.2",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

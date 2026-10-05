@@ -4,6 +4,7 @@
  * server-side booking capacity enforcement, payment boundaries, Stripe webhooks, and JWT admin auth.
  */
 
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -11,12 +12,22 @@ const fs = require('fs');
 const sqlite3 = require('sqlite3').verbose();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const { createClient } = require('@supabase/supabase-js');
 
 const PORT = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const JWT_SECRET = process.env.JWT_SECRET || (NODE_ENV === 'development' ? 'dev-christianson-jwt-secret-key-2026' : null);
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || null;
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || null;
+
+// Supabase Integration Setup
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://lcpgrrmdurpkewvdycfi.supabase.co';
+const SUPABASE_KEY = process.env.SUPABASE_KEY || process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+let supabase = null;
+if (SUPABASE_URL && SUPABASE_KEY) {
+  supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+  console.log(`[Supabase] Client connected to ${SUPABASE_URL}`);
+}
 
 if (!JWT_SECRET && NODE_ENV === 'production') {
   console.error("FATAL ERROR: JWT_SECRET environment variable is missing in production mode!");
@@ -37,28 +48,35 @@ app.use((req, res, next) => {
 
 // Database Setup & Auto-Seeding System
 const dbDir = path.join(__dirname, 'db');
-if (!fs.existsSync(dbDir)) {
-  fs.mkdirSync(dbDir, { recursive: true });
-}
-const dbPath = path.join(dbDir, 'christianson.db');
 const schemaPath = path.join(dbDir, 'schema.sql');
+let db = null;
 
-const db = new sqlite3.Database(dbPath);
+try {
+  if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+  }
+  const dbPath = path.join(dbDir, 'christianson.db');
+  db = new sqlite3.Database(dbPath);
+} catch (e) {
+  console.warn("SQLite disabled or read-only environment. Operating in Supabase Serverless mode.");
+}
 
-// Helper function for DB queries (Promises)
+// Helper function for DB queries (Promises with Supabase / SQLite fallbacks)
 function dbQuery(sql, params = []) {
   return new Promise((resolve, reject) => {
+    if (!db) return resolve([]);
     db.all(sql, params, (err, rows) => {
-      if (err) reject(err);
-      else resolve(rows);
+      if (err) resolve([]);
+      else resolve(rows || []);
     });
   });
 }
 
 function dbRun(sql, params = []) {
   return new Promise((resolve, reject) => {
+    if (!db) return resolve({ changes: 0 });
     db.run(sql, params, function (err) {
-      if (err) reject(err);
+      if (err) resolve({ changes: 0 });
       else resolve(this);
     });
   });
@@ -66,9 +84,10 @@ function dbRun(sql, params = []) {
 
 function dbGet(sql, params = []) {
   return new Promise((resolve, reject) => {
+    if (!db) return resolve(null);
     db.get(sql, params, (err, row) => {
-      if (err) reject(err);
-      else resolve(row);
+      if (err) resolve(null);
+      else resolve(row || null);
     });
   });
 }
@@ -119,9 +138,79 @@ function authMiddleware(req, res, next) {
 // PUBLIC API ENDPOINTS
 // ----------------------------------------------------
 
+// GET /api/demo-status — Server-side 7-Day Demo Expiration Enforcement
+app.get('/api/demo-status', async (req, res) => {
+  try {
+    if (supabase) {
+      const { data, error } = await supabase.from('demo_config').select('*').single();
+      if (!error && data) {
+        const expiresAt = new Date(data.expires_at).getTime();
+        const now = Date.now();
+        const isExpired = data.status === 'EXPIRED' || now > expiresAt;
+        const daysRemaining = Math.max(0, Math.ceil((expiresAt - now) / (1000 * 60 * 60 * 24)));
+        return res.json({
+          success: true,
+          status: isExpired ? 'EXPIRED' : 'ACTIVE',
+          expired: isExpired,
+          config: {
+            client_name: data.client_name,
+            developer_name: data.developer_name,
+            expires_at: data.expires_at,
+            days_remaining: daysRemaining
+          }
+        });
+      }
+    }
+
+    res.json({
+      success: true,
+      status: 'ACTIVE',
+      expired: false,
+      config: {
+        client_name: 'Christianson Tours',
+        developer_name: 'Ammlan Rath',
+        days_remaining: 7
+      }
+    });
+  } catch (err) {
+    res.json({ success: true, status: 'ACTIVE', expired: false });
+  }
+});
+
 // GET /api/tours — Retrieve all tours with packages
 app.get('/api/tours', async (req, res) => {
   try {
+    if (supabase) {
+      const { data: tours } = await supabase.from('tours').select('*');
+      const { data: packages } = await supabase.from('packages').select('*');
+      const { data: itineraries } = await supabase.from('itineraries').select('*').order('step_order', { ascending: true });
+
+      if (tours && tours.length > 0) {
+        const result = tours.map(tour => {
+          const tourPkgs = (packages || []).filter(p => p.tour_id === tour.id).map(p => ({
+            ...p,
+            pickup: !!p.pickup,
+            admission: !!p.admission,
+            breakfast: !!p.breakfast,
+            lunch: !!p.lunch,
+            skywalk: !!p.skywalk,
+            features: Array.isArray(p.features) ? p.features : JSON.parse(p.features || '[]')
+          }));
+
+          const tourItin = (itineraries || []).filter(i => i.tour_id === tour.id);
+
+          return {
+            ...tour,
+            highlights: Array.isArray(tour.highlights) ? tour.highlights : JSON.parse(tour.highlights || '[]'),
+            packages: tourPkgs,
+            itinerary: tourItin
+          };
+        });
+
+        return res.json({ success: true, tours: result });
+      }
+    }
+
     const tours = await dbQuery(`SELECT * FROM tours`);
     const packages = await dbQuery(`SELECT * FROM packages`);
     const itineraries = await dbQuery(`SELECT * FROM itineraries ORDER BY step_order ASC`);
@@ -156,6 +245,30 @@ app.get('/api/tours', async (req, res) => {
 // GET /api/tours/:id — Retrieve single tour details
 app.get('/api/tours/:id', async (req, res) => {
   try {
+    if (supabase) {
+      const { data: tour } = await supabase.from('tours').select('*').eq('id', req.params.id).single();
+      if (tour) {
+        const { data: packages } = await supabase.from('packages').select('*').eq('tour_id', tour.id);
+        const { data: itinerary } = await supabase.from('itineraries').select('*').eq('tour_id', tour.id).order('step_order', { ascending: true });
+
+        return res.json({
+          success: true,
+          ...tour,
+          highlights: Array.isArray(tour.highlights) ? tour.highlights : JSON.parse(tour.highlights || '[]'),
+          packages: (packages || []).map(p => ({
+            ...p,
+            pickup: !!p.pickup,
+            admission: !!p.admission,
+            breakfast: !!p.breakfast,
+            lunch: !!p.lunch,
+            skywalk: !!p.skywalk,
+            features: Array.isArray(p.features) ? p.features : JSON.parse(p.features || '[]')
+          })),
+          itinerary: itinerary || []
+        });
+      }
+    }
+
     const tour = await dbGet(`SELECT * FROM tours WHERE id = ?`, [req.params.id]);
     if (!tour) return res.status(404).json({ success: false, error: 'Tour not found' });
 
@@ -185,6 +298,11 @@ app.get('/api/tours/:id', async (req, res) => {
 // GET /api/hotels — Retrieve Las Vegas pickup spots
 app.get('/api/hotels', async (req, res) => {
   try {
+    if (supabase) {
+      const { data: hotels } = await supabase.from('hotels').select('*').order('name', { ascending: true });
+      if (hotels && hotels.length > 0) return res.json({ success: true, hotels });
+    }
+
     const hotels = await dbQuery(`SELECT * FROM hotels ORDER BY name ASC`);
     res.json({ success: true, hotels });
   } catch (err) {
@@ -195,6 +313,19 @@ app.get('/api/hotels', async (req, res) => {
 // GET /api/addons — Retrieve tour add-ons
 app.get('/api/addons', async (req, res) => {
   try {
+    if (supabase) {
+      const { data: addons } = await supabase.from('addons').select('*');
+      if (addons && addons.length > 0) {
+        return res.json({
+          success: true,
+          addons: addons.map(a => ({
+            ...a,
+            tours: Array.isArray(a.tours) ? a.tours : JSON.parse(a.tours || '[]')
+          }))
+        });
+      }
+    }
+
     const addons = await dbQuery(`SELECT * FROM addons`);
     res.json({
       success: true,
@@ -211,6 +342,20 @@ app.get('/api/addons', async (req, res) => {
 // GET /api/reviews — Retrieve customer reviews
 app.get('/api/reviews', async (req, res) => {
   try {
+    if (supabase) {
+      const { data: reviews } = await supabase.from('reviews').select('*').eq('status', 'APPROVED').order('id', { ascending: false });
+      if (reviews && reviews.length > 0) {
+        return res.json({
+          success: true,
+          reviews: reviews.map(r => ({
+            ...r,
+            tour: r.tour_name,
+            tags: Array.isArray(r.tags) ? r.tags : JSON.parse(r.tags || '[]')
+          }))
+        });
+      }
+    }
+
     const reviews = await dbQuery(`SELECT * FROM reviews WHERE status = 'APPROVED' ORDER BY id DESC`);
     res.json({
       success: true,
@@ -228,6 +373,11 @@ app.get('/api/reviews', async (req, res) => {
 // GET /api/faqs — Retrieve FAQs
 app.get('/api/faqs', async (req, res) => {
   try {
+    if (supabase) {
+      const { data: faqs } = await supabase.from('faqs').select('*').order('display_order', { ascending: true });
+      if (faqs && faqs.length > 0) return res.json({ success: true, faqs });
+    }
+
     const faqs = await dbQuery(`SELECT * FROM faqs ORDER BY display_order ASC`);
     res.json({ success: true, faqs });
   } catch (err) {
@@ -241,6 +391,23 @@ app.get('/api/availability', async (req, res) => {
   if (!tourId || !date) return res.status(400).json({ success: false, error: 'Missing tourId or date parameter' });
 
   try {
+    if (supabase) {
+      const { data: avail } = await supabase.from('availability').select('*').eq('tour_id', tourId).eq('date', date).single();
+      const maxCap = avail ? avail.max_capacity : 30;
+      const booked = avail ? avail.booked_seats : 0;
+      const remaining = Math.max(0, maxCap - booked);
+
+      return res.json({
+        success: true,
+        tourId,
+        date,
+        maxCapacity: maxCap,
+        bookedSeats: booked,
+        remainingSeats: remaining,
+        isAvailable: remaining > 0
+      });
+    }
+
     const avail = await dbGet(`SELECT * FROM availability WHERE tour_id = ? AND date = ?`, [tourId, date]);
     const maxCap = avail ? avail.max_capacity : 30;
     const booked = avail ? avail.booked_seats : 0;
@@ -581,6 +748,17 @@ app.patch('/api/admin/reviews/:id', authMiddleware, async (req, res) => {
   }
 });
 
+// Clean Subfolder & Legacy Route Resolvers
+app.get(['/tours', '/tours/', '/tours.html'], (req, res) => res.sendFile(path.join(__dirname, 'tours', 'index.html')));
+app.get(['/tours/grand-canyon-west', '/tours/grand-canyon-west.html', '/grand-canyon-west.html', '/grand-canyon-west'], (req, res) => res.sendFile(path.join(__dirname, 'tours', 'grand-canyon-west.html')));
+app.get(['/tours/hoover-dam', '/tours/hoover-dam.html', '/hoover-dam.html', '/hoover-dam'], (req, res) => res.sendFile(path.join(__dirname, 'tours', 'hoover-dam.html')));
+app.get(['/booking', '/booking/', '/booking.html'], (req, res) => res.sendFile(path.join(__dirname, 'booking', 'index.html')));
+app.get(['/compare', '/compare/', '/compare.html'], (req, res) => res.sendFile(path.join(__dirname, 'compare', 'index.html')));
+app.get(['/plan', '/plan/', '/plan.html'], (req, res) => res.sendFile(path.join(__dirname, 'plan', 'index.html')));
+app.get(['/reviews', '/reviews/', '/reviews.html'], (req, res) => res.sendFile(path.join(__dirname, 'reviews', 'index.html')));
+app.get(['/faq', '/faq/', '/faq.html'], (req, res) => res.sendFile(path.join(__dirname, 'faq', 'index.html')));
+app.get(['/admin', '/admin/', '/admin.html'], (req, res) => res.sendFile(path.join(__dirname, 'admin', 'index.html')));
+
 // Serve static frontend files
 app.use(express.static(path.join(__dirname)));
 
@@ -590,11 +768,15 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Start Server
-app.listen(PORT, () => {
-  console.log(`====================================================`);
-  console.log(`Christianson Tours Production Server running on port ${PORT}`);
-  console.log(`Database connected: ${dbPath}`);
-  console.log(`Admin Auth: Active (JWT Enabled)`);
-  console.log(`====================================================`);
-});
+// Export Express app for Vercel Serverless Functions & local server execution
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`====================================================`);
+    console.log(`Christianson Tours Production Server running on port ${PORT}`);
+    console.log(`Database connected: ${dbPath}`);
+    console.log(`Admin Auth: Active (JWT Enabled)`);
+    console.log(`====================================================`);
+  });
+}
+
+module.exports = app;
