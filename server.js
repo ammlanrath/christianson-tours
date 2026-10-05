@@ -94,31 +94,12 @@ function dbGet(sql, params = []) {
 
 // Auto-initialize & Seed Database if empty
 async function initDatabase() {
-  try {
-    const tableCheck = await dbGet(`SELECT name FROM sqlite_master WHERE type='table' AND name='tours'`);
-    if (!tableCheck && fs.existsSync(schemaPath)) {
-      console.log("Database empty or missing tables. Auto-initializing schema & seeding default data...");
-      const schemaSql = fs.readFileSync(schemaPath, 'utf8');
-      await new Promise((resolve, reject) => {
-        db.exec(schemaSql, (err) => {
-          if (err) reject(err);
-          else resolve();
-        });
-      });
-      // Execute seed script logic dynamically
-      const seedScriptPath = path.join(dbDir, 'seed.js');
-      if (fs.existsSync(seedScriptPath)) {
-        require(seedScriptPath);
-      }
-    }
-  } catch (e) {
-    console.error("Database initialization check error:", e);
-  }
+  console.log("Initialization complete. Supabase strictly enforced.");
 }
 initDatabase();
 
-// Authentication Middleware
-function authMiddleware(req, res, next) {
+// Authentication Middleware (Supabase)
+async function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ success: false, error: 'Unauthorized: Missing or malformed token', code: 'UNAUTHORIZED' });
@@ -126,8 +107,15 @@ function authMiddleware(req, res, next) {
 
   const token = authHeader.split(' ')[1];
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded;
+    const { data: { user }, error } = await supabase.auth.getUser(token);
+    if (error || !user) throw new Error(error.message);
+
+    const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
+    if (!profile || profile.role !== 'admin') {
+      return res.status(403).json({ success: false, error: 'Forbidden: Admins only', code: 'FORBIDDEN' });
+    }
+
+    req.user = { id: user.id, email: user.email, role: 'admin' };
     next();
   } catch (err) {
     return res.status(401).json({ success: false, error: 'Unauthorized: Session expired or invalid token', code: 'UNAUTHORIZED' });
@@ -141,247 +129,148 @@ function authMiddleware(req, res, next) {
 // GET /api/demo-status — Server-side 7-Day Demo Expiration Enforcement
 app.get('/api/demo-status', async (req, res) => {
   try {
-    if (supabase) {
-      const { data, error } = await supabase.from('demo_config').select('*').single();
-      if (!error && data) {
-        const expiresAt = new Date(data.expires_at).getTime();
-        const now = Date.now();
-        const isExpired = data.status === 'EXPIRED' || now > expiresAt;
-        const daysRemaining = Math.max(0, Math.ceil((expiresAt - now) / (1000 * 60 * 60 * 24)));
-        return res.json({
-          success: true,
-          status: isExpired ? 'EXPIRED' : 'ACTIVE',
-          expired: isExpired,
-          config: {
-            client_name: data.client_name,
-            developer_name: data.developer_name,
-            expires_at: data.expires_at,
-            days_remaining: daysRemaining
-          }
-        });
-      }
-    }
-
-    res.json({
+    const { data, error } = await supabase.from('demo_config').select('*').single();
+    if (error || !data) throw new Error(error?.message || 'Demo config not found');
+    const expiresAt = new Date(data.expires_at).getTime();
+    const now = Date.now();
+    const isExpired = data.status === 'EXPIRED' || now > expiresAt;
+    const daysRemaining = Math.max(0, Math.ceil((expiresAt - now) / (1000 * 60 * 60 * 24)));
+    return res.json({
       success: true,
-      status: 'ACTIVE',
-      expired: false,
+      status: isExpired ? 'EXPIRED' : 'ACTIVE',
+      expired: isExpired,
       config: {
-        client_name: 'Christianson Tours',
-        developer_name: 'Ammlan Rath',
-        days_remaining: 7
+        client_name: data.client_name,
+        developer_name: data.developer_name,
+        expires_at: data.expires_at,
+        days_remaining: daysRemaining
       }
     });
   } catch (err) {
-    res.json({ success: true, status: 'ACTIVE', expired: false });
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 
 // GET /api/tours — Retrieve all tours with packages
 app.get('/api/tours', async (req, res) => {
   try {
-    if (supabase) {
-      const { data: tours } = await supabase.from('tours').select('*');
-      const { data: packages } = await supabase.from('packages').select('*');
-      const { data: itineraries } = await supabase.from('itineraries').select('*').order('step_order', { ascending: true });
+    const { data: tours, error: toursErr } = await supabase.from('tours').select('*');
+    if (toursErr) throw new Error(toursErr.message);
+    const { data: packages, error: pkgsErr } = await supabase.from('packages').select('*');
+    if (pkgsErr) throw new Error(pkgsErr.message);
+    const { data: itineraries, error: itinErr } = await supabase.from('itineraries').select('*').order('step_order', { ascending: true });
+    if (itinErr) throw new Error(itinErr.message);
 
-      if (tours && tours.length > 0) {
-        const result = tours.map(tour => {
-          const tourPkgs = (packages || []).filter(p => p.tour_id === tour.id).map(p => ({
-            ...p,
-            pickup: !!p.pickup,
-            admission: !!p.admission,
-            breakfast: !!p.breakfast,
-            lunch: !!p.lunch,
-            skywalk: !!p.skywalk,
-            features: Array.isArray(p.features) ? p.features : JSON.parse(p.features || '[]')
-          }));
-
-          const tourItin = (itineraries || []).filter(i => i.tour_id === tour.id);
-
-          return {
-            ...tour,
-            highlights: Array.isArray(tour.highlights) ? tour.highlights : JSON.parse(tour.highlights || '[]'),
-            packages: tourPkgs,
-            itinerary: tourItin
-          };
-        });
-
-        return res.json({ success: true, tours: result });
-      }
-    }
-
-    const tours = await dbQuery(`SELECT * FROM tours`);
-    const packages = await dbQuery(`SELECT * FROM packages`);
-    const itineraries = await dbQuery(`SELECT * FROM itineraries ORDER BY step_order ASC`);
-
-    const result = tours.map(tour => {
-      const tourPkgs = packages.filter(p => p.tour_id === tour.id).map(p => ({
+    const result = (tours || []).map(tour => {
+      const tourPkgs = (packages || []).filter(p => p.tour_id === tour.id).map(p => ({
         ...p,
         pickup: !!p.pickup,
         admission: !!p.admission,
         breakfast: !!p.breakfast,
         lunch: !!p.lunch,
         skywalk: !!p.skywalk,
-        features: JSON.parse(p.features || '[]')
+        features: Array.isArray(p.features) ? p.features : JSON.parse(p.features || '[]')
       }));
-
-      const tourItin = itineraries.filter(i => i.tour_id === tour.id);
-
+      const tourItin = (itineraries || []).filter(i => i.tour_id === tour.id);
       return {
         ...tour,
-        highlights: JSON.parse(tour.highlights || '[]'),
+        highlights: Array.isArray(tour.highlights) ? tour.highlights : JSON.parse(tour.highlights || '[]'),
         packages: tourPkgs,
         itinerary: tourItin
       };
     });
-
-    res.json({ success: true, tours: result });
+    return res.json({ success: true, tours: result });
   } catch (err) {
-    res.status(500).json({ success: false, error: 'Database query error: ' + err.message });
+    res.status(500).json({ success: false, error: 'Supabase query error: ' + err.message });
   }
 });
 
 // GET /api/tours/:id — Retrieve single tour details
 app.get('/api/tours/:id', async (req, res) => {
   try {
-    if (supabase) {
-      const { data: tour } = await supabase.from('tours').select('*').eq('id', req.params.id).single();
-      if (tour) {
-        const { data: packages } = await supabase.from('packages').select('*').eq('tour_id', tour.id);
-        const { data: itinerary } = await supabase.from('itineraries').select('*').eq('tour_id', tour.id).order('step_order', { ascending: true });
+    const { data: tour, error: tourErr } = await supabase.from('tours').select('*').eq('id', req.params.id).single();
+    if (tourErr || !tour) return res.status(404).json({ success: false, error: 'Tour not found' });
+    
+    const { data: packages, error: pkgsErr } = await supabase.from('packages').select('*').eq('tour_id', tour.id);
+    if (pkgsErr) throw new Error(pkgsErr.message);
+    
+    const { data: itinerary, error: itinErr } = await supabase.from('itineraries').select('*').eq('tour_id', tour.id).order('step_order', { ascending: true });
+    if (itinErr) throw new Error(itinErr.message);
 
-        return res.json({
-          success: true,
-          ...tour,
-          highlights: Array.isArray(tour.highlights) ? tour.highlights : JSON.parse(tour.highlights || '[]'),
-          packages: (packages || []).map(p => ({
-            ...p,
-            pickup: !!p.pickup,
-            admission: !!p.admission,
-            breakfast: !!p.breakfast,
-            lunch: !!p.lunch,
-            skywalk: !!p.skywalk,
-            features: Array.isArray(p.features) ? p.features : JSON.parse(p.features || '[]')
-          })),
-          itinerary: itinerary || []
-        });
-      }
-    }
-
-    const tour = await dbGet(`SELECT * FROM tours WHERE id = ?`, [req.params.id]);
-    if (!tour) return res.status(404).json({ success: false, error: 'Tour not found' });
-
-    const packages = await dbQuery(`SELECT * FROM packages WHERE tour_id = ?`, [tour.id]);
-    const itinerary = await dbQuery(`SELECT * FROM itineraries WHERE tour_id = ? ORDER BY step_order ASC`, [tour.id]);
-
-    res.json({
-      success: true,
+    const result = {
       ...tour,
-      highlights: JSON.parse(tour.highlights || '[]'),
-      packages: packages.map(p => ({
+      highlights: Array.isArray(tour.highlights) ? tour.highlights : JSON.parse(tour.highlights || '[]'),
+      packages: (packages || []).map(p => ({
         ...p,
         pickup: !!p.pickup,
         admission: !!p.admission,
         breakfast: !!p.breakfast,
         lunch: !!p.lunch,
         skywalk: !!p.skywalk,
-        features: JSON.parse(p.features || '[]')
+        features: Array.isArray(p.features) ? p.features : JSON.parse(p.features || '[]')
       })),
-      itinerary
-    });
+      itinerary: itinerary || []
+    };
+    return res.json({ success: true, tour: result });
   } catch (err) {
-    res.status(500).json({ success: false, error: 'Database query error: ' + err.message });
+    res.status(500).json({ success: false, error: 'Supabase query error: ' + err.message });
   }
 });
 
 // GET /api/hotels — Retrieve Las Vegas pickup spots
 app.get('/api/hotels', async (req, res) => {
   try {
-    if (supabase) {
-      const { data: hotels } = await supabase.from('hotels').select('*').order('name', { ascending: true });
-      if (hotels && hotels.length > 0) return res.json({ success: true, hotels });
-    }
-
-    const hotels = await dbQuery(`SELECT * FROM hotels ORDER BY name ASC`);
-    res.json({ success: true, hotels });
+    const { data: hotels, error } = await supabase.from('hotels').select('*').order('name', { ascending: true });
+    if (error) throw new Error(error.message);
+    res.json({ success: true, hotels: hotels || [] });
   } catch (err) {
-    res.status(500).json({ success: false, error: 'Database query error: ' + err.message });
+    res.status(500).json({ success: false, error: 'Supabase query error: ' + err.message });
   }
 });
 
 // GET /api/addons — Retrieve tour add-ons
 app.get('/api/addons', async (req, res) => {
   try {
-    if (supabase) {
-      const { data: addons } = await supabase.from('addons').select('*');
-      if (addons && addons.length > 0) {
-        return res.json({
-          success: true,
-          addons: addons.map(a => ({
-            ...a,
-            tours: Array.isArray(a.tours) ? a.tours : JSON.parse(a.tours || '[]')
-          }))
-        });
-      }
-    }
-
-    const addons = await dbQuery(`SELECT * FROM addons`);
+    const { data: addons, error } = await supabase.from('addons').select('*');
+    if (error) throw new Error(error.message);
     res.json({
       success: true,
-      addons: addons.map(a => ({
+      addons: (addons || []).map(a => ({
         ...a,
-        tours: JSON.parse(a.tours || '[]')
+        tours: Array.isArray(a.tours) ? a.tours : JSON.parse(a.tours || '[]')
       }))
     });
   } catch (err) {
-    res.status(500).json({ success: false, error: 'Database query error: ' + err.message });
+    res.status(500).json({ success: false, error: 'Supabase query error: ' + err.message });
   }
 });
 
 // GET /api/reviews — Retrieve customer reviews
 app.get('/api/reviews', async (req, res) => {
   try {
-    if (supabase) {
-      const { data: reviews } = await supabase.from('reviews').select('*').eq('status', 'APPROVED').order('id', { ascending: false });
-      if (reviews && reviews.length > 0) {
-        return res.json({
-          success: true,
-          reviews: reviews.map(r => ({
-            ...r,
-            tour: r.tour_name,
-            tags: Array.isArray(r.tags) ? r.tags : JSON.parse(r.tags || '[]')
-          }))
-        });
-      }
-    }
-
-    const reviews = await dbQuery(`SELECT * FROM reviews WHERE status = 'APPROVED' ORDER BY id DESC`);
+    const { data: reviews, error } = await supabase.from('reviews').select('*').eq('status', 'APPROVED').order('id', { ascending: false });
+    if (error) throw new Error(error.message);
     res.json({
       success: true,
-      reviews: reviews.map(r => ({
+      reviews: (reviews || []).map(r => ({
         ...r,
         tour: r.tour_name,
-        tags: JSON.parse(r.tags || '[]')
+        tags: Array.isArray(r.tags) ? r.tags : JSON.parse(r.tags || '[]')
       }))
     });
   } catch (err) {
-    res.status(500).json({ success: false, error: 'Database query error: ' + err.message });
+    res.status(500).json({ success: false, error: 'Supabase query error: ' + err.message });
   }
 });
 
 // GET /api/faqs — Retrieve FAQs
 app.get('/api/faqs', async (req, res) => {
   try {
-    if (supabase) {
-      const { data: faqs } = await supabase.from('faqs').select('*').order('display_order', { ascending: true });
-      if (faqs && faqs.length > 0) return res.json({ success: true, faqs });
-    }
-
-    const faqs = await dbQuery(`SELECT * FROM faqs ORDER BY display_order ASC`);
-    res.json({ success: true, faqs });
+    const { data: faqs, error } = await supabase.from('faqs').select('*').order('display_order', { ascending: true });
+    if (error) throw new Error(error.message);
+    res.json({ success: true, faqs: faqs || [] });
   } catch (err) {
-    res.status(500).json({ success: false, error: 'Database query error: ' + err.message });
+    res.status(500).json({ success: false, error: 'Supabase query error: ' + err.message });
   }
 });
 
@@ -391,29 +280,16 @@ app.get('/api/availability', async (req, res) => {
   if (!tourId || !date) return res.status(400).json({ success: false, error: 'Missing tourId or date parameter' });
 
   try {
-    if (supabase) {
-      const { data: avail } = await supabase.from('availability').select('*').eq('tour_id', tourId).eq('date', date).single();
-      const maxCap = avail ? avail.max_capacity : 30;
-      const booked = avail ? avail.booked_seats : 0;
-      const remaining = Math.max(0, maxCap - booked);
-
-      return res.json({
-        success: true,
-        tourId,
-        date,
-        maxCapacity: maxCap,
-        bookedSeats: booked,
-        remainingSeats: remaining,
-        isAvailable: remaining > 0
-      });
+    const { data: avail, error } = await supabase.from('availability').select('*').eq('tour_id', tourId).eq('date', date).single();
+    if (error || !avail) {
+      return res.status(404).json({ success: false, error: 'Availability not configured', code: 'AVAILABILITY_NOT_CONFIGURED' });
     }
-
-    const avail = await dbGet(`SELECT * FROM availability WHERE tour_id = ? AND date = ?`, [tourId, date]);
-    const maxCap = avail ? avail.max_capacity : 30;
-    const booked = avail ? avail.booked_seats : 0;
+    
+    const maxCap = avail.max_capacity;
+    const booked = avail.booked_seats;
     const remaining = Math.max(0, maxCap - booked);
 
-    res.json({
+    return res.json({
       success: true,
       tourId,
       date,
@@ -423,7 +299,7 @@ app.get('/api/availability', async (req, res) => {
       isAvailable: remaining > 0
     });
   } catch (err) {
-    res.status(500).json({ success: false, error: 'Database query error: ' + err.message });
+    res.status(500).json({ success: false, error: 'Supabase query error: ' + err.message });
   }
 });
 
@@ -441,89 +317,48 @@ app.post('/api/bookings/create', async (req, res) => {
 
   const adultCount = parseInt(adults) || 1;
   const kidCount = parseInt(kids) || 0;
-  const totalGuests = adultCount + kidCount;
+  const selectedAddons = Array.isArray(addons) ? addons : [];
+
+  const bookingRef = 'CT-' + Math.floor(10000 + Math.random() * 90000); // Collision handled by DB
 
   try {
-    // 1. Fetch official package price from DB (Server is the sole pricing authority)
-    const pkg = await dbGet(`SELECT * FROM packages WHERE id = ? AND tour_id = ?`, [packageId, tourId]);
-    if (!pkg) return res.status(404).json({ success: false, error: 'Invalid tour or package selected.' });
+    const { data, error } = await supabase.rpc('create_booking_atomic', {
+      p_booking_id: bookingRef,
+      p_tour_id: tourId,
+      p_package_id: packageId,
+      p_hotel_id: hotelId,
+      p_date: date,
+      p_adults: adultCount,
+      p_kids: kidCount,
+      p_guest_name: guestName,
+      p_guest_email: guestEmail,
+      p_guest_phone: guestPhone || '',
+      p_addon_ids: selectedAddons
+    });
 
-    // 2. Fetch hotel details from DB
-    const hotel = await dbGet(`SELECT * FROM hotels WHERE id = ?`, [hotelId]);
-    if (!hotel) return res.status(404).json({ success: false, error: 'Invalid hotel pickup location.' });
-
-    // 3. Server-side price calculation
-    let calculatedTotal = pkg.price * totalGuests;
-
-    const selectedAddons = Array.isArray(addons) ? addons : [];
-    if (selectedAddons.length > 0) {
-      const dbAddons = await dbQuery(`SELECT * FROM addons`);
-      selectedAddons.forEach(addonId => {
-        const match = dbAddons.find(a => a.id === addonId);
-        if (match) calculatedTotal += match.price * totalGuests;
-      });
+    if (error) {
+      console.error("Supabase RPC Error:", error);
+      return res.status(500).json({ success: false, error: 'Booking failed due to internal error.' });
     }
 
-    // 4. Server-Side Atomic Capacity Check
-    let avail = await dbGet(`SELECT * FROM availability WHERE tour_id = ? AND date = ?`, [tourId, date]);
-    const maxCap = avail ? avail.max_capacity : 30;
-    const currentBooked = avail ? avail.booked_seats : 0;
-
-    if (currentBooked + totalGuests > maxCap) {
-      return res.status(409).json({
-        success: false,
-        error: 'Capacity Exceeded',
-        message: `Only ${Math.max(0, maxCap - currentBooked)} seats remain for ${date}. Cannot book ${totalGuests} seats.`
-      });
+    if (!data.success) {
+      if (data.code === 'AVAILABILITY_NOT_CONFIGURED') return res.status(404).json({ success: false, error: 'Availability not configured for this date.' });
+      if (data.code === 'INSUFFICIENT_CAPACITY') return res.status(409).json({ success: false, error: 'Not enough seats available.' });
+      if (data.code === 'INVALID_TOUR' || data.code === 'INVALID_PACKAGE') return res.status(400).json({ success: false, error: 'Invalid tour or package.' });
+      if (data.code === 'INVALID_HOTEL') return res.status(400).json({ success: false, error: 'Invalid hotel.' });
+      if (data.code === 'INVALID_ADDON') return res.status(400).json({ success: false, error: 'Invalid or duplicate addons.' });
+      
+      return res.status(400).json({ success: false, error: data.code });
     }
-
-    // 5. Update/Insert availability
-    if (!avail) {
-      await dbRun(`INSERT INTO availability (tour_id, date, max_capacity, booked_seats) VALUES (?, ?, ?, ?)`,
-        [tourId, date, 30, totalGuests]);
-    } else {
-      await dbRun(`UPDATE availability SET booked_seats = booked_seats + ? WHERE tour_id = ? AND date = ?`,
-        [totalGuests, tourId, date]);
-    }
-
-    // 6. Create Booking Record with Initial PENDING_PAYMENT Lifecycle Status
-    const bookingRef = 'CT-' + Math.floor(10000 + Math.random() * 90000);
-
-    await dbRun(`INSERT INTO bookings 
-      (id, tour_id, package_id, date, adults, kids, hotel_id, hotel_name, pickup_time, guest_name, guest_email, guest_phone, addons, total_price, status, payment_status)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        bookingRef,
-        tourId,
-        packageId,
-        date,
-        adultCount,
-        kidCount,
-        hotelId,
-        hotel.name,
-        hotel.pickup_time,
-        guestName,
-        guestEmail,
-        guestPhone || '',
-        JSON.stringify(selectedAddons),
-        calculatedTotal,
-        'CONFIRMED',
-        'PENDING'
-      ]);
 
     res.status(201).json({
       success: true,
-      bookingReference: bookingRef,
-      totalPrice: calculatedTotal,
-      guestName,
-      hotelName: hotel.name,
-      pickupTime: hotel.pickup_time,
-      date,
-      status: 'CONFIRMED',
-      paymentStatus: 'PENDING',
+      bookingReference: data.booking_id,
+      totalPrice: data.total_price,
+      status: 'PENDING',
+      paymentStatus: 'UNPAID',
       message: 'Reservation created. Awaiting payment confirmation.'
     });
-
   } catch (err) {
     console.error("Booking Error:", err);
     res.status(500).json({ success: false, error: 'Server booking processing failed: ' + err.message });
@@ -540,8 +375,9 @@ app.post('/api/payments/create-session', async (req, res) => {
   if (!bookingId) return res.status(400).json({ success: false, error: 'Missing bookingId parameter' });
 
   try {
-    const booking = await dbGet(`SELECT * FROM bookings WHERE id = ?`, [bookingId]);
-    if (!booking) return res.status(404).json({ success: false, error: 'Booking not found' });
+    const { data: booking, error: fetchErr } = await supabase.from('bookings').select('*').eq('id', bookingId).single();
+    if (fetchErr || !booking) return res.status(404).json({ success: false, error: 'Booking not found' });
+    if (booking.status !== 'PENDING') return res.status(400).json({ success: false, error: 'Booking is no longer pending' });
 
     if (!STRIPE_SECRET_KEY) {
       return res.json({
@@ -556,28 +392,36 @@ app.post('/api/payments/create-session', async (req, res) => {
 
     // Stripe Checkout Session Creation
     const stripe = require('stripe')(STRIPE_SECRET_KEY);
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: [{
-        price_data: {
-          currency: 'usd',
-          product_data: {
-            name: `Christianson Tours — Booking ${booking.id}`,
-            description: `Date: ${booking.date} · Hotel: ${booking.hotel_name}`
+    let session;
+    try {
+      session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        client_reference_id: booking.id,
+        line_items: [{
+          price_data: {
+            currency: 'usd',
+            product_data: { name: `Christianson Tour: ${booking.tour_id}` },
+            unit_amount: Math.round(booking.total_price * 100),
           },
-          unit_amount: Math.round(booking.total_price * 100)
-        },
-        quantity: 1
-      }],
-      mode: 'payment',
-      success_url: `${req.protocol}://${req.get('host')}/booking.html?confirmed=${booking.id}`,
-      cancel_url: `${req.protocol}://${req.get('host')}/booking.html?cancelled=${booking.id}`,
-      metadata: { bookingId: booking.id }
-    });
+          quantity: 1,
+        }],
+        mode: 'payment',
+        success_url: `http://localhost:${PORT}/booking.html?confirmed=${booking.id}`,
+        cancel_url: `http://localhost:${PORT}/booking.html?cancelled=true`,
+      });
+    } catch (stripeErr) {
+      // If Stripe session creation fails, cancel the reservation
+      await supabase.rpc('cancel_reservation', { p_booking_id: booking.id });
+      throw stripeErr;
+    }
 
-    res.json({ success: true, stripeConfigured: true, sessionUrl: session.url });
+    // Save Stripe session ID
+    await supabase.from('bookings').update({ stripe_session_id: session.id }).eq('id', booking.id);
+
+    res.json({ success: true, url: session.url });
   } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
+    console.error("Stripe Error:", err);
+    res.status(500).json({ success: false, error: 'Payment initialization failed' });
   }
 });
 
@@ -587,48 +431,19 @@ app.post('/api/payments/mock-confirm', async (req, res) => {
   if (!bookingId) return res.status(400).json({ success: false, error: 'Missing bookingId' });
 
   try {
-    const booking = await dbGet(`SELECT * FROM bookings WHERE id = ?`, [bookingId]);
-    if (!booking) return res.status(404).json({ success: false, error: 'Booking reference not found' });
+    const { data, error } = await supabase
+      .from('bookings')
+      .update({ status: 'CONFIRMED', payment_status: 'PAID' })
+      .eq('id', bookingId)
+      .eq('status', 'PENDING')
+      .select();
 
-    await dbRun(`UPDATE bookings SET payment_status = 'PAID', status = 'CONFIRMED' WHERE id = ?`, [bookingId]);
+    if (error || !data || data.length === 0) return res.status(404).json({ success: false, error: 'Booking reference not found or not pending' });
+
     res.json({ success: true, bookingId, paymentStatus: 'PAID', status: 'CONFIRMED', message: 'Payment confirmed in demo mode.' });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
-});
-
-// POST /api/payments/webhook — Official Stripe Signature Verified Webhook
-app.post('/api/payments/webhook', async (req, res) => {
-  const sig = req.headers['stripe-signature'];
-  let event;
-
-  if (STRIPE_SECRET_KEY && STRIPE_WEBHOOK_SECRET && sig) {
-    const stripe = require('stripe')(STRIPE_SECRET_KEY);
-    try {
-      event = stripe.webhooks.constructEvent(req.body, sig, STRIPE_WEBHOOK_SECRET);
-    } catch (err) {
-      console.error(`Webhook Signature Verification Failed: ${err.message}`);
-      return res.status(400).send(`Webhook Error: ${err.message}`);
-    }
-  } else {
-    // Unverified fallback only if Stripe webhook secret is unconfigured
-    try {
-      event = JSON.parse(req.body.toString());
-    } catch (e) {
-      return res.status(400).send("Invalid webhook payload");
-    }
-  }
-
-  if (event.type === 'checkout.session.completed' || event.type === 'payment_intent.succeeded') {
-    const session = event.data.object;
-    const bookingId = session.metadata ? session.metadata.bookingId : null;
-    if (bookingId) {
-      await dbRun(`UPDATE bookings SET payment_status = 'PAID', status = 'CONFIRMED' WHERE id = ?`, [bookingId]);
-      console.log(`Payment webhook confirmed booking ${bookingId}`);
-    }
-  }
-
-  res.json({ received: true });
 });
 
 // ----------------------------------------------------
@@ -641,18 +456,22 @@ app.post('/api/auth/login', async (req, res) => {
   if (!username || !password) return res.status(400).json({ success: false, error: 'Username and password required' });
 
   try {
-    const user = await dbGet(`SELECT * FROM users WHERE username = ?`, [username]);
-    if (!user) return res.status(401).json({ success: false, error: 'Invalid username or password' });
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: username,
+      password: password
+    });
+    
+    if (error || !data.user) return res.status(401).json({ success: false, error: 'Invalid username or password' });
 
-    const validPassword = await bcrypt.compare(password, user.password_hash);
-    if (!validPassword) return res.status(401).json({ success: false, error: 'Invalid username or password' });
-
-    const token = jwt.sign({ id: user.id, username: user.username, role: user.role }, JWT_SECRET, { expiresIn: '12h' });
+    const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.user.id).single();
+    if (!profile || profile.role !== 'admin') {
+      return res.status(403).json({ success: false, error: 'Unauthorized: Admins only' });
+    }
 
     res.json({
       success: true,
-      token,
-      user: { username: user.username, role: user.role }
+      token: data.session.access_token,
+      user: { username: data.user.email, role: 'admin' }
     });
   } catch (err) {
     res.status(500).json({ success: false, error: 'Server authentication failure: ' + err.message });
@@ -662,20 +481,23 @@ app.post('/api/auth/login', async (req, res) => {
 // GET /api/admin/dashboard — Aggregated Business Analytics (Protected)
 app.get('/api/admin/dashboard', authMiddleware, async (req, res) => {
   try {
-    const totalBookings = await dbGet(`SELECT COUNT(*) as count, SUM(total_price) as revenue FROM bookings WHERE status != 'CANCELLED'`);
-    const pendingBookings = await dbGet(`SELECT COUNT(*) as count FROM bookings WHERE status = 'PENDING' OR payment_status = 'PENDING'`);
-    const totalTours = await dbGet(`SELECT COUNT(*) as count FROM tours`);
-    const recentBookings = await dbQuery(`SELECT * FROM bookings ORDER BY created_at DESC LIMIT 10`);
+    const { data: bookingsData } = await supabase.from('bookings').select('total_price').neq('status', 'CANCELLED');
+    const totalBookingsCount = bookingsData ? bookingsData.length : 0;
+    const totalRevenue = bookingsData ? bookingsData.reduce((sum, b) => sum + Number(b.total_price), 0) : 0;
+
+    const { count: pendingBookingsCount } = await supabase.from('bookings').select('*', { count: 'exact', head: true }).or('status.eq.PENDING,payment_status.eq.PENDING');
+    const { count: totalToursCount } = await supabase.from('tours').select('*', { count: 'exact', head: true });
+    const { data: recentBookings } = await supabase.from('bookings').select('*').order('created_at', { ascending: false }).limit(10);
 
     res.json({
       success: true,
       analytics: {
-        totalBookings: totalBookings.count || 0,
-        totalRevenue: totalBookings.revenue || 0,
-        pendingBookings: pendingBookings.count || 0,
-        totalTours: totalTours.count || 0
+        totalBookings: totalBookingsCount,
+        totalRevenue: totalRevenue,
+        pendingBookings: pendingBookingsCount || 0,
+        totalTours: totalToursCount || 0
       },
-      recentBookings
+      recentBookings: recentBookings || []
     });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
@@ -685,8 +507,9 @@ app.get('/api/admin/dashboard', authMiddleware, async (req, res) => {
 // GET /api/admin/bookings — All Customer Reservations (Protected)
 app.get('/api/admin/bookings', authMiddleware, async (req, res) => {
   try {
-    const bookings = await dbQuery(`SELECT * FROM bookings ORDER BY created_at DESC`);
-    res.json({ success: true, bookings });
+    const { data: bookings, error } = await supabase.from('bookings').select('*').order('created_at', { ascending: false });
+    if (error) throw new Error(error.message);
+    res.json({ success: true, bookings: bookings || [] });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
@@ -696,8 +519,29 @@ app.get('/api/admin/bookings', authMiddleware, async (req, res) => {
 app.patch('/api/admin/bookings/:id', authMiddleware, async (req, res) => {
   const { status, payment_status } = req.body;
   try {
-    await dbRun(`UPDATE bookings SET status = COALESCE(?, status), payment_status = COALESCE(?, payment_status) WHERE id = ?`,
-      [status, payment_status, req.params.id]);
+    // If admin is cancelling, route through transactional RPC to release capacity
+    if (status === 'CANCELLED') {
+      const { data, error } = await supabase.rpc('admin_cancel_booking', { p_booking_id: req.params.id });
+      if (error) throw new Error(error.message);
+      if (!data || data.success === false) throw new Error(data?.error || 'Cancellation failed');
+      
+      return res.json({ success: true, message: 'Booking cancelled transactionally', result: data });
+    }
+
+    // Normal non-cancellation updates
+    const updateData = {};
+    if (status) updateData.status = status;
+    if (payment_status) updateData.payment_status = payment_status;
+
+    // Prevent invalid transitions: Cannot un-cancel a booking directly without checking capacity
+    const { data: booking } = await supabase.from('bookings').select('status').eq('id', req.params.id).single();
+    if (booking && booking.status === 'CANCELLED' && status && status !== 'CANCELLED') {
+       return res.status(400).json({ success: false, error: 'Cannot uncancel a booking directly. Must create a new booking to reserve capacity.' });
+    }
+
+    const { error } = await supabase.from('bookings').update(updateData).eq('id', req.params.id);
+    if (error) throw new Error(error.message);
+
     res.json({ success: true, message: 'Booking status updated successfully' });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
@@ -708,11 +552,17 @@ app.patch('/api/admin/bookings/:id', authMiddleware, async (req, res) => {
 app.put('/api/admin/tours/:id', authMiddleware, async (req, res) => {
   const { name, tagline, starting_price, summary } = req.body;
   try {
-    await dbRun(`UPDATE tours SET name = COALESCE(?, name), tagline = COALESCE(?, tagline), starting_price = COALESCE(?, starting_price), summary = COALESCE(?, summary) WHERE id = ?`,
-      [name, tagline, starting_price, summary, req.params.id]);
+    const updateData = {};
+    if (name) updateData.name = name;
+    if (tagline) updateData.tagline = tagline;
+    if (starting_price) updateData.starting_price = starting_price;
+    if (summary) updateData.summary = summary;
+
+    const { error } = await supabase.from('tours').update(updateData).eq('id', req.params.id);
+    if (error) throw new Error(error.message);
     
     if (starting_price) {
-      await dbRun(`UPDATE packages SET price = ? WHERE tour_id = ? AND badge = 'Best Value'`, [starting_price, req.params.id]);
+      await supabase.from('packages').update({ price: starting_price }).eq('tour_id', req.params.id).eq('badge', 'Best Value');
     }
 
     res.json({ success: true, message: 'Tour details updated in database' });
@@ -727,8 +577,14 @@ app.post('/api/admin/availability', authMiddleware, async (req, res) => {
   if (!tourId || !date || !maxCapacity) return res.status(400).json({ success: false, error: 'Missing parameters' });
 
   try {
-    await dbRun(`INSERT INTO availability (tour_id, date, max_capacity, booked_seats) VALUES (?, ?, ?, 0)
-      ON CONFLICT(tour_id, date) DO UPDATE SET max_capacity = ?`, [tourId, date, maxCapacity, maxCapacity]);
+    const { data: existing } = await supabase.from('availability').select('id').eq('tour_id', tourId).eq('date', date).single();
+    if (existing) {
+      const { error } = await supabase.from('availability').update({ max_capacity: maxCapacity }).eq('id', existing.id);
+      if (error) throw new Error(error.message);
+    } else {
+      const { error } = await supabase.from('availability').insert([{ tour_id: tourId, date, max_capacity: maxCapacity, booked_seats: 0 }]);
+      if (error) throw new Error(error.message);
+    }
     res.json({ success: true, message: 'Capacity updated successfully' });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
@@ -737,11 +593,12 @@ app.post('/api/admin/availability', authMiddleware, async (req, res) => {
 
 // PATCH /api/admin/reviews/:id — Moderate Customer Reviews (Protected)
 app.patch('/api/admin/reviews/:id', authMiddleware, async (req, res) => {
-  const { status } = req.body; // 'APPROVED' or 'REJECTED'
+  const { status } = req.body; // 'APPROVED', 'PENDING' or 'REJECTED'
   if (!status) return res.status(400).json({ success: false, error: 'Status is required' });
 
   try {
-    await dbRun(`UPDATE reviews SET status = ? WHERE id = ?`, [status, req.params.id]);
+    const { error } = await supabase.from('reviews').update({ status }).eq('id', req.params.id);
+    if (error) throw new Error(error.message);
     res.json({ success: true, message: `Review status updated to ${status}` });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
