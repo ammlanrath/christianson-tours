@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" fill="none" opacity="0.35">
+  <g transform="translate(-50, -50)">
+    <!-- Branch stem -->
+    <path d="M50 0 C 120 100, 180 250, 220 450" stroke="#4a5d4e" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M120 100 C 160 140, 220 180, 280 200" stroke="#4a5d4e" stroke-width="2" fill="none"/>
+    <path d="M160 200 C 210 250, 260 300, 310 320" stroke="#4a5d4e" stroke-width="2" fill="none"/>
+
+    <!-- Willow/Sage Leaves -->
+    <path d="M280 200 Q 320 180 340 210 Q 300 220 280 200 Z" fill="#6b7f6e" opacity="0.8"/>
+    <path d="M310 320 Q 350 300 370 330 Q 330 340 310 320 Z" fill="#5c7060" opacity="0.85"/>
+    <path d="M220 140 Q 250 110 270 130 Q 240 150 220 140 Z" fill="#4a5d4e" opacity="0.75"/>
+    <path d="M180 230 Q 220 200 240 220 Q 200 240 180 230 Z" fill="#6b7f6e" opacity="0.8"/>
+    <path d="M250 280 Q 290 250 310 270 Q 270 290 250 280 Z" fill="#5c7060" opacity="0.75"/>
+    
+    <!-- Accent Sprigs -->
+    <path d="M90 60 C 130 50, 170 30, 200 10" stroke="#c2542e" stroke-width="1.5" fill="none" opacity="0.6"/>
+    <circle cx="200" cy="10" r="3" fill="#e06d44" opacity="0.7"/>
+    <circle cx="180" cy="20" r="2.5" fill="#e06d44" opacity="0.6"/>
+    <circle cx="160" cy="32" r="2" fill="#e0a944" opacity="0.7"/>
+  </g>
+</svg>

@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin CMS Dashboard — Christianson Tours</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              charcoal: '#0a0e12',
+              surface: '#14191e',
+              surfaceHover: '#1c232b',
+              sand: '#e8ded4',
+              sandstone: '#f7f3ee',
+              terracotta: '#e06d44',
+              terracottaDark: '#c2542e',
+              ochre: '#f59e0b',
+              turquoise: '#06b6d4',
+              muted: '#8e9aa8'
+            }
+          },
+          fontFamily: {
+            cinzel: ['Cinzel', 'serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            syne: ['Syne', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+  <style>
+    body { background-color: #0a0e12; color: #e8ded4; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-panel {
+      background: rgba(20, 25, 30, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(232, 222, 212, 0.12);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+    .glass-panel-elevated {
+      background: rgba(14, 19, 25, 0.95);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(232, 222, 212, 0.18);
+      box-shadow: 0 20px 50px 0 rgba(0, 0, 0, 0.7);
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-brand-terracotta selection:text-white min-h-screen">
+
+<!-- TOAST NOTIFICATION CONTAINER -->
+<div id="toast-container" class="fixed top-5 right-5 z-50 space-y-3 pointer-events-none"></div>
+
+<!-- LOGIN MODAL / VIEW (Shown when unauthenticated) -->
+<div id="admin-login-view" class="fixed inset-0 z-40 flex items-center justify-center p-6 bg-black/90 backdrop-blur-xl">
+  <div class="glass-panel-elevated p-8 sm:p-12 rounded-3xl border border-white/20 max-w-md w-full space-y-6 shadow-2xl">
+    <div class="text-center space-y-2">
+      <div class="h-12 bg-white/95 rounded-xl px-4 flex items-center justify-center inline-block mx-auto shadow-md">
+        <span class="text-brand-charcoal font-cinzel font-bold text-lg tracking-tight">CHRISTIANSON TOURS</span>
+      </div>
+      <h2 class="text-2xl font-cinzel font-bold text-white pt-2">Admin CMS Portal</h2>
+      <p class="text-xs text-brand-sand/60">Enter authorized staff credentials to manage live excursion data.</p>
+    </div>
+
+    <form id="login-form" class="space-y-4">
+      <div>
+        <label class="block text-xs uppercase font-mono text-brand-sand/60 mb-1">Username</label>
+        <input type="text" id="login-username" placeholder="admin" required class="w-full bg-brand-charcoal border border-white/20 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-terracotta"/>
+      </div>
+      <div>
+        <label class="block text-xs uppercase font-mono text-brand-sand/60 mb-1">Password</label>
+        <input type="password" id="login-password" placeholder="••••••••" required class="w-full bg-brand-charcoal border border-white/20 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-terracotta"/>
+      </div>
+      
+      <div id="login-error" class="hidden p-3 rounded-xl bg-rose-500/20 border border-rose-500/40 text-xs text-rose-300 font-medium text-center"></div>
+
+      <button type="submit" id="btn-login-submit" class="w-full py-3.5 rounded-xl bg-brand-terracotta hover:bg-brand-terracottaDark text-white font-bold text-xs uppercase tracking-widest transition-all shadow-lg shadow-brand-terracotta/20 flex items-center justify-center space-x-2">
+        <span>Log In to Admin Portal →</span>
+      </button>
+    </form>
+
+    <div class="pt-4 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-brand-sand/50">
+      <span>Development / Demo:</span>
+      <button type="button" onclick="fillDemoCredentials()" class="text-brand-ochre hover:underline font-bold">
+        ⚡ Fill Local Demo Credentials
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN ADMIN DASHBOARD (Protected View) -->
+<div id="admin-dashboard-view" class="hidden min-h-screen flex flex-col">
+  <!-- Top Navigation Header -->
+  <header class="glass-panel border-b border-white/10 px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center space-x-4">
+      <div class="h-10 flex items-center bg-white/95 rounded-lg px-3 shadow">
+        <span class="text-brand-charcoal font-cinzel font-bold text-base tracking-tight">CHRISTIANSON TOURS</span>
+      </div>
+      <span class="hidden sm:inline-flex px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-[10px] font-mono font-bold items-center space-x-1.5">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span>Production Database Active</span>
+      </span>
+    </div>
+
+    <div class="flex items-center space-x-6">
+      <div class="text-xs text-right hidden sm:block">
+        <span class="text-white font-bold block" id="admin-user-display">Administrator</span>
+        <span class="text-[10px] text-brand-sand/50 font-mono">JWT Authenticated Session</span>
+      </div>
+      <a href="index.html" target="_blank" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all flex items-center space-x-1.5">
+        <span>🌐</span>
+        <span>Public Website</span>
+      </a>
+      <button onclick="logoutAdmin()" class="px-4 py-2 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 text-xs font-bold transition-all">
+        Logout
+      </button>
+    </div>
+  </header>
+
+  <!-- Dashboard Main Layout -->
+  <div class="flex-1 max-w-[1720px] w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <!-- Sidebar Navigation -->
+    <div class="lg:col-span-3 glass-panel p-4 rounded-3xl border border-white/15 space-y-2">
+      <button onclick="switchTab('overview')" id="tab-overview" class="admin-tab-btn w-full text-left p-3.5 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center space-x-3 bg-brand-terracotta text-white shadow-lg">
+        <span>📊</span><span>Dashboard Overview</span>
+      </button>
+      <button onclick="switchTab('tours')" id="tab-tours" class="admin-tab-btn w-full text-left p-3.5 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center space-x-3 hover:bg-white/10 text-brand-sand/80">
+        <span>🗺️</span><span>Tours & Pricing</span>
+      </button>
+      <button onclick="switchTab('bookings')" id="tab-bookings" class="admin-tab-btn w-full text-left p-3.5 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center space-x-3 hover:bg-white/10 text-brand-sand/80">
+        <span>📋</span><span>Customer Reservations</span>
+      </button>
+      <button onclick="switchTab('capacity')" id="tab-capacity" class="admin-tab-btn w-full text-left p-3.5 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center space-x-3 hover:bg-white/10 text-brand-sand/80">
+        <span>🗓️</span><span>Date Capacity Cap</span>
+      </button>
+      <button onclick="switchTab('reviews')" id="tab-reviews" class="admin-tab-btn w-full text-left p-3.5 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center space-x-3 hover:bg-white/10 text-brand-sand/80">
+        <span>💬</span><span>Review Moderation</span>
+      </button>
+    </div>
+
+    <!-- Main Content Body -->
+    <div class="lg:col-span-9 space-y-6">
+      
+      <!-- TAB 1: OVERVIEW -->
+      <div id="content-overview" class="admin-tab-content space-y-6">
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div class="glass-panel p-6 rounded-2xl border border-white/10">
+            <span class="text-xs font-mono uppercase text-brand-sand/60">Gross Revenue</span>
+            <div class="text-3xl font-syne font-bold text-brand-ochre mt-2" id="stat-revenue">$0</div>
+            <span class="text-[10px] text-emerald-400 font-mono">Confirmed Payments</span>
+          </div>
+          <div class="glass-panel p-6 rounded-2xl border border-white/10">
+            <span class="text-xs font-mono uppercase text-brand-sand/60">Total Reservations</span>
+            <div class="text-3xl font-syne font-bold text-white mt-2" id="stat-bookings">0</div>
+            <span class="text-[10px] text-brand-sand/50 font-mono">Booked Guests</span>
+          </div>
+          <div class="glass-panel p-6 rounded-2xl border border-white/10">
+            <span class="text-xs font-mono uppercase text-brand-sand/60">Active Packages</span>
+            <div class="text-3xl font-syne font-bold text-brand-turquoise mt-2" id="stat-tours">3</div>
+            <span class="text-[10px] text-brand-sand/50 font-mono">Public Offers</span>
+          </div>
+          <div class="glass-panel p-6 rounded-2xl border border-white/10">
+            <span class="text-xs font-mono uppercase text-brand-sand/60">Pending Payments</span>
+            <div class="text-3xl font-syne font-bold text-amber-400 mt-2" id="stat-pending">0</div>
+            <span class="text-[10px] text-amber-400/80 font-mono">Awaiting Checkout</span>
+          </div>
+        </div>
+
+        <div class="glass-panel p-6 rounded-3xl border border-white/15">
+          <h3 class="text-lg font-cinzel font-bold text-white mb-4">Recent Customer Reservations</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr class="border-b border-white/10 text-brand-sand/60 font-mono">
+                  <th class="py-3 px-2">Ref ID</th>
+                  <th class="py-3 px-2">Guest Name</th>
+                  <th class="py-3 px-2">Tour</th>
+                  <th class="py-3 px-2">Date</th>
+                  <th class="py-3 px-2">Pickup Point</th>
+                  <th class="py-3 px-2">Amount</th>
+                  <th class="py-3 px-2">Status</th>
+                </tr>
+              </thead>
+              <tbody id="overview-recent-table" class="divide-y divide-white/10 text-brand-sand/90">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: TOURS & PRICING CRUD -->
+      <div id="content-tours" class="admin-tab-content hidden space-y-6">
+        <div class="flex justify-between items-center">
+          <div>
+            <h3 class="text-2xl font-cinzel font-bold text-white">Live Tour & Pricing Management</h3>
+            <p class="text-xs text-brand-sand/60">Price updates immediately sync with database and booking engine.</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 gap-6" id="admin-tours-list">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+
+      <!-- TAB 3: CUSTOMER BOOKINGS MANAGEMENT -->
+      <div id="content-bookings" class="admin-tab-content hidden space-y-6">
+        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+          <h3 class="text-2xl font-cinzel font-bold text-white">Customer Reservations</h3>
+          <div class="flex items-center space-x-3">
+            <input type="text" id="booking-search" oninput="filterBookingsTable()" placeholder="🔍 Search ref code or guest name..." class="bg-brand-charcoal border border-white/20 text-white text-xs rounded-xl px-4 py-2.5 w-64 focus:outline-none focus:border-brand-terracotta"/>
+          </div>
+        </div>
+        <div class="glass-panel p-6 rounded-3xl border border-white/15 overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-white/10 text-brand-sand/60 font-mono">
+                <th class="py-3 px-2">Ref ID</th>
+                <th class="py-3 px-2">Guest Contact</th>
+                <th class="py-3 px-2">Tour & Package</th>
+                <th class="py-3 px-2">Date</th>
+                <th class="py-3 px-2">Guests</th>
+                <th class="py-3 px-2">Pickup Location</th>
+                <th class="py-3 px-2">Total</th>
+                <th class="py-3 px-2">Status</th>
+                <th class="py-3 px-2">Payment</th>
+                <th class="py-3 px-2 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-bookings-table" class="divide-y divide-white/10">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 4: DATE CAPACITY CONTROL -->
+      <div id="content-capacity" class="admin-tab-content hidden space-y-6">
+        <h3 class="text-2xl font-cinzel font-bold text-white">Set Daily Excursion Capacity</h3>
+        <div class="glass-panel p-8 rounded-3xl border border-white/15 space-y-5 max-w-lg">
+          <div>
+            <label class="block text-xs uppercase font-mono text-brand-sand/60 mb-2">Select Tour Excursion</label>
+            <select id="cap-tour-id" class="w-full bg-brand-charcoal border border-white/20 text-white rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-brand-terracotta">
+              <option value="grand-canyon-west">Grand Canyon West Rim Tour</option>
+              <option value="hoover-dam">Hoover Dam Express Highlights</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs uppercase font-mono text-brand-sand/60 mb-2">Target Date</label>
+            <input type="date" id="cap-date" class="w-full bg-brand-charcoal border border-white/20 text-white rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-brand-terracotta"/>
+          </div>
+          <div>
+            <label class="block text-xs uppercase font-mono text-brand-sand/60 mb-2">Maximum Daily Seats Available</label>
+            <input type="number" id="cap-seats" value="30" min="1" max="100" class="w-full bg-brand-charcoal border border-white/20 text-white rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-brand-terracotta"/>
+          </div>
+          <button onclick="updateCapacity()" class="w-full py-3.5 rounded-xl bg-brand-turquoise text-black font-bold text-xs uppercase tracking-wider hover:bg-cyan-400 transition-all shadow-md">
+            Save Capacity Cap →
+          </button>
+        </div>
+      </div>
+
+      <!-- TAB 5: REVIEWS MODERATION -->
+      <div id="content-reviews" class="admin-tab-content hidden space-y-6">
+        <h3 class="text-2xl font-cinzel font-bold text-white">Customer Reviews Moderation</h3>
+        <div class="space-y-4" id="admin-reviews-list">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="/js/api.js"></script>
+<script>
+  let allBookingsData = [];
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Set default target date to tomorrow
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    document.getElementById('cap-date').value = tomorrow.toISOString().split('T')[0];
+
+    if (window.CHRISTIANSON_API.isLoggedIn()) {
+      showDashboard();
+    }
+  });
+
+  function fillDemoCredentials() {
+    document.getElementById('login-username').value = 'admin';
+    document.getElementById('login-password').value = 'admin123';
+  }
+
+  function showToast(message, type = 'success') {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    const bgColor = type === 'success' ? 'bg-emerald-600' : (type === 'error' ? 'bg-rose-600' : 'bg-brand-ochre text-black');
+    toast.className = `px-5 py-3 rounded-xl text-xs font-bold text-white shadow-2xl transition-all ${bgColor} pointer-events-auto transform translate-y-2`;
+    toast.textContent = message;
+    container.appendChild(toast);
+    setTimeout(() => toast.remove(), 4000);
+  }
+
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const u = document.getElementById('login-username').value;
+    const p = document.getElementById('login-password').value;
+    const errEl = document.getElementById('login-error');
+    const btn = document.getElementById('btn-login-submit');
+
+    btn.disabled = true;
+    btn.innerHTML = '<span>Authenticating...</span>';
+    errEl.classList.add('hidden');
+
+    try {
+      const data = await window.CHRISTIANSON_API.login(u, p);
+      showToast("Authentication successful! Welcome back.");
+      showDashboard();
+    } catch (err) {
+      if (err.code === 'BACKEND_UNAVAILABLE') {
+        errEl.textContent = 'Server connection failed. Please ensure node server.js is running on port 3000.';
+      } else {
+        errEl.textContent = err.message || 'Invalid username or password';
+      }
+      errEl.classList.remove('hidden');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<span>Log In to Admin Portal →</span>';
+    }
+  });
+
+  function logoutAdmin() {
+    window.CHRISTIANSON_API.clearToken();
+    document.getElementById('admin-dashboard-view').classList.add('hidden');
+    document.getElementById('admin-login-view').classList.remove('hidden');
+    showToast("You have been logged out.", "info");
+  }
+
+  async function showDashboard() {
+    document.getElementById('admin-login-view').classList.add('hidden');
+    document.getElementById('admin-dashboard-view').classList.remove('hidden');
+    await loadDashboardOverview();
+  }
+
+  function switchTab(tabName) {
+    document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+      btn.className = 'admin-tab-btn w-full text-left p-3.5 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center space-x-3 hover:bg-white/10 text-brand-sand/80';
+    });
+    document.getElementById(`tab-${tabName}`).className = 'admin-tab-btn w-full text-left p-3.5 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center space-x-3 bg-brand-terracotta text-white shadow-lg';
+
+    document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.add('hidden'));
+    document.getElementById(`content-${tabName}`).classList.remove('hidden');
+
+    if (tabName === 'overview') loadDashboardOverview();
+    if (tabName === 'tours') loadToursAdmin();
+    if (tabName === 'bookings') loadBookingsAdmin();
+    if (tabName === 'reviews') loadReviewsAdmin();
+  }
+
+  async function loadDashboardOverview() {
+    try {
+      const data = await window.CHRISTIANSON_API.getAdminDashboard();
+      document.getElementById('stat-revenue').textContent = `$${(data.analytics.totalRevenue || 0).toLocaleString()}`;
+      document.getElementById('stat-bookings').textContent = data.analytics.totalBookings || 0;
+      document.getElementById('stat-tours').textContent = data.analytics.totalTours || 0;
+      document.getElementById('stat-pending').textContent = data.analytics.pendingBookings || 0;
+
+      const tableBody = document.getElementById('overview-recent-table');
+      tableBody.innerHTML = (data.recentBookings || []).map(b => `
+        <tr>
+          <td class="py-3 px-2 font-mono font-bold text-brand-ochre">${b.id}</td>
+          <td class="py-3 px-2 font-bold text-white">${b.guest_name}</td>
+          <td class="py-3 px-2 text-brand-sand/70">${b.tour_id}</td>
+          <td class="py-3 px-2">${b.date}</td>
+          <td class="py-3 px-2 text-brand-sand/80">${b.hotel_name}</td>
+          <td class="py-3 px-2 font-bold text-white">$${b.total_price}</td>
+          <td class="py-3 px-2"><span class="px-2 py-0.5 rounded ${b.status === 'CONFIRMED' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-300'} font-bold">${b.status}</span></td>
+        </tr>
+      `).join('');
+    } catch (e) {
+      if (e.code === 'UNAUTHORIZED') {
+        showToast("Session expired. Please log in again.", "error");
+        logoutAdmin();
+      } else {
+        showToast("Error loading dashboard data: " + e.message, "error");
+      }
+    }
+  }
+
+  async function loadToursAdmin() {
+    try {
+      const tours = await window.CHRISTIANSON_API.getTours();
+      const container = document.getElementById('admin-tours-list');
+      container.innerHTML = tours.map(t => `
+        <div class="glass-panel p-6 rounded-3xl border border-white/15 space-y-4">
+          <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+            <div>
+              <span class="text-[10px] font-mono uppercase text-brand-terracotta font-bold">${t.badge || 'Featured Excursion'}</span>
+              <h4 class="text-xl font-cinzel font-bold text-white">${t.name}</h4>
+              <p class="text-xs text-brand-sand/70 mt-1">${t.tagline || ''}</p>
+            </div>
+            <div class="flex items-center space-x-3">
+              <span class="text-xs text-brand-sand/60">Base Price ($):</span>
+              <input type="number" id="tour-price-${t.id}" value="${t.starting_price || t.startingPrice}" class="w-24 bg-brand-charcoal border border-white/20 text-white font-bold rounded-xl px-3 py-2 text-sm text-center"/>
+              <button onclick="saveTourPrice('${t.id}')" class="px-4 py-2 rounded-xl bg-brand-terracotta hover:bg-brand-terracottaDark text-white font-bold text-xs uppercase tracking-wider shadow">
+                Save Price
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    } catch (e) {
+      showToast("Error loading tours: " + e.message, "error");
+    }
+  }
+
+  async function saveTourPrice(tourId) {
+    const newPrice = parseFloat(document.getElementById(`tour-price-${tourId}`).value);
+    try {
+      await window.CHRISTIANSON_API.updateTour(tourId, { starting_price: newPrice });
+      showToast("Tour price updated successfully!");
+    } catch (e) {
+      showToast("Failed to update tour price: " + e.message, "error");
+    }
+  }
+
+  async function loadBookingsAdmin() {
+    try {
+      const data = await window.CHRISTIANSON_API.getAdminBookings();
+      allBookingsData = data.bookings || [];
+      renderBookingsTable(allBookingsData);
+    } catch (e) {
+      if (e.code === 'UNAUTHORIZED') logoutAdmin();
+      else showToast("Error loading bookings: " + e.message, "error");
+    }
+  }
+
+  function renderBookingsTable(bookings) {
+    const tbody = document.getElementById('admin-bookings-table');
+    tbody.innerHTML = bookings.map(b => `
+      <tr>
+        <td class="py-3 px-2 font-mono font-bold text-brand-ochre">${b.id}</td>
+        <td class="py-3 px-2">
+          <div class="font-bold text-white">${b.guest_name}</div>
+          <div class="text-[10px] text-brand-sand/50">${b.guest_email}</div>
+        </td>
+        <td class="py-3 px-2">
+          <div class="font-bold text-white">${b.tour_id}</div>
+          <div class="text-[10px] text-brand-terracotta">${b.package_id}</div>
+        </td>
+        <td class="py-3 px-2">${b.date}</td>
+        <td class="py-3 px-2 font-bold">${b.adults}A, ${b.kids}K</td>
+        <td class="py-3 px-2">
+          <div>${b.hotel_name}</div>
+          <div class="text-[10px] text-brand-turquoise">${b.pickup_time}</div>
+        </td>
+        <td class="py-3 px-2 font-syne font-bold text-brand-ochre">$${b.total_price}</td>
+        <td class="py-3 px-2">
+          <span class="px-2 py-0.5 rounded ${b.status === 'CONFIRMED' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-300'} font-bold">${b.status}</span>
+        </td>
+        <td class="py-3 px-2">
+          <span class="px-2 py-0.5 rounded ${b.payment_status === 'PAID' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-300'} font-bold">${b.payment_status || 'PENDING'}</span>
+        </td>
+        <td class="py-3 px-2 text-right">
+          ${b.status !== 'CANCELLED' ? `
+            <button onclick="updateBookingStatus('${b.id}', 'CANCELLED', '${b.payment_status}')" class="px-2.5 py-1 bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 rounded-lg font-bold text-[10px]">
+              Cancel
+            </button>
+          ` : '<span class="text-rose-400/50 text-[10px]">Cancelled</span>'}
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterBookingsTable() {
+    const q = document.getElementById('booking-search').value.toLowerCase();
+    const filtered = allBookingsData.filter(b => b.id.toLowerCase().includes(q) || b.guest_name.toLowerCase().includes(q));
+    renderBookingsTable(filtered);
+  }
+
+  async function updateBookingStatus(bookingId, status, paymentStatus) {
+    if (!confirm(`Are you sure you want to change booking ${bookingId} status to ${status}?`)) return;
+    try {
+      await window.CHRISTIANSON_API.updateBookingStatus(bookingId, status, paymentStatus);
+      showToast(`Booking ${bookingId} status updated to ${status}`);
+      loadBookingsAdmin();
+    } catch (e) {
+      showToast("Failed to update status: " + e.message, "error");
+    }
+  }
+
+  async function updateCapacity() {
+    const tourId = document.getElementById('cap-tour-id').value;
+    const date = document.getElementById('cap-date').value;
+    const maxCapacity = parseInt(document.getElementById('cap-seats').value);
+
+    try {
+      await window.CHRISTIANSON_API.setAvailability(tourId, date, maxCapacity);
+      showToast(`Capacity updated to ${maxCapacity} seats for ${date}`);
+    } catch (e) {
+      showToast("Error updating capacity: " + e.message, "error");
+    }
+  }
+
+  async function loadReviewsAdmin() {
+    try {
+      const reviews = await window.CHRISTIANSON_API.getReviews();
+      const container = document.getElementById('admin-reviews-list');
+
+      container.innerHTML = reviews.map(r => `
+        <div class="glass-panel p-6 rounded-2xl border border-white/15 space-y-3">
+          <div class="flex justify-between items-center">
+            <div>
+              <h4 class="font-bold text-white">${r.author} (${r.date})</h4>
+              <span class="text-[10px] text-brand-sand/60">${r.tour}</span>
+            </div>
+            <div class="flex items-center space-x-3">
+              <span class="text-brand-ochre font-bold">★★★★★ ${r.rating}/5</span>
+              <button onclick="moderateReview(${r.id}, 'REJECTED')" class="px-3 py-1 bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 rounded-lg text-xs font-bold">Reject</button>
+            </div>
+          </div>
+          <p class="text-xs text-brand-sand/90 italic">"${r.comment}"</p>
+        </div>
+      `).join('');
+    } catch (e) {
+      showToast("Error loading reviews: " + e.message, "error");
+    }
+  }
+
+  async function moderateReview(id, status) {
+    try {
+      await window.CHRISTIANSON_API.moderateReview(id, status);
+      showToast(`Review ${status.toLowerCase()} successfully`);
+      loadReviewsAdmin();
+    } catch (e) {
+      showToast("Failed to moderate review: " + e.message, "error");
+    }
+  }
+</script>
+<script src="/js/demo-gate.js"></script>
+</body>
+</html>

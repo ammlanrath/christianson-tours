@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Tours & Excursions — Christianson Tours Las Vegas</title>
+  <meta name="description" content="Explore Grand Canyon West Rim, Hoover Dam, and private charter tours departing daily from Las Vegas. Compare packages and book with hotel pickup included.">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              charcoal: '#161b22',
+              sand: '#f7f3ee',
+              terracotta: '#e06d44',
+              terracottaDark: '#c2542e',
+              ochre: '#d9922b',
+              turquoise: '#208ba6',
+              sage: '#4a5d4e'
+            }
+          },
+          fontFamily: {
+            cinzel: ['Cinzel', 'serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            syne: ['Syne', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-sandstone antialiased selection:bg-brand-terracotta selection:text-white">
+
+<!-- BOTANICAL EDGE OVERLAYS -->
+<div class="foliage-overlay-left"></div>
+<div class="foliage-overlay-right"></div>
+
+<!-- HEADER NAVIGATION -->
+<header class="fixed top-0 left-0 right-0 z-50 glass-header-warm">
+  <div class="max-w-[1720px] mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+    <a class="flex items-center space-x-3 group" href="index.html">
+      <div class="h-11 flex items-center bg-white/95 rounded-lg px-3.5 py-1 shadow-md group-hover:scale-105 transition-transform border border-brand-terracotta/20">
+        <span class="text-brand-charcoal font-cinzel font-bold text-lg tracking-tight">CHRISTIANSON TOURS</span>
+      </div>
+    </a>
+    <nav class="hidden lg:flex items-center space-x-8 text-xs font-semibold uppercase tracking-wider text-slate-800">
+      <a class="text-brand-terracotta font-bold" href="tours.html">Tours</a>
+      <a class="hover:text-brand-terracotta transition-colors" href="plan.html">Plan My Trip</a>
+      <a class="hover:text-brand-terracotta transition-colors" href="compare.html">Compare</a>
+      <a class="hover:text-brand-terracotta transition-colors" href="reviews.html">Reviews</a>
+      <a class="hover:text-brand-terracotta transition-colors" href="faq.html">FAQ</a>
+    </nav>
+    <div class="flex items-center space-x-4">
+      <a class="hidden sm:inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-brand-terracotta hover:bg-brand-terracottaDark text-white text-xs font-bold uppercase tracking-widest transition-all shadow-lg" href="booking.html">
+        Book Now →
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO HEADER -->
+<section class="relative pt-32 pb-12 px-6 lg:px-10 max-w-[1720px] mx-auto z-10">
+  <div class="max-w-3xl">
+    <div class="inline-flex items-center space-x-2 text-brand-terracotta text-xs font-bold uppercase tracking-widest mb-4 px-4 py-1.5 rounded-full bg-brand-terracotta/10 border border-brand-terracotta/20">
+      <span>★ 4.9 Rated Southwestern Excursions</span>
+    </div>
+    <h1 class="text-4xl sm:text-6xl font-cinzel font-extrabold text-brand-charcoal tracking-tight leading-tight mb-4">
+      Explore The Southwest
+    </h1>
+    <p class="text-slate-700 text-base sm:text-lg leading-relaxed">
+      Select from our flagship Grand Canyon West Rim excursions, Hoover Dam highlights, or private executive group charters. All tours include VIP Las Vegas hotel lobby transport and expert naturalists.
+    </p>
+  </div>
+</section>
+
+<!-- FILTER CONTROLS & MAIN TOURS GRID -->
+<section class="pb-24 px-6 lg:px-10 max-w-[1720px] mx-auto z-10 relative">
+  <!-- Interactive Filters Bar -->
+  <div class="glass-panel-warm rounded-3xl p-6 mb-12 border border-brand-terracotta/15">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
+      <!-- Duration Filter -->
+      <div>
+        <label class="block text-xs font-mono uppercase tracking-widest text-slate-600 font-bold mb-2">Duration</label>
+        <select id="filter-duration" class="w-full bg-white/90 border border-slate-300 rounded-xl px-4 py-3 text-xs text-slate-800 focus:border-brand-terracotta outline-none shadow-sm">
+          <option value="all">All Durations</option>
+          <option value="half-day">Half Day (under 5 hrs)</option>
+          <option value="full-day">Full Day (10+ hrs)</option>
+        </select>
+      </div>
+
+      <!-- Experience Type Filter -->
+      <div>
+        <label class="block text-xs font-mono uppercase tracking-widest text-slate-600 font-bold mb-2">Destination</label>
+        <select id="filter-category" class="w-full bg-white/90 border border-slate-300 rounded-xl px-4 py-3 text-xs text-slate-800 focus:border-brand-terracotta outline-none shadow-sm">
+          <option value="all">All Destinations</option>
+          <option value="canyon">Grand Canyon West Rim</option>
+          <option value="hoover-dam">Hoover Dam</option>
+          <option value="private">Private Group Charters</option>
+        </select>
+      </div>
+
+      <!-- Max Price Filter -->
+      <div>
+        <label class="block text-xs font-mono uppercase tracking-widest text-slate-600 font-bold mb-2">Max Price</label>
+        <select id="filter-price" class="w-full bg-white/90 border border-slate-300 rounded-xl px-4 py-3 text-xs text-slate-800 focus:border-brand-terracotta outline-none shadow-sm">
+          <option value="all">All Price Ranges</option>
+          <option value="100">Under $100</option>
+          <option value="150">Under $150</option>
+        </select>
+      </div>
+
+      <!-- Reset & Helper CTA -->
+      <div class="flex space-x-3">
+        <button id="reset-filters" class="flex-1 py-3 px-4 rounded-xl border border-slate-300 hover:bg-white text-xs font-bold text-slate-700 uppercase tracking-wider transition-all">
+          Reset
+        </button>
+        <a href="compare.html" class="flex-1 py-3 px-4 rounded-xl bg-brand-terracotta hover:bg-brand-terracottaDark text-xs font-bold text-white uppercase tracking-wider text-center transition-all shadow-md">
+          Compare Tours
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tour Cards Grid -->
+  <div id="tours-grid" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Populated dynamically via JS -->
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="glass-header-warm border-t border-brand-terracotta/15 py-12 px-6 lg:px-10">
+  <div class="max-w-[1720px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-slate-600">
+    <div class="flex items-center space-x-3">
+      <span class="font-cinzel font-bold text-slate-900 text-sm">CHRISTIANSON TOURS</span>
+      <span>© 2026. All rights reserved. Production Database System.</span>
+    </div>
+    <div class="flex space-x-6">
+      <a href="tours.html" class="hover:text-brand-terracotta font-semibold">All Tours</a>
+      <a href="compare.html" class="hover:text-brand-terracotta font-semibold">Compare Packages</a>
+      <a href="plan.html" class="hover:text-brand-terracotta font-semibold">Plan Trip</a>
+      <a href="reviews.html" class="hover:text-brand-terracotta font-semibold">Guest Reviews</a>
+      <a href="faq.html" class="hover:text-brand-terracotta font-semibold">FAQ</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Load Central Data & Render Script -->
+<script src="data.js"></script>
+<script src="api.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    const grid = document.getElementById('tours-grid');
+    const filterDuration = document.getElementById('filter-duration');
+    const filterCategory = document.getElementById('filter-category');
+    const filterPrice = document.getElementById('filter-price');
+    const resetBtn = document.getElementById('reset-filters');
+
+    const tours = await window.CHRISTIANSON_API.getTours();
+
+    function renderTours() {
+      const durationVal = filterDuration.value;
+      const categoryVal = filterCategory.value;
+      const priceVal = filterPrice.value;
+
+      const filtered = tours.filter(tour => {
+        if (durationVal !== 'all' && tour.durationType !== durationVal) return false;
+        if (categoryVal !== 'all' && tour.category !== categoryVal) return false;
+        if (priceVal !== 'all' && tour.startingPrice > parseInt(priceVal)) return false;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full glass-panel-warm p-12 rounded-3xl text-center">
+            <h3 class="text-2xl font-cinzel font-bold text-slate-900 mb-2">No Tours Match Your Filter Criteria</h3>
+            <p class="text-sm text-slate-600 mb-6">Try broadening your duration or price parameters.</p>
+            <button onclick="document.getElementById('reset-filters').click()" class="px-6 py-3 rounded-full bg-brand-terracotta text-white font-bold text-xs uppercase tracking-widest">Reset All Filters</button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(tour => {
+        const detailLink = tour.id === 'grand-canyon-west' ? 'grand-canyon-west.html' : (tour.id === 'hoover-dam' ? 'hoover-dam.html' : 'booking.html');
+        return `
+          <article class="glass-panel-warm-elevated rounded-3xl overflow-hidden border border-brand-terracotta/20 hover:border-brand-terracotta/50 transition-all duration-300 flex flex-col shadow-lg">
+            <div class="relative h-64 w-full overflow-hidden">
+              <img src="${tour.heroImage}" alt="${tour.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+              <span class="absolute top-4 left-4 px-3.5 py-1 rounded-full bg-brand-terracotta text-white text-[11px] font-bold uppercase tracking-wider shadow">
+                ${tour.badge}
+              </span>
+              <span class="absolute bottom-4 left-4 text-white text-xs font-mono font-bold bg-black/60 px-3 py-1 rounded-full backdrop-blur">
+                ★ ${tour.rating} (${tour.reviewCount.toLocaleString()} reviews)
+              </span>
+            </div>
+
+            <div class="p-6 sm:p-8 flex-1 flex flex-col justify-between space-y-6">
+              <div>
+                <div class="flex justify-between items-baseline mb-2">
+                  <span class="text-xs font-mono font-bold uppercase tracking-wider text-brand-turquoise">${tour.duration}</span>
+                  <div class="text-right">
+                    <span class="text-xs text-slate-500 uppercase font-mono">From</span>
+                    <span class="text-2xl font-syne font-bold text-brand-terracotta ml-1">$${tour.startingPrice}</span>
+                  </div>
+                </div>
+                <h3 class="text-2xl font-cinzel font-bold text-slate-900 mb-2">${tour.name}</h3>
+                <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-4">${tour.summary}</p>
+
+                <ul class="space-y-2 text-xs text-slate-700">
+                  ${tour.highlights.slice(0, 4).map(h => `
+                    <li class="flex items-start space-x-2">
+                      <span class="text-brand-terracotta font-bold">✓</span>
+                      <span>${h}</span>
+                    </li>
+                  `).join('')}
+                </ul>
+              </div>
+
+              <div class="flex items-center space-x-3 pt-4 border-t border-slate-200">
+                <a href="${detailLink}" class="flex-1 py-3 px-4 rounded-xl bg-brand-terracotta hover:bg-brand-terracottaDark text-white text-xs font-bold uppercase tracking-wider text-center transition-all shadow-md">Explore Tour</a>
+                <a href="booking.html?tour=${tour.id}" class="py-3 px-5 rounded-xl border border-slate-300 hover:border-slate-500 text-slate-800 text-xs font-bold text-center transition-all">Book</a>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    filterDuration.addEventListener('change', renderTours);
+    filterCategory.addEventListener('change', renderTours);
+    filterPrice.addEventListener('change', renderTours);
+    resetBtn.addEventListener('click', () => {
+      filterDuration.value = 'all';
+      filterCategory.value = 'all';
+      filterPrice.value = 'all';
+      renderTours();
+    });
+
+    renderTours();
+  });
+</script>
+<script src="/js/demo-gate.js"></script>
+</body>
+</html>

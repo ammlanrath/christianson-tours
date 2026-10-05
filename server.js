@@ -749,22 +749,25 @@ app.patch('/api/admin/reviews/:id', authMiddleware, async (req, res) => {
 });
 
 // Clean Subfolder & Legacy Route Resolvers
-app.get(['/tours', '/tours/', '/tours.html'], (req, res) => res.sendFile(path.join(__dirname, 'tours', 'index.html')));
-app.get(['/tours/grand-canyon-west', '/tours/grand-canyon-west.html', '/grand-canyon-west.html', '/grand-canyon-west'], (req, res) => res.sendFile(path.join(__dirname, 'tours', 'grand-canyon-west.html')));
-app.get(['/tours/hoover-dam', '/tours/hoover-dam.html', '/hoover-dam.html', '/hoover-dam'], (req, res) => res.sendFile(path.join(__dirname, 'tours', 'hoover-dam.html')));
-app.get(['/booking', '/booking/', '/booking.html'], (req, res) => res.sendFile(path.join(__dirname, 'booking', 'index.html')));
-app.get(['/compare', '/compare/', '/compare.html'], (req, res) => res.sendFile(path.join(__dirname, 'compare', 'index.html')));
-app.get(['/plan', '/plan/', '/plan.html'], (req, res) => res.sendFile(path.join(__dirname, 'plan', 'index.html')));
-app.get(['/reviews', '/reviews/', '/reviews.html'], (req, res) => res.sendFile(path.join(__dirname, 'reviews', 'index.html')));
-app.get(['/faq', '/faq/', '/faq.html'], (req, res) => res.sendFile(path.join(__dirname, 'faq', 'index.html')));
-app.get(['/admin', '/admin/', '/admin.html'], (req, res) => res.sendFile(path.join(__dirname, 'admin', 'index.html')));
+app.get(['/tours', '/tours/', '/tours.html'], (req, res) => res.sendFile(path.join(__dirname, 'public', 'tours', 'index.html')));
+app.get(['/tours/grand-canyon-west', '/tours/grand-canyon-west.html', '/grand-canyon-west.html', '/grand-canyon-west'], (req, res) => res.sendFile(path.join(__dirname, 'public', 'tours', 'grand-canyon-west.html')));
+app.get(['/tours/hoover-dam', '/tours/hoover-dam.html', '/hoover-dam.html', '/hoover-dam'], (req, res) => res.sendFile(path.join(__dirname, 'public', 'tours', 'hoover-dam.html')));
+app.get(['/booking', '/booking/', '/booking.html'], (req, res) => res.sendFile(path.join(__dirname, 'public', 'booking', 'index.html')));
+app.get(['/compare', '/compare/', '/compare.html'], (req, res) => res.sendFile(path.join(__dirname, 'public', 'compare', 'index.html')));
+app.get(['/plan', '/plan/', '/plan.html'], (req, res) => res.sendFile(path.join(__dirname, 'public', 'plan', 'index.html')));
+app.get(['/reviews', '/reviews/', '/reviews.html'], (req, res) => res.sendFile(path.join(__dirname, 'public', 'reviews', 'index.html')));
+app.get(['/faq', '/faq/', '/faq.html'], (req, res) => res.sendFile(path.join(__dirname, 'public', 'faq', 'index.html')));
+app.get(['/admin', '/admin/', '/admin.html'], (req, res) => res.sendFile(path.join(__dirname, 'public', 'admin', 'index.html')));
 
 // Serve static frontend files
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname)));
 
 // Fallback to index.html for single-page style navigation
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api/')) return res.status(404).json({ success: false, error: 'API route not found' });
+  const pubPath = path.join(__dirname, 'public', 'index.html');
+  if (fs.existsSync(pubPath)) return res.sendFile(pubPath);
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
@@ -773,7 +776,7 @@ if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`====================================================`);
     console.log(`Christianson Tours Production Server running on port ${PORT}`);
-    console.log(`Database connected: ${dbPath}`);
+    console.log(`Database connected: Supabase / Local DB`);
     console.log(`Admin Auth: Active (JWT Enabled)`);
     console.log(`====================================================`);
   });

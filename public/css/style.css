@@ -1,0 +1,180 @@
+/* Christianson Tours — Unified Sandstone Visual Identity & Glass System */
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background-color: #0a0e12;
+}
+
+body {
+    overflow-x: clip;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+#animation-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* ----------------------------------------------------
+ * CONTEXTUAL BACKGROUND SYSTEM
+ * ---------------------------------------------------- */
+
+/* Sandstone: Default warm ivory background for informational pages */
+.bg-sandstone {
+    background-color: #f7f3ee !important;
+    color: #161b22 !important;
+    position: relative;
+    background-image: url('../assets/contour-lines.svg');
+    background-size: cover;
+    background-position: center;
+}
+
+/* Desert: Controlled warm background for tour details & itinerary */
+.bg-desert {
+    background-color: #f2ede4 !important;
+    color: #161b22 !important;
+    position: relative;
+    background-image: url('../assets/contour-lines.svg');
+    background-size: cover;
+    background-position: center;
+}
+
+/* Clean Booking: High-contrast warm ivory for booking flow */
+.bg-clean-booking {
+    background-color: #f9f6f0 !important;
+    color: #161b22 !important;
+}
+
+/* Canyon: Dark cinematic background reserved for homepage hero */
+.bg-canyon {
+    background-color: #0a0e12 !important;
+    color: #e8ded4 !important;
+}
+
+/* ----------------------------------------------------
+ * WARM TRANSLUCENT GLASS CARDS
+ * ---------------------------------------------------- */
+
+.glass-panel-warm {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(224, 109, 68, 0.15);
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.06);
+    color: #161b22;
+}
+
+.glass-panel-warm-elevated {
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(224, 109, 68, 0.22);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
+    color: #161b22;
+}
+
+/* Warm Header Glass */
+.glass-header-warm {
+    background: rgba(247, 243, 238, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(224, 109, 68, 0.15);
+}
+
+/* ----------------------------------------------------
+ * SOUTHWEST BOTANICAL DECORATION OVERLAYS
+ * ---------------------------------------------------- */
+
+.foliage-overlay-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 320px;
+    height: 480px;
+    background-image: url('../assets/southwest-foliage-left.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.65;
+}
+
+.foliage-overlay-right {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 320px;
+    height: 480px;
+    background-image: url('../assets/southwest-foliage-right.svg');
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    background-size: contain;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.65;
+}
+
+@media (max-width: 768px) {
+    .foliage-overlay-left, .foliage-overlay-right {
+        opacity: 0.3;
+        width: 160px;
+        height: 240px;
+    }
+}
+
+/* ----------------------------------------------------
+ * INFINITE MARQUEE CAROUSEL TRACK
+ * ---------------------------------------------------- */
+@keyframes marquee-slide {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(-50%, 0, 0);
+    }
+}
+
+.marquee-container {
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+    user-select: none;
+}
+
+.marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-slide 32s linear infinite;
+    will-change: transform;
+}
+
+.marquee-container:hover .marquee-track {
+    animation-play-state: paused;
+}
+
+/* Accessibility Focus Outline Styles */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+    outline: 2px solid #e06d44 !important;
+    outline-offset: 2px !important;
+}
+
+/* Accessibility prefers-reduced-motion Support */
+@media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    .marquee-track {
+        animation: none !important;
+        width: 100%;
+        flex-wrap: wrap;
+        transform: none !important;
+    }
+}

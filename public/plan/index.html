@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plan My Trip — Interactive Travel Assistant — Christianson Tours</title>
+  <meta name="description" content="Use our interactive travel assistant to find the perfect Las Vegas excursion based on your schedule, interests, group size, and preferences.">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              charcoal: '#161b22',
+              sand: '#f7f3ee',
+              terracotta: '#e06d44',
+              terracottaDark: '#c2542e',
+              ochre: '#d9922b',
+              turquoise: '#208ba6'
+            }
+          },
+          fontFamily: {
+            cinzel: ['Cinzel', 'serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            syne: ['Syne', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-sandstone antialiased selection:bg-brand-terracotta selection:text-white">
+
+<!-- BOTANICAL EDGE OVERLAYS -->
+<div class="foliage-overlay-left"></div>
+<div class="foliage-overlay-right"></div>
+
+<!-- HEADER NAVIGATION -->
+<header class="fixed top-0 left-0 right-0 z-50 glass-header-warm">
+  <div class="max-w-[1720px] mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+    <a class="flex items-center space-x-3 group" href="index.html">
+      <div class="h-11 flex items-center bg-white/95 rounded-lg px-3.5 py-1 shadow-md group-hover:scale-105 transition-transform border border-brand-terracotta/20">
+        <span class="text-brand-charcoal font-cinzel font-bold text-lg tracking-tight">CHRISTIANSON TOURS</span>
+      </div>
+    </a>
+    <nav class="hidden lg:flex items-center space-x-8 text-xs font-semibold uppercase tracking-wider text-slate-800">
+      <a class="hover:text-brand-terracotta transition-colors" href="tours.html">Tours</a>
+      <a class="hover:text-brand-terracotta transition-colors text-brand-terracotta font-bold" href="plan.html">Plan My Trip</a>
+      <a class="hover:text-brand-terracotta transition-colors" href="compare.html">Compare</a>
+      <a class="hover:text-brand-terracotta transition-colors" href="reviews.html">Reviews</a>
+      <a class="hover:text-brand-terracotta transition-colors" href="faq.html">FAQ</a>
+    </nav>
+    <div class="flex items-center space-x-4">
+      <a class="hidden sm:inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-brand-terracotta hover:bg-brand-terracottaDark text-white text-xs font-bold uppercase tracking-widest transition-all shadow-lg" href="booking.html">
+        Book Now →
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO HEADER -->
+<section class="pt-32 pb-10 px-6 lg:px-10 max-w-[1720px] mx-auto z-10 relative">
+  <div class="max-w-3xl">
+    <div class="flex items-center space-x-2 text-brand-terracotta text-xs font-bold uppercase tracking-widest mb-3">
+      <span class="w-6 h-[2px] bg-brand-terracotta"></span>
+      <span>Smart Travel Recommendation Engine</span>
+    </div>
+    <h1 class="text-4xl sm:text-6xl font-cinzel font-extrabold text-brand-charcoal tracking-tight mb-4">
+      Plan Your Perfect Day
+    </h1>
+    <p class="text-slate-700 text-base sm:text-lg font-sans leading-relaxed">
+      Tell us what kind of experience you're looking for, and our algorithm will generate a personalized recommendation tailored to your schedule, budget, and travel preferences.
+    </p>
+  </div>
+</section>
+
+<!-- INTERACTIVE PLANNER FORM & RESULTS -->
+<section class="pb-24 px-6 lg:px-10 max-w-[1720px] mx-auto z-10 relative">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <!-- Questionnaire Form -->
+    <div class="lg:col-span-7 glass-panel-warm p-8 sm:p-10 rounded-3xl border border-brand-terracotta/20 shadow-lg space-y-8">
+      <!-- 1. Available Time -->
+      <div>
+        <label class="block text-xs uppercase font-mono text-slate-600 mb-3">1. How much time do you have available?</label>
+        <div class="grid grid-cols-3 gap-3">
+          <button type="button" onclick="selectTime('half-day')" id="time-half-day" class="time-btn p-4 rounded-xl border border-slate-300 bg-white/80 text-center font-bold text-xs uppercase tracking-wider text-slate-700 hover:border-brand-terracotta transition-all shadow-sm">
+            Half Day<br><span class="text-[10px] font-mono text-slate-500 lowercase">(4-5 hrs)</span>
+          </button>
+          <button type="button" onclick="selectTime('full-day')" id="time-full-day" class="time-btn p-4 rounded-xl border border-brand-terracotta bg-brand-terracotta text-center font-bold text-xs uppercase tracking-wider text-white shadow-md">
+            Full Day<br><span class="text-[10px] font-mono text-white/80 lowercase">(10+ hrs)</span>
+          </button>
+          <button type="button" onclick="selectTime('flexible')" id="time-flexible" class="time-btn p-4 rounded-xl border border-slate-300 bg-white/80 text-center font-bold text-xs uppercase tracking-wider text-slate-700 hover:border-brand-terracotta transition-all shadow-sm">
+            Flexible<br><span class="text-[10px] font-mono text-slate-500 lowercase">(Any duration)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. Target Date & Guests -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-xs uppercase font-mono text-slate-600 mb-2">2. When are you visiting?</label>
+          <input type="date" id="trip-date" class="w-full bg-white border border-slate-300 text-slate-900 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-terracotta shadow-sm" value="2026-10-15"/>
+        </div>
+        <div>
+          <label class="block text-xs uppercase font-mono text-slate-600 mb-2">3. Number of Travelers</label>
+          <div class="flex items-center space-x-3 bg-white border border-slate-300 rounded-xl px-4 py-2 shadow-sm">
+            <span class="text-xs text-slate-600">Adults:</span>
+            <input type="number" id="adults-count" min="1" max="10" value="2" class="w-12 bg-transparent text-slate-900 font-bold text-center border-b border-slate-300 focus:outline-none"/>
+            <span class="text-xs text-slate-600 ml-2">Kids:</span>
+            <input type="number" id="kids-count" min="0" max="10" value="0" class="w-12 bg-transparent text-slate-900 font-bold text-center border-b border-slate-300 focus:outline-none"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Interests -->
+      <div>
+        <label class="block text-xs uppercase font-mono text-slate-600 mb-3">4. What interests you most? (Select all that apply)</label>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <label class="flex items-center space-x-3 p-3 rounded-xl glass-panel-warm border border-slate-300 hover:border-slate-400 cursor-pointer shadow-sm">
+            <input type="checkbox" value="scenic" class="interest-cb accent-brand-terracotta" checked/>
+            <span class="text-xs text-slate-800 font-bold">🌄 Scenic Views</span>
+          </label>
+          <label class="flex items-center space-x-3 p-3 rounded-xl glass-panel-warm border border-slate-300 hover:border-slate-400 cursor-pointer shadow-sm">
+            <input type="checkbox" value="skywalk" class="interest-cb accent-brand-terracotta" checked/>
+            <span class="text-xs text-slate-800 font-bold">🚶 Glass Skywalk</span>
+          </label>
+          <label class="flex items-center space-x-3 p-3 rounded-xl glass-panel-warm border border-slate-300 hover:border-slate-400 cursor-pointer shadow-sm">
+            <input type="checkbox" value="history" class="interest-cb accent-brand-terracotta"/>
+            <span class="text-xs text-slate-800 font-bold">🏛️ Engineering/History</span>
+          </label>
+          <label class="flex items-center space-x-3 p-3 rounded-xl glass-panel-warm border border-slate-300 hover:border-slate-400 cursor-pointer shadow-sm">
+            <input type="checkbox" value="photography" class="interest-cb accent-brand-terracotta" checked/>
+            <span class="text-xs text-slate-800 font-bold">📸 Photography</span>
+          </label>
+          <label class="flex items-center space-x-3 p-3 rounded-xl glass-panel-warm border border-slate-300 hover:border-slate-400 cursor-pointer shadow-sm">
+            <input type="checkbox" value="lunch" class="interest-cb accent-brand-terracotta" checked/>
+            <span class="text-xs text-slate-800 font-bold">🥪 Meal Included</span>
+          </label>
+          <label class="flex items-center space-x-3 p-3 rounded-xl glass-panel-warm border border-slate-300 hover:border-slate-400 cursor-pointer shadow-sm">
+            <input type="checkbox" value="nature" class="interest-cb accent-brand-terracotta"/>
+            <span class="text-xs text-slate-800 font-bold">🌵 Joshua Tree Forest</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 4. Main Priority -->
+      <div>
+        <label class="block text-xs uppercase font-mono text-slate-600 mb-3">5. What is your primary priority?</label>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <label class="flex items-center space-x-3 p-4 rounded-xl glass-panel-warm border border-slate-300 cursor-pointer shadow-sm">
+            <input type="radio" name="priority" value="best-value" class="accent-brand-terracotta"/>
+            <div>
+              <div class="text-xs font-bold text-slate-900">Lowest Price</div>
+              <div class="text-[10px] text-slate-500">Maximum savings</div>
+            </div>
+          </label>
+          <label class="flex items-center space-x-3 p-4 rounded-xl glass-panel-warm border border-slate-300 cursor-pointer shadow-sm">
+            <input type="radio" name="priority" value="ultimate" class="accent-brand-terracotta" checked/>
+            <div>
+              <div class="text-xs font-bold text-slate-900">Best Experience</div>
+              <div class="text-[10px] text-slate-500">All VIP inclusions</div>
+            </div>
+          </label>
+          <label class="flex items-center space-x-3 p-4 rounded-xl glass-panel-warm border border-slate-300 cursor-pointer shadow-sm">
+            <input type="radio" name="priority" value="express" class="accent-brand-terracotta"/>
+            <div>
+              <div class="text-xs font-bold text-slate-900">Fastest Tour</div>
+              <div class="text-[10px] text-slate-500">Back by 1:00 PM</div>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Recommendation Display Panel -->
+    <div class="lg:col-span-5 sticky top-28">
+      <div class="glass-panel-warm-elevated p-8 rounded-3xl border border-brand-terracotta/20 shadow-2xl space-y-6" id="recommendation-result">
+        <!-- Populated dynamically via JS -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GLOBAL FOOTER -->
+<footer class="glass-header-warm border-t border-brand-terracotta/15 py-12 px-6 lg:px-10">
+  <div class="max-w-[1720px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-slate-600">
+    <div class="flex items-center space-x-3">
+      <span class="font-cinzel font-bold text-slate-900 text-sm">CHRISTIANSON TOURS</span>
+      <span>© 2026. All rights reserved. Production Database System.</span>
+    </div>
+    <div class="flex space-x-6">
+      <a href="tours.html" class="hover:text-brand-terracotta font-semibold">All Tours</a>
+      <a href="compare.html" class="hover:text-brand-terracotta font-semibold">Compare Packages</a>
+      <a href="plan.html" class="hover:text-brand-terracotta font-semibold">Plan Trip</a>
+      <a href="reviews.html" class="hover:text-brand-terracotta font-semibold">Guest Reviews</a>
+      <a href="faq.html" class="hover:text-brand-terracotta font-semibold">FAQ</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/data.js"></script>
+<script src="/js/api.js"></script>
+<script>
+  let selectedTime = 'full-day';
+
+  function selectTime(time) {
+    selectedTime = time;
+    document.querySelectorAll('.time-btn').forEach(btn => {
+      btn.className = 'time-btn p-4 rounded-xl border border-slate-300 bg-white/80 text-center font-bold text-xs uppercase tracking-wider text-slate-700 hover:border-brand-terracotta transition-all shadow-sm';
+    });
+    const activeBtn = document.getElementById(`time-${time}`);
+    if (activeBtn) {
+      activeBtn.className = 'time-btn p-4 rounded-xl border border-brand-terracotta bg-brand-terracotta text-center font-bold text-xs uppercase tracking-wider text-white shadow-md';
+    }
+    calculateRecommendation();
+  }
+
+  function calculateRecommendation() {
+    const priority = document.querySelector('input[name="priority"]:checked')?.value || 'ultimate';
+    const checkedInterests = Array.from(document.querySelectorAll('.interest-cb:checked')).map(cb => cb.value);
+    const resultBox = document.getElementById('recommendation-result');
+
+    let tourId = 'grand-canyon-west';
+    let packageId = 'best';
+    let title = 'Grand Canyon West Rim — Ultimate Package';
+    let price = 149;
+    let reasons = [];
+
+    if (selectedTime === 'half-day' || priority === 'express') {
+      tourId = 'hoover-dam';
+      packageId = 'hoover-standard';
+      title = 'Hoover Dam Express Highlights Tour';
+      price = 50;
+      reasons = [
+        'Fits your 4.5-hour half-day schedule perfectly',
+        'Gets you back to Las Vegas by 1:00 PM for afternoon plans',
+        'Includes 900-ft Bypass Bridge walk & Lake Mead vistas',
+        'Complimentary hotel lobby pickup included'
+      ];
+    } else if (priority === 'best-value') {
+      tourId = 'grand-canyon-west';
+      packageId = 'good';
+      title = 'Grand Canyon West Rim — Standard Package';
+      price = 97;
+      reasons = [
+        'Lowest price for a full-day Grand Canyon experience ($97)',
+        'Includes Hualapai Park Entrance permit ($50 value)',
+        'Continental breakfast & hotel pickup included',
+        '4 full hours at Eagle Point & Guano Point'
+      ];
+    } else {
+      tourId = 'grand-canyon-west';
+      packageId = 'best';
+      title = 'Grand Canyon West Rim — Ultimate Package';
+      price = 149;
+      reasons = [
+        'Complete experience including Skywalk Glass Bridge VIP pass',
+        'Full 4 hours exploring Eagle Point & Guano Point overlooks',
+        'Catered deli picnic lunch & continental breakfast included',
+        'Matches your selected interests for scenic photos & skywalk'
+      ];
+    }
+
+    resultBox.innerHTML = `
+      <div class="flex items-center justify-between">
+        <span class="px-3 py-1 rounded-full bg-brand-terracotta text-white text-[10px] font-bold uppercase tracking-wider">Your Recommendation</span>
+        <span class="text-xs font-mono text-emerald-700 font-bold">100% Match</span>
+      </div>
+
+      <div>
+        <h3 class="text-2xl font-cinzel font-bold text-slate-900 mb-1">${title}</h3>
+        <div class="text-3xl font-syne font-bold text-brand-terracotta my-2">$${price} <span class="text-xs text-slate-500 font-normal font-sans">/ guest</span></div>
+      </div>
+
+      <div class="border-t border-b border-slate-200 py-4">
+        <h4 class="text-xs uppercase font-mono text-slate-500 mb-3">Why We Recommend It:</h4>
+        <ul class="space-y-2.5 text-xs text-slate-700">
+          ${reasons.map(r => `<li class="flex items-start space-x-2"><span class="text-emerald-600 font-bold">✓</span><span>${r}</span></li>`).join('')}
+        </ul>
+      </div>
+
+      <div class="space-y-3 pt-2">
+        <a href="booking.html?tour=${tourId}&package=${packageId}" class="block w-full py-4 rounded-2xl bg-brand-terracotta hover:bg-brand-terracottaDark text-center font-bold text-xs uppercase tracking-widest text-white shadow-lg transition-all">
+          Book Recommended Package ($${price}) →
+        </a>
+        <a href="${tourId === 'hoover-dam' ? 'hoover-dam.html' : 'grand-canyon-west.html'}" class="block w-full text-center text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors">
+          Explore Tour Details First
+        </a>
+      </div>
+    `;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.interest-cb, input[name="priority"]').forEach(el => {
+      el.addEventListener('change', calculateRecommendation);
+    });
+    calculateRecommendation();
+  });
+</script>
+<script src="/js/demo-gate.js"></script>
+</body>
+</html>
